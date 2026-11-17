@@ -1,0 +1,58 @@
+/*
+  Abyssal Liturgy, reduced to black and white.
+  Dark is the brand: Void ground, Bone ink. Light is its exact inverse:
+  Bone ground, Void ink. Greys are the brand's Fog and Ash, darkened for the
+  light theme so every text pair stays above WCAG AA (4.5:1).
+
+  Canvas colours (--c-*) are read by src/core/Palette.ts, so this file is the
+  single source of truth for both the DOM and the games.
+*/
+:root {
+  --c-ink: #e6e3da;
+  --c-ground: #08090b;
+  --c-fog: #9aa3a8;
+  --c-ash: #7f8589;
+  --c-line: rgba(230, 227, 218, 0.16);
+  --c-faint: rgba(230, 227, 218, 0.06);
+  --c-glow: rgba(124, 136, 145, 0.13);
+
+  --bg: var(--c-ground);
+  --bg-2: #0d1013;
+  --bg-3: #12161a;
+  --text: var(--c-ink);
+  --text-2: var(--c-fog);
+  --text-3: var(--c-ash);
+  --accent: #c9cfd2;
+  --line: var(--c-line);
+  --line-strong: rgba(230, 227, 218, 0.3);
+  --scrim: rgba(0, 0, 0, 0.62);
+  --page-grad: radial-gradient(ellipse 120% 80% at 50% -10%, rgba(124, 136, 145, 0.1), transparent 60%);
+
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-liturgy: cubic-bezier(0.16, 0.4, 0.15, 1);
+
+  --font-display: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+  --font-body: "Jost", "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+:root[data-theme="light"] {
+  --c-ink: #08090b;
+  --c-ground: #e6e3da;
+  --c-fog: #363e43;
+  --c-ash: #4c555b;
+  --c-line: rgba(8, 9, 11, 0.18);
+  --c-faint: rgba(8, 9, 11, 0.06);
+  --c-glow: rgba(255, 255, 255, 0.4);
+
+  --bg-2: #dcd9cf;
+  --bg-3: #d2cfc5;
+  --accent: #3f484e;
+  --line-strong: rgba(8, 9, 11, 0.34);
+  --scrim: rgba(8, 9, 11, 0.5);
+  --page-grad: radial-gradient(ellipse 120% 80% at 50% -10%, rgba(255, 255, 255, 0.5), transparent 60%);
+}

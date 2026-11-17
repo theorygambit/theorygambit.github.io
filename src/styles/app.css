@@ -1,0 +1,617 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/*
+  SIZE. html, body and #root all use --app-h (set by src/core/Viewport.ts), never
+  100vh, 100dvh or inset:0. The same gradient is painted on html so no flat
+  band can show if the window is ever shorter than the screen.
+*/
+html,
+body {
+  height: var(--app-h, 100%);
+  background-color: var(--bg);
+  background-image: var(--page-grad);
+  background-size: 100% var(--app-h, 100%);
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-synthesis: none;
+  overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+#root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--app-h, 100%);
+  overflow: hidden;
+}
+
+canvas,
+svg,
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+button,
+a {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 2px;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Decorative field behind everything. It is allowed to be soft. No text ever sits on it. */
+.bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--app-h, 100%);
+  display: block;
+  z-index: 0;
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------------ home */
+
+.home {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  /* Safe area goes on the content column only, never on the background or a canvas. */
+  padding-top: calc(var(--safe-top) + 8px);
+  padding-bottom: calc(var(--safe-bottom) + 24px);
+}
+
+.home-col {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.home-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  min-height: 52px;
+}
+
+.bar-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.tool-btn,
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  transition: background-color 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.tool-btn:hover,
+.link-btn:hover {
+  border-color: var(--line-strong);
+}
+.tool-btn:active,
+.link-btn:active {
+  background: var(--bg-3);
+}
+.link-btn {
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-2);
+}
+.tool-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1;
+}
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 236px;
+}
+.hero canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.home-body {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.section-title {
+  padding: 22px 20px 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-3);
+}
+
+.games {
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 48px 1fr 20px;
+  align-items: center;
+  column-gap: 16px;
+  min-height: 84px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  transition: background-color 0.3s var(--ease);
+}
+.row:active {
+  background: var(--bg-2);
+}
+.row-glyph {
+  width: 48px;
+  height: 48px;
+}
+.row-glyph svg {
+  display: block;
+  width: 48px;
+  height: 48px;
+  stroke: var(--text);
+  fill: none;
+  stroke-width: 0.5;
+}
+.row-glyph svg .solid {
+  fill: var(--text);
+  stroke: none;
+}
+.row-name {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--text);
+}
+.row-hook {
+  margin-top: 4px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.row-state {
+  width: 12px;
+  height: 12px;
+  justify-self: end;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+}
+.row-state.is-done {
+  background: var(--text);
+}
+
+.tier {
+  border-top: 1px solid var(--line);
+}
+.tier > summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 60px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text);
+  cursor: pointer;
+}
+.tier > summary::-webkit-details-marker {
+  display: none;
+}
+.tier-count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.tier-blurb {
+  padding: 0 20px 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.slots {
+  list-style: none;
+}
+.slot {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  column-gap: 12px;
+  min-height: 48px;
+  align-items: center;
+  padding: 6px 20px;
+  border-top: 1px solid var(--line);
+}
+.slot-n {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.slot-name {
+  display: block;
+  min-height: 22px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--text-2);
+}
+
+.foot {
+  padding: 22px 20px 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.foot a {
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* ------------------------------------------------------------------ game */
+
+.game {
+  display: flex;
+  justify-content: center;
+  padding-top: calc(var(--safe-top) + 8px);
+  padding-bottom: calc(var(--safe-bottom) + 8px);
+  background: var(--bg);
+}
+
+.game-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 560px;
+  height: 100%;
+  background: var(--bg);
+}
+
+.game-head {
+  flex: none;
+  padding: 4px 20px 10px;
+}
+.game-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1.05;
+  color: var(--text);
+}
+.game-meta {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  /* Gameplay surface: no scroll, no zoom, no selection. */
+  touch-action: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+.stage canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  touch-action: none;
+}
+
+.dock {
+  flex: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.dock-btn {
+  min-height: 56px;
+  background: var(--bg-2);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-2);
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.dock-btn:hover {
+  color: var(--text);
+}
+.dock-btn:active {
+  background: var(--bg-3);
+}
+.dock-btn.is-lit {
+  background: var(--text);
+  color: var(--bg);
+}
+.dock-btn:disabled {
+  color: var(--text-3);
+  cursor: default;
+}
+
+/* ----------------------------------------------------------- theory sheet */
+
+.sheet {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 5;
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 0.5s;
+}
+.sheet.is-open {
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+/* The scrim has no text, so fading it is safe. The panel opens by growing its height. */
+.sheet-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--scrim);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-liturgy);
+}
+.sheet.is-open .sheet-scrim {
+  opacity: 1;
+}
+.sheet-panel {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+  border-top: 1px solid var(--line-strong);
+  transition: max-height 0.5s var(--ease-liturgy);
+}
+.sheet.is-open .sheet-panel {
+  max-height: 88%;
+}
+.sheet-head {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 8px 8px 20px;
+}
+.sheet-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 1.05;
+}
+.sheet-kicker {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.sheet-close {
+  flex: none;
+  min-width: 64px;
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-2);
+}
+.sheet-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  padding: 4px 20px calc(var(--safe-bottom) + 28px);
+  user-select: text;
+  -webkit-user-select: text;
+}
+.sheet-idea {
+  margin: 12px 0 4px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.3;
+}
+.sheet h3 {
+  margin: 26px 0 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-3);
+}
+.sheet p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-2);
+  max-width: 62ch;
+}
+.sheet-steps {
+  list-style: none;
+}
+.sheet-steps li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  column-gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.sheet-steps b {
+  font-weight: 400;
+  color: var(--text);
+}
+.sheet-math {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.sheet-math li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.sheet-math span {
+  display: block;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.sheet-math code {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.sheet-remember {
+  margin-top: 26px;
+  padding: 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--text);
+}
+.sheet-link {
+  display: inline-block;
+  margin-top: 26px;
+  min-height: 44px;
+  line-height: 44px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.debug {
+  position: absolute;
+  top: calc(var(--safe-top) + 4px);
+  left: 4px;
+  z-index: 50;
+  max-width: calc(100% - 8px);
+  padding: 6px 8px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre;
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .home-body,
+  .game-col {
+    border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-panel,
+  .sheet-scrim,
+  .row,
+  .tool-btn,
+  .dock-btn {
+    transition-duration: 0.01ms;
+  }
+}
