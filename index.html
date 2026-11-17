@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover plus no zoom: part of the iPhone home screen app contract (docs/IPHONE_CONTRACT.md) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Theory Gambit" />
+    <meta name="theme-color" content="#08090b" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="A game for every game theory in The Gambit. Learn each idea by feeling it, seeing it and proving it." />
+    <meta property="og:title" content="Theory Gambit" />
+    <meta property="og:description" content="Learn game theory by playing it." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://theorygambit.github.io/" />
+    <title>Theory Gambit</title>
+
+    <link rel="icon" type="image/svg+xml" href="%BASE_URL%favicon.svg" />
+    <link rel="apple-touch-icon" href="%BASE_URL%icons/apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%manifest.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Exactly the faces the app draws: Cormorant italic 300, Jost 300 and 400, JetBrains Mono 400. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Jost:wght@300;400&family=JetBrains+Mono:wght@400&display=swap"
+    />
+
+    <script>
+      // Set the theme before first paint so there is never a flash of the wrong one.
+      try {
+        var p = JSON.parse(localStorage.getItem("tg.prefs.v1") || "{}");
+        var t = p.theme || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.dataset.theme = t;
+        document.documentElement.style.colorScheme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

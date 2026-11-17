@@ -1,0 +1,32 @@
+{
+  "name": "theorygambit",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Theory Gambit: a mobile first game for every game theory in The Gambit. Each game teaches the theory by letting you feel it, see it and prove it.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --noEmit",
+    "lint": "oxlint src tools",
+    "test": "tsx tools/test-models.ts",
+    "preview": "vite preview",
+    "sync:catalog": "node tools/sync-catalog.mjs",
+    "verify:iphone": "node tools/verify-iphone.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "oxlint": "^1.71.0",
+    "playwright": "^1.63.0",
+    "tsx": "^4.21.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.1.1"
+  }
+}
