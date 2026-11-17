@@ -51,6 +51,38 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="16.4" cy="16.4" r="2.2" />
         </svg>
       );
+    case "prisoners-dilemma":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="8.5" cy="12" r="4.5" />
+          <circle cx="15.5" cy="12" r="4.5" />
+          <path d="M12 3.5v17" />
+        </svg>
+      );
+    case "matching-pennies":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path className="solid" d="M12 4a8 8 0 0 0 0 16Z" />
+          <circle cx="12" cy="12" r="8" />
+        </svg>
+      );
+    case "stag-hunt":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="9" cy="10.5" r="4.5" />
+          <circle cx="17.5" cy="14" r="3" />
+          <path d="M3 20.5h18" />
+        </svg>
+      );
+    case "ultimatum":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect className="solid" x="3" y="8" width="11" height="7" />
+          <rect x="14.5" y="8.5" width="6.5" height="6" />
+          <path d="M14 5v13" />
+          <circle className="solid" cx="14" cy="20.5" r="1.5" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
