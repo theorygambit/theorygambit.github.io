@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
+  <title id="t">The curriculum</title>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. One game is live, four more have models and tests, and the rest are empty slots.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .rt{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:22px;fill:#e6e3da}
+      .rs{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.18em;fill:#7f8589}
+      .em{fill:none;stroke:#9aa3a8;stroke-opacity:.8;stroke-dasharray:1.4 2.3;stroke-width:1.2}
+      .md{fill:none;stroke:#c9cfd2;stroke-width:1.3}
+      .lv{fill:#e6e3da}
+      .sy{fill:none;stroke:#e6e3da;stroke-opacity:.7}
+      .d{animation:wave 9.6s cubic-bezier(0.16,0.4,0.15,1) infinite;animation-delay:calc(var(--i) * 36ms)}
+      @keyframes wave{0%,100%{opacity:.62}7%{opacity:1}15%{opacity:.62}}
+      .halo{fill:none;stroke:#e6e3da;stroke-opacity:.35;transform-box:fill-box;transform-origin:center;animation:halo 4.8s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes halo{0%{transform:scale(.7);opacity:.7}70%,100%{transform:scale(2.6);opacity:0}}
+      .lg{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300;font-size:13px;fill:#9aa3a8}
+      .br{stroke:rgba(214,219,222,0.18);fill:none}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="50%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="500"/>
+  <rect x="0" y="0" width="1200" height="500" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="500" filter="url(#grain)" opacity=".05"/>
+  <text class="k" x="45" y="42">THE CURRICULUM  ·  118 SLOTS, EASY TO HARD, ONE DOT PER GAME</text>
+  <path class="hair" d="M45 58H1155"/>
+  <text class="rt" x="45" y="136">Foundations</text><text class="rs" x="45" y="156">24 ENTRIES</text>
+  <circle class="halo" cx="196" cy="130" r="5"/><circle class="lv d" style="--i:0" cx="196" cy="130" r="5.4"/>
+  <circle class="md d" style="--i:1" cx="216.8" cy="130" r="4.6"/>
+  <circle class="md d" style="--i:2" cx="237.6" cy="130" r="4.6"/>
+  <circle class="md d" style="--i:3" cx="258.4" cy="130" r="4.6"/>
+  <circle class="md d" style="--i:4" cx="279.2" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:5" cx="300" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:6" cx="320.8" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:7" cx="341.6" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:8" cx="362.4" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:9" cx="383.2" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:10" cx="404" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:11" cx="424.8" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:12" cx="445.6" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:13" cx="466.4" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:14" cx="487.2" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:15" cx="508" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:16" cx="528.8" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:17" cx="549.6" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:18" cx="570.4" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:19" cx="591.2" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:20" cx="612" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:21" cx="632.8" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:22" cx="653.6" cy="130" r="4.6"/>
+  <circle class="em d" style="--i:23" cx="674.4" cy="130" r="4.6"/>
+  <path class="br" d="M189 110H286.2M189 110V115M286.2 110V115"/><text class="rs" x="189" y="102">THE FIRST FIVE</text>
+  <text class="rt" x="45" y="220">Core</text><text class="rs" x="45" y="240">46 ENTRIES</text>
+  <circle class="em d" style="--i:24" cx="196" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:25" cx="216.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:26" cx="237.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:27" cx="258.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:28" cx="279.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:29" cx="300" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:30" cx="320.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:31" cx="341.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:32" cx="362.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:33" cx="383.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:34" cx="404" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:35" cx="424.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:36" cx="445.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:37" cx="466.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:38" cx="487.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:39" cx="508" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:40" cx="528.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:41" cx="549.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:42" cx="570.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:43" cx="591.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:44" cx="612" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:45" cx="632.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:46" cx="653.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:47" cx="674.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:48" cx="695.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:49" cx="716" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:50" cx="736.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:51" cx="757.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:52" cx="778.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:53" cx="799.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:54" cx="820" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:55" cx="840.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:56" cx="861.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:57" cx="882.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:58" cx="903.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:59" cx="924" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:60" cx="944.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:61" cx="965.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:62" cx="986.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:63" cx="1007.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:64" cx="1028" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:65" cx="1048.8" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:66" cx="1069.6" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:67" cx="1090.4" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:68" cx="1111.2" cy="214" r="4.6"/>
+  <circle class="em d" style="--i:69" cx="1132" cy="214" r="4.6"/>
+  <text class="rt" x="45" y="304">Advanced</text><text class="rs" x="45" y="324">46 ENTRIES</text>
+  <circle class="em d" style="--i:70" cx="196" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:71" cx="216.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:72" cx="237.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:73" cx="258.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:74" cx="279.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:75" cx="300" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:76" cx="320.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:77" cx="341.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:78" cx="362.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:79" cx="383.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:80" cx="404" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:81" cx="424.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:82" cx="445.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:83" cx="466.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:84" cx="487.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:85" cx="508" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:86" cx="528.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:87" cx="549.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:88" cx="570.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:89" cx="591.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:90" cx="612" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:91" cx="632.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:92" cx="653.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:93" cx="674.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:94" cx="695.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:95" cx="716" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:96" cx="736.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:97" cx="757.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:98" cx="778.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:99" cx="799.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:100" cx="820" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:101" cx="840.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:102" cx="861.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:103" cx="882.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:104" cx="903.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:105" cx="924" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:106" cx="944.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:107" cx="965.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:108" cx="986.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:109" cx="1007.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:110" cx="1028" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:111" cx="1048.8" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:112" cx="1069.6" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:113" cx="1090.4" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:114" cx="1111.2" cy="298" r="4.6"/>
+  <circle class="em d" style="--i:115" cx="1132" cy="298" r="4.6"/>
+  <path class="br" d="M1083.4 318H1139M1083.4 318V313M1139 318V313"/><text class="rs" x="1139" y="334" text-anchor="end">FINALE: HYPERGAMES AND METAGAMES</text>
+  <text class="rt" x="45" y="388">Synthesis</text><text class="rs" x="45" y="408">2 CAPSTONES</text>
+  <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="sy d" style="--i:116" cx="196" cy="382" r="3.4"/>
+  <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="sy d" style="--i:117" cx="230" cy="382" r="3.4"/>
+  <path class="hair" d="M45 436H1155"/>
+  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 Dominant Strategy</text>
+  <circle class="md" cx="318" cy="466" r="4.6"/><text class="lg" x="334" y="470">Model and tests ready: 002 to 005</text>
+  <circle class="em" cx="624" cy="466" r="4.6"/><text class="lg" x="640" y="470">Empty slot: opens the idea and a Gambit link</text>
+  <circle class="sy" cx="956" cy="466" r="7.2"/><circle class="sy" cx="956" cy="466" r="3.4"/><text class="lg" x="974" y="470">Synthesis capstone</text>
+</svg>

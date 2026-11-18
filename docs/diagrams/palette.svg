@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360" role="img" aria-labelledby="t d">
+  <title id="t">Palette, dark and light</title>
+  <desc id="d">Dark is the brand. Light is its exact inverse. Ground, ink, secondary and tertiary text, in both themes.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .sw{stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .sl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.14em}
+      .rl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .sd{transform-box:fill-box;transform-origin:center;animation:flip 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes flip{0%,8%{transform:rotate(0)}46%,58%{transform:rotate(180deg)}96%,100%{transform:rotate(360deg)}}
+      .tg{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:22px;fill:#e6e3da}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="50%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="360"/>
+  <rect x="0" y="0" width="1200" height="360" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="360" filter="url(#grain)" opacity=".05"/>
+  <text class="k" x="45" y="40">PALETTE  ·  DARK IS THE BRAND, LIGHT IS ITS EXACT INVERSE</text>
+  <text class="rl" x="45" y="130">DARK</text>
+  <rect class="sw" x="140" y="78" width="200" height="104" fill="#08090b"/>
+  <text class="sl" x="156" y="118" fill="#e6e3da">VOID</text>
+  <text class="sl" x="156" y="140" fill="#e6e3da" fill-opacity=".7">#08090B</text>
+  <text class="sl" x="156" y="164" fill="#e6e3da" fill-opacity=".7" style="font-size:9.5px">GROUND</text>
+  <rect class="sw" x="354" y="78" width="200" height="104" fill="#e6e3da"/>
+  <text class="sl" x="370" y="118" fill="#08090b">BONE</text>
+  <text class="sl" x="370" y="140" fill="#08090b" fill-opacity=".7">#E6E3DA</text>
+  <text class="sl" x="370" y="164" fill="#08090b" fill-opacity=".7" style="font-size:9.5px">INK</text>
+  <rect class="sw" x="568" y="78" width="200" height="104" fill="#9aa3a8"/>
+  <text class="sl" x="584" y="118" fill="#08090b">FOG</text>
+  <text class="sl" x="584" y="140" fill="#08090b" fill-opacity=".7">#9AA3A8</text>
+  <text class="sl" x="584" y="164" fill="#08090b" fill-opacity=".7" style="font-size:9.5px">SECONDARY</text>
+  <rect class="sw" x="782" y="78" width="200" height="104" fill="#7f8589"/>
+  <text class="sl" x="798" y="118" fill="#08090b">ASH</text>
+  <text class="sl" x="798" y="140" fill="#08090b" fill-opacity=".7">#7F8589</text>
+  <text class="sl" x="798" y="164" fill="#08090b" fill-opacity=".7" style="font-size:9.5px">TERTIARY</text>
+  <text class="rl" x="45" y="258">LIGHT</text>
+  <rect class="sw" x="140" y="206" width="200" height="104" fill="#e6e3da"/>
+  <text class="sl" x="156" y="246" fill="#08090b">BONE</text>
+  <text class="sl" x="156" y="268" fill="#08090b" fill-opacity=".7">#E6E3DA</text>
+  <text class="sl" x="156" y="292" fill="#08090b" fill-opacity=".7" style="font-size:9.5px">GROUND</text>
+  <rect class="sw" x="354" y="206" width="200" height="104" fill="#08090b"/>
+  <text class="sl" x="370" y="246" fill="#e6e3da">VOID</text>
+  <text class="sl" x="370" y="268" fill="#e6e3da" fill-opacity=".7">#08090B</text>
+  <text class="sl" x="370" y="292" fill="#e6e3da" fill-opacity=".7" style="font-size:9.5px">INK</text>
+  <rect class="sw" x="568" y="206" width="200" height="104" fill="#363e43"/>
+  <text class="sl" x="584" y="246" fill="#e6e3da">FOG</text>
+  <text class="sl" x="584" y="268" fill="#e6e3da" fill-opacity=".7">#363E43</text>
+  <text class="sl" x="584" y="292" fill="#e6e3da" fill-opacity=".7" style="font-size:9.5px">SECONDARY</text>
+  <rect class="sw" x="782" y="206" width="200" height="104" fill="#4c555b"/>
+  <text class="sl" x="798" y="246" fill="#e6e3da">ASH</text>
+  <text class="sl" x="798" y="268" fill="#e6e3da" fill-opacity=".7">#4C555B</text>
+  <text class="sl" x="798" y="292" fill="#e6e3da" fill-opacity=".7" style="font-size:9.5px">TERTIARY</text>
+  <g transform="translate(1086 190)">
+    <circle r="52" fill="none" stroke="rgba(214,219,222,0.18)"/>
+    <g class="sd"><path d="M0 -44A44 44 0 0 1 0 44Z" fill="#e6e3da"/><path d="M0 -44A44 44 0 0 0 0 44Z" fill="#08090b" stroke="rgba(214,219,222,0.18)"/></g>
+  </g>
+  <text class="tg" x="1086" y="276" text-anchor="middle">inverse</text>
+  <text class="k" x="45" y="340" style="font-size:10px">EVERY TEXT PAIR IS AT LEAST 4.5 TO 1. COLOURS LIVE IN SRC/STYLES/TOKENS.CSS AND GAMES READ THEM THROUGH PALETTE.</text>
+</svg>

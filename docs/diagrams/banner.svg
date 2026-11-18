@@ -1,0 +1,383 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 330" width="1200" height="330" role="img" aria-labelledby="t d">
+  <title id="t">Theory Gambit</title>
+  <desc id="d">A looping picture of the first game: a two by two payoff table played in three beats, Feel, See and Prove, beside the title Theory Gambit.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .gbp circle,.gbp-fx circle{transform-box:fill-box;transform-origin:center}
+      .gbp-contours circle{fill:none;stroke:#7f8589;stroke-opacity:.09}
+      .gbp-contours .gbp-orbit{stroke-opacity:.2;stroke-dasharray:1 7}
+      .gbp-mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:8px;letter-spacing:.2em;fill:#7f8589}
+      .gbp-hair{fill:none;stroke:rgba(214,219,222,0.18);stroke-width:.6}
+      .gbp-ring{fill:none;stroke:#c9cfd2;stroke-width:1;opacity:.6}
+      .gbp-board path{fill:none;stroke:#7f8589;stroke-opacity:.6;stroke-width:1;stroke-dasharray:1;stroke-dashoffset:0}
+      .gbp-band{fill:#e6e3da;opacity:.075}
+      .gbp-bandline{fill:none;stroke:#c9cfd2;stroke-opacity:.75;stroke-dasharray:1;stroke-dashoffset:0}
+      .gbp-alt{fill:none;stroke:#c9cfd2;stroke-dasharray:2 3;opacity:0}
+      .gbp-win,.gbp-you{fill:#e6e3da} .gbp-you{opacity:.28}
+      .gbp-arrow,.gbp-head{fill:none;stroke:#c9cfd2;stroke-linecap:round;stroke-linejoin:round}
+      .gbp-arrow{stroke-dasharray:1;stroke-dashoffset:0}
+      .gbp-num text{fill:#e6e3da} .gbp-num .gbp-num-tl,.gbp-num .gbp-num-tr{opacity:.3}
+      .gbp-cap{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:15px;fill:#9aa3a8;opacity:0}
+      .gbp-cap-3{fill:#e6e3da;opacity:1}
+      .gbp-bar-bg{fill:none;stroke:rgba(214,219,222,0.18)}
+      .gbp-bar{fill:none;stroke:#e6e3da;stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:0}
+      .gbp-labs text,.gbp-row-down{fill:#e6e3da}
+      .gbp-orbit{animation:gbp-spin 140s linear infinite}
+      .gbp-board path{animation:gbp-draw 1.8s cubic-bezier(0.16,0.4,0.15,1) both}
+      .gbp-board path:nth-child(2){animation-delay:.35s} .gbp-board path:nth-child(3){animation-delay:.55s}
+      .gbp-them-l{animation:gbp-themL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-them-r{animation:gbp-themR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-you-tl{animation:gbp-youTL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-you-tr{animation:gbp-youTR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-alt-bl{animation:gbp-altBL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-alt-br{animation:gbp-altBR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-win-bl{animation:gbp-winBL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-win-br{animation:gbp-winBR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-arrow-l{animation:gbp-arrowL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-arrow-r{animation:gbp-arrowR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-head-l{animation:gbp-headL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-head-r{animation:gbp-headR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-band{animation:gbp-band 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-bandline{animation:gbp-bandLine 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-bandline-2{animation:gbp-bandLine 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-row-down{animation:gbp-rowDown 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-num-tl{animation:gbp-numTL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-num-tr{animation:gbp-numTR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-num-bl{animation:gbp-numBL 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-num-br{animation:gbp-numBR 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-cap-1{animation:gbp-cap1 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-cap-2{animation:gbp-cap2 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-cap-3{animation:gbp-cap3 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-lab-1{animation:gbp-lab1 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-lab-2{animation:gbp-lab2 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-lab-3{animation:gbp-lab3 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-bar-1{animation:gbp-bar1 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-bar-2{animation:gbp-bar2 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .gbp-bar-3{animation:gbp-bar3 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes gbp-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+      @keyframes gbp-spin{to{transform:rotate(360deg)}}
+@keyframes gbp-themL{
+  0%{opacity:0.5;transform:scale(1)}
+  3.75%{opacity:0.5;transform:scale(1)}
+  5.833%{opacity:1;transform:scale(1.35)}
+  9.167%{opacity:0.5;transform:scale(1)}
+  16.667%{opacity:0.5;transform:scale(1)}
+  18.75%{opacity:1;transform:scale(1.35)}
+  22.083%{opacity:0.5;transform:scale(1)}
+  75%{opacity:0.5;transform:scale(1)}
+  77.5%{opacity:1;transform:scale(1.5)}
+  82.5%{opacity:0.55;transform:scale(1)}
+  100%{opacity:0.5;transform:scale(1)}
+}
+@keyframes gbp-themR{
+  0%{opacity:0.5;transform:scale(1)}
+  10.833%{opacity:0.5;transform:scale(1)}
+  12.917%{opacity:1;transform:scale(1.35)}
+  16.25%{opacity:0.5;transform:scale(1)}
+  23.75%{opacity:0.5;transform:scale(1)}
+  25.833%{opacity:1;transform:scale(1.35)}
+  29.167%{opacity:0.5;transform:scale(1)}
+  75%{opacity:0.5;transform:scale(1)}
+  77.5%{opacity:1;transform:scale(1.5)}
+  82.5%{opacity:0.55;transform:scale(1)}
+  100%{opacity:0.5;transform:scale(1)}
+}
+@keyframes gbp-youTL{
+  0%{opacity:0;transform:scale(0.15)}
+  3.75%{opacity:0;transform:scale(0.15)}
+  7.917%{opacity:1;transform:scale(1)}
+  16.667%{opacity:1;transform:scale(1)}
+  18.75%{opacity:1;transform:scale(1.1)}
+  22.083%{opacity:1;transform:scale(1)}
+  33.333%{opacity:1;transform:scale(1)}
+  39.167%{opacity:0.45;transform:scale(1)}
+  66.667%{opacity:0.45;transform:scale(1)}
+  73.333%{opacity:0.28;transform:scale(1)}
+  90%{opacity:0.28;transform:scale(1)}
+  94.167%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.15)}
+}
+@keyframes gbp-youTR{
+  0%{opacity:0;transform:scale(0.15)}
+  10.833%{opacity:0;transform:scale(0.15)}
+  15%{opacity:1;transform:scale(1)}
+  23.75%{opacity:1;transform:scale(1)}
+  25.833%{opacity:1;transform:scale(1.1)}
+  29.167%{opacity:1;transform:scale(1)}
+  33.333%{opacity:1;transform:scale(1)}
+  39.167%{opacity:0.45;transform:scale(1)}
+  66.667%{opacity:0.45;transform:scale(1)}
+  73.333%{opacity:0.28;transform:scale(1)}
+  90%{opacity:0.28;transform:scale(1)}
+  94.167%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.15)}
+}
+@keyframes gbp-numTL{
+  0%{opacity:0}
+  5.833%{opacity:0}
+  9.167%{opacity:0.75}
+  33.333%{opacity:0.75}
+  39.167%{opacity:0.4}
+  73.333%{opacity:0.3}
+  90%{opacity:0.3}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-numTR{
+  0%{opacity:0}
+  12.917%{opacity:0}
+  16.25%{opacity:0.75}
+  33.333%{opacity:0.75}
+  39.167%{opacity:0.4}
+  73.333%{opacity:0.3}
+  90%{opacity:0.3}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-altBL{
+  0%{opacity:0;transform:scale(0.15)}
+  6.25%{opacity:0;transform:scale(0.15)}
+  10.417%{opacity:0.85;transform:scale(1)}
+  18.75%{opacity:0.85;transform:scale(1)}
+  20.417%{opacity:1;transform:scale(1)}
+  24.167%{opacity:0.85;transform:scale(1)}
+  32.5%{opacity:0.85;transform:scale(1)}
+  37.5%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.15)}
+}
+@keyframes gbp-altBR{
+  0%{opacity:0;transform:scale(0.15)}
+  13.333%{opacity:0;transform:scale(0.15)}
+  17.5%{opacity:0.85;transform:scale(1)}
+  25.833%{opacity:0.85;transform:scale(1)}
+  27.5%{opacity:1;transform:scale(1)}
+  31.25%{opacity:0.85;transform:scale(1)}
+  37.5%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.15)}
+}
+@keyframes gbp-numBL{
+  0%{opacity:0}
+  8.333%{opacity:0}
+  11.667%{opacity:0.55}
+  33.333%{opacity:0.55}
+  39.167%{opacity:0.8}
+  66.667%{opacity:0.8}
+  73.333%{opacity:1}
+  90%{opacity:1}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-numBR{
+  0%{opacity:0}
+  15.417%{opacity:0}
+  18.75%{opacity:0.55}
+  33.333%{opacity:0.55}
+  39.167%{opacity:0.8}
+  66.667%{opacity:0.8}
+  73.333%{opacity:1}
+  90%{opacity:1}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-winBL{
+  0%{opacity:0;transform:scale(0.9)}
+  33.333%{opacity:0;transform:scale(0.9)}
+  39.167%{opacity:1;transform:scale(1)}
+  90%{opacity:1;transform:scale(1)}
+  94.167%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.9)}
+}
+@keyframes gbp-winBR{
+  0%{opacity:0;transform:scale(0.9)}
+  34.333%{opacity:0;transform:scale(0.9)}
+  40.167%{opacity:1;transform:scale(1)}
+  90%{opacity:1;transform:scale(1)}
+  94.167%{opacity:0;transform:scale(1)}
+  100%{opacity:0;transform:scale(0.9)}
+}
+@keyframes gbp-arrowL{
+  0%{opacity:0;stroke-dashoffset:1}
+  40%{opacity:0;stroke-dashoffset:1}
+  40.083%{opacity:1;stroke-dashoffset:1}
+  48.333%{opacity:1;stroke-dashoffset:0}
+  90%{opacity:1;stroke-dashoffset:0}
+  94.167%{opacity:0;stroke-dashoffset:0}
+  100%{opacity:0;stroke-dashoffset:1}
+}
+@keyframes gbp-arrowR{
+  0%{opacity:0;stroke-dashoffset:1}
+  41.5%{opacity:0;stroke-dashoffset:1}
+  41.583%{opacity:1;stroke-dashoffset:1}
+  49.833%{opacity:1;stroke-dashoffset:0}
+  90%{opacity:1;stroke-dashoffset:0}
+  94.167%{opacity:0;stroke-dashoffset:0}
+  100%{opacity:0;stroke-dashoffset:1}
+}
+@keyframes gbp-headL{
+  0%{opacity:0}
+  45.833%{opacity:0}
+  48.75%{opacity:1}
+  90%{opacity:1}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-headR{
+  0%{opacity:0}
+  47.333%{opacity:0}
+  50.25%{opacity:1}
+  90%{opacity:1}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-band{
+  0%{opacity:0}
+  66.667%{opacity:0}
+  74.167%{opacity:0.075}
+  90%{opacity:0.075}
+  94.167%{opacity:0}
+  100%{opacity:0}
+}
+@keyframes gbp-bandLine{
+  0%{opacity:0;stroke-dashoffset:1}
+  66.667%{opacity:0;stroke-dashoffset:1}
+  66.75%{opacity:1;stroke-dashoffset:1}
+  74.167%{opacity:1;stroke-dashoffset:0}
+  90%{opacity:1;stroke-dashoffset:0}
+  94.167%{opacity:0;stroke-dashoffset:0}
+  100%{opacity:0;stroke-dashoffset:1}
+}
+@keyframes gbp-rowDown{
+  0%{fill:#7f8589}
+  66.667%{fill:#7f8589}
+  73.333%{fill:#e6e3da}
+  90%{fill:#e6e3da}
+  94.167%{fill:#7f8589}
+  100%{fill:#7f8589}
+}
+@keyframes gbp-cap1{
+  0%{opacity:0;transform:translateY(4px)}
+  2.5%{opacity:0;transform:translateY(4px)}
+  6.667%{opacity:1;transform:translateY(0px)}
+  29.167%{opacity:1;transform:translateY(0px)}
+  32.5%{opacity:0;transform:translateY(-2px)}
+  100%{opacity:0;transform:translateY(-2px)}
+}
+@keyframes gbp-cap2{
+  0%{opacity:0;transform:translateY(4px)}
+  33.333%{opacity:0;transform:translateY(4px)}
+  37.5%{opacity:1;transform:translateY(0px)}
+  62.5%{opacity:1;transform:translateY(0px)}
+  65.833%{opacity:0;transform:translateY(-2px)}
+  100%{opacity:0;transform:translateY(-2px)}
+}
+@keyframes gbp-cap3{
+  0%{opacity:0;transform:translateY(4px)}
+  66.667%{opacity:0;transform:translateY(4px)}
+  70.833%{opacity:1;transform:translateY(0px)}
+  90%{opacity:1;transform:translateY(0px)}
+  94.167%{opacity:0;transform:translateY(-2px)}
+  100%{opacity:0;transform:translateY(4px)}
+}
+@keyframes gbp-lab1{
+  0%{fill:#e6e3da}
+  31.667%{fill:#e6e3da}
+  35%{fill:#7f8589}
+  97.5%{fill:#7f8589}
+  100%{fill:#e6e3da}
+}
+@keyframes gbp-lab2{
+  0%{fill:#7f8589}
+  32.5%{fill:#7f8589}
+  35.833%{fill:#e6e3da}
+  65%{fill:#e6e3da}
+  68.333%{fill:#7f8589}
+  100%{fill:#7f8589}
+}
+@keyframes gbp-lab3{
+  0%{fill:#7f8589}
+  65.833%{fill:#7f8589}
+  69.167%{fill:#e6e3da}
+  91.667%{fill:#e6e3da}
+  96.667%{fill:#7f8589}
+  100%{fill:#7f8589}
+}
+@keyframes gbp-bar1{
+  0%{stroke-dashoffset:1}
+  0.833%{stroke-dashoffset:1}
+  32.5%{stroke-dashoffset:0}
+  94.167%{stroke-dashoffset:0}
+  96.667%{stroke-dashoffset:1}
+  100%{stroke-dashoffset:1}
+}
+@keyframes gbp-bar2{
+  0%{stroke-dashoffset:1}
+  33.333%{stroke-dashoffset:1}
+  65.833%{stroke-dashoffset:0}
+  94.167%{stroke-dashoffset:0}
+  96.667%{stroke-dashoffset:1}
+  100%{stroke-dashoffset:1}
+}
+@keyframes gbp-bar3{
+  0%{stroke-dashoffset:1}
+  66.667%{stroke-dashoffset:1}
+  91.667%{stroke-dashoffset:0}
+  94.167%{stroke-dashoffset:0}
+  96.667%{stroke-dashoffset:1}
+  100%{stroke-dashoffset:1}
+}
+      .word{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:84px;fill:#e6e3da;letter-spacing:-.01em}
+      .beats{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:30px}
+      .b1{animation:gbp-lab1 12s cubic-bezier(0.16,0.4,0.15,1) infinite} .b2{animation:gbp-lab2 12s cubic-bezier(0.16,0.4,0.15,1) infinite} .b3{animation:gbp-lab3 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      .b1,.b2,.b3{fill:#e6e3da}
+      .halo{fill:none;stroke:#7f8589;stroke-opacity:.07}
+      .rise{animation:rise 1.4s cubic-bezier(0.16,0.4,0.15,1) both} .d1{animation-delay:.2s}.d2{animation-delay:.4s}.d3{animation-delay:.6s}
+      @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="22%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="330"/>
+  <rect x="0" y="0" width="1200" height="330" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="330" filter="url(#grain)" opacity=".05"/>
+  <g class="halo"><circle cx="220" cy="165" r="150"/><circle cx="220" cy="165" r="210"/><circle cx="220" cy="165" r="280"/><circle cx="220" cy="165" r="360"/></g>
+  <g class="gbp" transform="translate(60 -8)">
+    <g class="gbp-contours"><circle cx="160" cy="138" r="104"/><circle cx="160" cy="138" r="134"/><circle cx="160" cy="138" r="164"/><circle class="gbp-orbit" cx="160" cy="138" r="119"/></g>
+    
+    <circle class="gbp-ring gbp-them-l" cx="115" cy="53" r="5.5"/>
+    <circle class="gbp-ring gbp-them-r" cx="205" cy="53" r="5.5"/>
+    <text class="gbp-mono" x="115" y="73" text-anchor="middle">LEFT</text>
+    <text class="gbp-mono" x="205" y="73" text-anchor="middle">RIGHT</text>
+    <text class="gbp-mono" x="60" y="107" text-anchor="end" dominant-baseline="middle">UP</text>
+    <text class="gbp-mono gbp-row-down" x="60" y="169" text-anchor="end" dominant-baseline="middle">DOWN</text>
+    <rect class="gbp-band" x="70" y="138" width="180" height="62"/>
+    <g class="gbp-board"><path pathLength="1" d="M70 76H250V200H70Z"/><path pathLength="1" d="M160 76V200"/><path pathLength="1" d="M70 138H250"/></g>
+    <path class="gbp-bandline" pathLength="1" d="M70 138H250"/>
+    <path class="gbp-bandline gbp-bandline-2" pathLength="1" d="M70 200H250"/>
+    <circle class="gbp-alt gbp-alt-bl" cx="115" cy="169" r="12.25"/>
+    <circle class="gbp-alt gbp-alt-br" cx="205" cy="169" r="8.66"/>
+    <circle class="gbp-win gbp-win-bl" cx="115" cy="169" r="12.25"/>
+    <circle class="gbp-win gbp-win-br" cx="205" cy="169" r="8.66"/>
+    <circle class="gbp-you gbp-you-tl" cx="115" cy="107" r="11.18"/>
+    <circle class="gbp-you gbp-you-tr" cx="205" cy="107" r="7.07"/>
+    <g class="gbp-arrows"><path class="gbp-arrow gbp-arrow-l" pathLength="1" d="M115 122V150"/><path class="gbp-head gbp-head-l" d="M110.5 145.5L115 150.5L119.5 145.5"/><path class="gbp-arrow gbp-arrow-r" pathLength="1" d="M205 118V154"/><path class="gbp-head gbp-head-r" d="M200.5 149L205 154L209.5 149"/></g>
+    <g class="gbp-mono gbp-num"><text class="gbp-num-tl" x="78" y="90">5</text><text class="gbp-num-tr" x="168" y="90">2</text><text class="gbp-num-bl" x="78" y="152">6</text><text class="gbp-num-br" x="168" y="152">3</text></g>
+    <g class="gbp-caps" text-anchor="middle"><text class="gbp-cap gbp-cap-1" x="160" y="226">Play four rounds.</text><text class="gbp-cap gbp-cap-2" x="160" y="226">The same row wins both times.</text><text class="gbp-cap gbp-cap-3" x="160" y="226">Best no matter what they do.</text></g>
+    <g class="gbp-bars"><path class="gbp-bar-bg" d="M45 245H115M125 245H195M205 245H275"/><path class="gbp-bar gbp-bar-1" pathLength="1" d="M45 245H115"/><path class="gbp-bar gbp-bar-2" pathLength="1" d="M125 245H195"/><path class="gbp-bar gbp-bar-3" pathLength="1" d="M205 245H275"/></g>
+    <g class="gbp-mono gbp-labs" text-anchor="middle"><text class="gbp-lab-1" x="80" y="260">FEEL</text><text class="gbp-lab-2" x="160" y="260">SEE</text><text class="gbp-lab-3" x="240" y="260">PROVE</text></g>
+  </g>
+  <path class="hair" d="M452 58V272"/>
+  <text class="k rise d1" x="492" y="98">THE GAMBIT  ·  A GAME FOR EVERY THEORY</text>
+  <text class="word rise d2" x="488" y="178">Theory Gambit</text>
+  <text class="beats rise d3" x="492" y="232"><tspan class="b1">Feel it.</tspan><tspan class="b2" dx="16">See it.</tspan><tspan class="b3" dx="16">Prove it.</tspan></text>
+  <text class="k" x="492" y="274" style="font-size:10.5px">REACT 19  ·  TYPESCRIPT  ·  CANVAS  ·  INSTALLS ON THE IPHONE HOME SCREEN</text>
+</svg>
