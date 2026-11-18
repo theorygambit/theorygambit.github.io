@@ -6,6 +6,7 @@ import { GameRegistry } from "./Registry";
 import { Rng } from "./Rng";
 import { Surface } from "./Surface";
 import { loadFonts } from "./Fonts";
+import { Feedback } from "./Feedback";
 
 /**
  * Hosts one Game on one canvas: sizing, the frame loop, theme redraws and the
@@ -25,10 +26,12 @@ export class GameRuntime {
   private disposed = false;
   private readonly ro: ResizeObserver;
   private readonly offPalette: () => void;
+  private readonly audit = new URLSearchParams(location.search).has("audit");
 
   constructor(canvas: HTMLCanvasElement, box: HTMLElement, slug: string) {
     this.surface = new Surface(canvas);
     this.painter = new Painter(this.surface);
+    if (this.audit) this.painter.auditOn(true);
     this.box = box;
     this.slug = slug;
     this.ro = new ResizeObserver(() => this.fit());
@@ -95,6 +98,7 @@ export class GameRuntime {
     this.activeId = null;
     const { x, y } = this.local(e);
     this.game?.pointerUp(x, y);
+    Feedback.tap();
   };
 
   private readonly visibility = (): void => {
@@ -126,6 +130,11 @@ export class GameRuntime {
     const c = Palette.colors;
     this.painter.clear(c);
     this.game.draw(this.painter, c);
+    if (this.audit) {
+      const g = window as unknown as { __tgViolations?: string[]; __tgCaptions?: { prompt: number; note: number } };
+      g.__tgViolations = this.painter.audit();
+      g.__tgCaptions = this.game.captionLines;
+    }
   }
 
   debug(): Game | null {
