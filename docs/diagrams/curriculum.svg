@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
   <title id="t">The curriculum</title>
-  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. One game is live, four more have models and tests, and the rest are empty slots.</desc>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. The five opening games are live, and the rest are empty slots.</desc>
   <defs>
     <style>
 
@@ -36,10 +36,10 @@
   <path class="hair" d="M45 58H1155"/>
   <text class="rt" x="45" y="136">Foundations</text><text class="rs" x="45" y="156">24 ENTRIES</text>
   <circle class="halo" cx="196" cy="130" r="5"/><circle class="lv d" style="--i:0" cx="196" cy="130" r="5.4"/>
-  <circle class="md d" style="--i:1" cx="216.8" cy="130" r="4.6"/>
-  <circle class="md d" style="--i:2" cx="237.6" cy="130" r="4.6"/>
-  <circle class="md d" style="--i:3" cx="258.4" cy="130" r="4.6"/>
-  <circle class="md d" style="--i:4" cx="279.2" cy="130" r="4.6"/>
+  <circle class="lv d" style="--i:1" cx="216.8" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:2" cx="237.6" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:3" cx="258.4" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:4" cx="279.2" cy="130" r="5.4"/>
   <circle class="em d" style="--i:5" cx="300" cy="130" r="4.6"/>
   <circle class="em d" style="--i:6" cx="320.8" cy="130" r="4.6"/>
   <circle class="em d" style="--i:7" cx="341.6" cy="130" r="4.6"/>
@@ -159,8 +159,7 @@
   <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="sy d" style="--i:116" cx="196" cy="382" r="3.4"/>
   <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="sy d" style="--i:117" cx="230" cy="382" r="3.4"/>
   <path class="hair" d="M45 436H1155"/>
-  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 Dominant Strategy</text>
-  <circle class="md" cx="318" cy="466" r="4.6"/><text class="lg" x="334" y="470">Model and tests ready: 002 to 005</text>
-  <circle class="em" cx="624" cy="466" r="4.6"/><text class="lg" x="640" y="470">Empty slot: opens the idea and a Gambit link</text>
+  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 005, the five opening games</text>
+  <circle class="em" cx="420" cy="466" r="4.6"/><text class="lg" x="436" y="470">Empty slot: opens the idea and a Gambit link</text>
   <circle class="sy" cx="956" cy="466" r="7.2"/><circle class="sy" cx="956" cy="466" r="3.4"/><text class="lg" x="974" y="470">Synthesis capstone</text>
 </svg>
