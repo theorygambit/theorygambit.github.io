@@ -9,6 +9,10 @@ Target: https://theorygambit.github.io
 3. In the repository: **Settings, Pages, Build and deployment, Source: GitHub Actions**.
 4. Run `npm install` once locally and commit the generated `package-lock.json` (the workflow uses `npm ci` when a lock file exists, and `npm install` otherwise).
 
+## Clean links
+
+Addresses are plain paths such as `https://theorygambit.github.io/g/stag-hunt`, with no hash. GitHub Pages has no server rewrites, so the build copies `index.html` to `404.html` (see `vite.config.ts`). Pages serves that file for any unknown path and the app then reads the address. Old `/#/g/<slug>` links are upgraded in place. If you ever move hosting, add a rewrite of every path to `index.html` instead.
+
 ## Every release
 
 Push to `main`. `.github/workflows/deploy.yml` runs lint, type check, model tests and the build, then publishes `dist` with the official Pages actions. Workflow action versions: checkout v6, setup-node v6 (Node 24), configure-pages v6, upload-pages-artifact v5, deploy-pages v5.
@@ -21,6 +25,7 @@ npm run dev            # development
 npm test               # model tests
 npm run build && npm run preview
 npm run verify:iphone  # iPhone contract (needs `npx playwright install chromium` once)
+npm run verify:layout  # no overlaps, seven screen sizes
 ```
 
 ## After deploying, on every iPhone

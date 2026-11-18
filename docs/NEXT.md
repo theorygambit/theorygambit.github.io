@@ -21,7 +21,7 @@ Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Gam
 - `Timeline` in Matching Pennies is a good base for any repeated game (for example Axelrod's tournament).
 - The Stag Hunt and Ultimatum chart code is a good base for any "find the crossing or the peak" idea.
 
-Follow `docs/ADDING_A_GAME.md`. Keep the model pure and tested.
+Follow `docs/ADDING_A_GAME.md`. Keep the model pure and tested, draw inside the frame (`docs/LAYOUT.md`) and add the game to `tools/verify-layout.mjs`.
 
 ## Known follow ups
 

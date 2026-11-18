@@ -5,16 +5,17 @@ Vite 8, React 19, TypeScript 6, no runtime dependencies besides React. Everythin
 ```
 src/
   core/        Engine layer. No React.
-    Game.ts          Abstract Game: beats, buttons, captions, pointer routing.
+    Game.ts          Abstract Game: beats, the Frame layout, buttons, captions, pointer routing.
+    Geometry.ts      Box and hit testing shared by games and the base class.
     Runtime.ts       Hosts one Game on one canvas: sizing, loop, first pointer only.
-    Surface.ts       1:1 device pixel canvas.   Painter.ts  Snapped text, hairlines, discs.
+    Surface.ts       1:1 device pixel canvas.   Painter.ts  Snapped text, hairlines, discs, and the layout auditor.
     Damped.ts        Critically damped motion and Signals (Lag CHOP style).
     Rng.ts           Seeded random.             math.ts     Easing, normal distribution.
     Registry.ts      GameRegistry: slug -> module.
     Store.ts         Prefs and progress (localStorage, useSyncExternalStore ready).
     Theme.ts / Palette.ts   Theme and canvas colours, read from CSS tokens.
     Viewport.ts      --app-h and the ?debug=layout report.   GestureGuard.ts   Touch rules.
-    Sound.ts / Haptics.ts   Soft sine voices, vibration.
+    Sound.ts / Haptics.ts / Feedback.ts   Soft sine voices, iPhone safe haptics, one entry point (see FEEDBACK.md).
   catalog/     All topics.
     entries.ts       GENERATED from The Gambit (npm run sync:catalog). Do not edit.
     curriculum.ts    Order, tiers, finale and synthesis. The only place that knows order.
@@ -24,7 +25,7 @@ src/
   theory/      TheoryEntry type.
   ui/          React shell: Home, GameScreen, TheorySheet, Hero, Router, Icons, DebugOverlay.
   styles/      tokens.css (single source of colour) and app.css.
-tools/         test-models.ts, verify-iphone.mjs, sync-catalog.mjs, make-icons.mjs
+tools/         test-models.ts, verify-iphone.mjs, verify-layout.mjs, sync-catalog.mjs, make-icons.mjs
 docs/          You are here.
 ```
 
@@ -42,4 +43,4 @@ A game is a small state machine over `Beat = "feel" | "see" | "prove"` plus `"do
 
 ## Testing
 
-`npm test` runs `tools/test-models.ts` on pure models and the curriculum. `npm run verify:iphone` runs the iPhone contract in headless Chromium. CI runs lint, typecheck, tests and build before deploying.
+`npm test` runs `tools/test-models.ts` on pure models and the curriculum. `npm run verify:iphone` runs the iPhone contract in headless Chromium. `npm run verify:layout` opens every game at seven screen sizes and fails on any overlap (see LAYOUT.md). CI runs lint, typecheck, tests and build before deploying.

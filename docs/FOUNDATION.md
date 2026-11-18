@@ -29,6 +29,9 @@ Theory Gambit is a mobile first game app that sits on top of **The Gambit** (has
 - TypeScript, React 19, object oriented. Games and engines are classes. React is only the shell.
 - Games draw everything, including text, inside their own canvas. Never float page text over a canvas.
 - Gameplay canvases are 1:1 with device pixels.
+- **Nothing overlaps, ever.** A game draws its figure only inside the frame's body, sized from the real canvas height, with at least 3 pixels of clear space around every piece of text. `npm run verify:layout` checks this on seven screen sizes. Rules in `LAYOUT.md`.
+- Sound and haptics only fire from input handlers, and follow `FEEDBACK.md`.
+- URLs are clean paths (`/g/<slug>`), never hashes.
 - No em dashes anywhere: code, copy, docs, commit messages.
 - Do not touch other repositories. This repo is self contained. The only link out is the Gambit URL.
 - Follow `IPHONE_CONTRACT.md` for any layout or animation change. `npm run verify:iphone` must pass.
@@ -45,4 +48,5 @@ Theory Gambit is a mobile first game app that sits on top of **The Gambit** (has
 2. Game class with Feel, See and Prove, and `debugGoto` for all three beats.
 3. `TheoryEntry` written.
 4. Registered in `src/games/index.ts`, with a glyph in `src/ui/Icons.tsx` and a one line hook.
-5. Played once on a phone in both themes. `npm test`, `npm run typecheck` and `npm run verify:iphone` pass.
+5. Every beat and every state added to `tools/verify-layout.mjs`, and `npm run verify:layout` passes.
+6. Played once on a phone in both themes. `npm test`, `npm run typecheck` and `npm run verify:iphone` pass.
