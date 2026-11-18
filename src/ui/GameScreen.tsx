@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { chapterOf } from "../catalog/chapters";
 import { Curriculum } from "../catalog/curriculum";
-import { Haptics } from "../core/Haptics";
+import { Feedback } from "../core/Feedback";
 import { GameRegistry } from "../core/Registry";
 import { GameRuntime } from "../core/Runtime";
 import { progress } from "../core/Store";
-import { Sound } from "../core/Sound";
 import { router } from "./Router";
 import { TheorySheet, gambitUrl } from "./TheorySheet";
 
@@ -35,8 +34,7 @@ export function GameScreen({ slug }: { slug: string }) {
       rt.bus.on("complete", () => {
         progress.markUnderstood(slug);
         setDone(true);
-        Sound.done();
-        Haptics.confirm();
+        Feedback.done();
       }),
     ];
     return () => {
