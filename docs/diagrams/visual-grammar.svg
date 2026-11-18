@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-labelledby="t d">
+  <title id="t">Visual grammar</title>
+  <desc id="d">The grammar every game shares: you are the filled disc, the other player is the ring, and a payoff is the area of a disc, not its radius.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .pt{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:26px;fill:#e6e3da}
+      .pb{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300;font-size:14.5px;fill:#9aa3a8}
+      .you{fill:#e6e3da} .them{fill:none;stroke:#c9cfd2;stroke-width:1.5}
+      .fx circle{transform-box:fill-box;transform-origin:center}
+      .halo{fill:none;stroke:#7f8589;stroke-opacity:.14}
+      .yb{animation:breathe 6s cubic-bezier(0.16,0.4,0.15,1) infinite} .tb{animation:breathe 6s cubic-bezier(0.16,0.4,0.15,1) infinite -3s}
+      .ha{animation:halo 6s cubic-bezier(0.16,0.4,0.15,1) infinite} .hb{animation:halo 6s cubic-bezier(0.16,0.4,0.15,1) infinite -3s}
+      .p1,.p2,.p3,.p4{fill:#e6e3da}
+      .p1{animation:pop 12s cubic-bezier(0.16,0.4,0.15,1) infinite} .p2{animation:pop 12s cubic-bezier(0.16,0.4,0.15,1) infinite .5s}
+      .p3{animation:pop 12s cubic-bezier(0.16,0.4,0.15,1) infinite 1s} .p4{animation:pop 12s cubic-bezier(0.16,0.4,0.15,1) infinite 1.5s}
+      .pn{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#7f8589;text-anchor:middle}
+      .rule{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.16em;fill:#9aa3a8}
+      @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+      @keyframes halo{0%,100%{transform:scale(1);opacity:.14}50%{transform:scale(1.12);opacity:.3}}
+      @keyframes pop{0%{transform:scale(.2);opacity:0}6%{transform:scale(1);opacity:1}88%{transform:scale(1);opacity:1}96%{transform:scale(1);opacity:0}100%{transform:scale(.2);opacity:0}}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="50%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="440"/>
+  <rect x="0" y="0" width="1200" height="440" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="440" filter="url(#grain)" opacity=".05"/>
+  <text class="k" x="45" y="38">VISUAL GRAMMAR, SHARED BY EVERY GAME</text>
+  <rect class="card" x="45" y="60" width="350" height="250"/>
+  <g class="fx"><circle class="halo ha" cx="220" cy="150" r="56"/><circle class="you yb" cx="220" cy="150" r="32"/></g>
+  <text class="pt" x="73" y="238">You are the filled disc.</text>
+  <text class="pb" x="73" y="266">Your moves and your payoffs are drawn</text>
+  <text class="pb" x="73" y="287">as solid discs, never as numbers alone.</text>
+  <rect class="card" x="425" y="60" width="350" height="250"/>
+  <g class="fx"><circle class="halo hb" cx="600" cy="150" r="56"/><circle class="them tb" cx="600" cy="150" r="32"/></g>
+  <text class="pt" x="453" y="238">The other player is the ring.</text>
+  <text class="pb" x="453" y="266">Opponents, partners and crowds are</text>
+  <text class="pb" x="453" y="287">always drawn as hairline rings.</text>
+  <rect class="card" x="805" y="60" width="350" height="250"/>
+  <g class="fx"><circle class="p1" cx="863" cy="140" r="9.5"/><circle class="p2" cx="933" cy="140" r="16.5"/><circle class="p3" cx="1012" cy="140" r="21.2"/><circle class="p4" cx="1095" cy="140" r="23.3"/></g>
+  <text class="pn" x="863" y="196">1</text><text class="pn" x="933" y="196">3</text><text class="pn" x="1012" y="196">5</text><text class="pn" x="1095" y="196">6</text>
+  <path class="hair" d="M833 176H1127"/>
+  <text class="pt" x="833" y="238">A payoff is the area.</text>
+  <text class="pb" x="833" y="266">6 is twice the area of 3, not twice the</text>
+  <text class="pb" x="833" y="287">radius. Numbers sit small in the corner.</text>
+  <text class="rule" x="45" y="350" style="fill:#e6e3da">BLACK AND WHITE</text>
+  <text class="pb" x="45" y="374">Dark and light are exact inverses.</text>
+  <text class="rule" x="425" y="350" style="fill:#e6e3da">HAIRLINES</text>
+  <text class="pb" x="425" y="374">One device pixel. Square corners.</text>
+  <text class="rule" x="805" y="350" style="fill:#e6e3da">MOTION</text>
+  <text class="pb" x="805" y="374">Critically damped. No bounce, no snap.</text>
+  <path class="hair" d="M45 330H1155"/>
+  <text class="k" x="45" y="416" style="font-size:10px">SO A SHAPE IS NEVER DECORATION. IT CARRIES MEANING.</text>
+</svg>

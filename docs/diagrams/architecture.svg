@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" role="img" aria-labelledby="t d">
+  <title id="t">Architecture</title>
+  <desc id="d">A layered picture of Theory Gambit. A React shell sits on top of a plain engine of classes. The engine runs one game at a time. Games hold a pure model. The catalog and the curriculum feed the shell. Events travel up from the game to React.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .box{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .box2{fill:rgba(214,219,222,.025);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .node{fill:#0d1013;stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .ttl{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:17px;fill:#e6e3da}
+      .sub{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;fill:#7f8589}
+      .lbl{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.2em;fill:#7f8589}
+      .chip{fill:none;stroke:rgba(214,219,222,0.18)}
+      .chipt{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;fill:#9aa3a8;text-anchor:middle}
+      .flow{fill:none;stroke:#7c8891;stroke-width:1;stroke-dasharray:3 4;stroke-opacity:.7}
+      .head{fill:none;stroke:#c9cfd2;stroke-width:1;stroke-linecap:round;stroke-linejoin:round}
+      .fl{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300;font-size:12.5px;fill:#9aa3a8}
+      .dot{fill:#e6e3da}
+      .pulse{animation:pulse 4s cubic-bezier(0.16,0.4,0.15,1) infinite} @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="50%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="640"/>
+  <rect x="0" y="0" width="1200" height="640" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="640" filter="url(#grain)" opacity=".05"/>
+  <text class="k" x="45" y="42">ARCHITECTURE  ·  REACT IS ONLY THE SHELL. EVERYTHING ELSE IS HAND WRITTEN CLASSES.</text>
+
+  <!-- shell -->
+  <rect class="box" x="290" y="74" width="620" height="100"/>
+  <text class="lbl" x="314" y="100">REACT SHELL  ·  SRC/UI</text>
+  <rect class="chip" x="314" y="118" width="90" height="26"/><text class="chipt" x="359" y="135">Home</text><rect class="chip" x="414" y="118" width="118" height="26"/><text class="chipt" x="473" y="135">GameScreen</text><rect class="chip" x="542" y="118" width="118" height="26"/><text class="chipt" x="601" y="135">TheorySheet</text><rect class="chip" x="670" y="118" width="80" height="26"/><text class="chipt" x="710" y="135">Hero</text><rect class="chip" x="760" y="118" width="90" height="26"/><text class="chipt" x="805" y="135">Router</text>
+
+  <!-- catalog -->
+  <rect class="box2" x="45" y="236" width="220" height="228"/>
+  <text class="lbl" x="65" y="264">CATALOG  ·  SRC/CATALOG</text>
+  <text class="ttl" x="65" y="300">entries.ts</text><text class="sub" x="65" y="318">generated from The Gambit</text>
+  <text class="ttl" x="65" y="356">curriculum.ts</text><text class="sub" x="65" y="374">order, tiers, finale, synthesis</text>
+  <text class="sub" x="65" y="428">116 topics + 2 capstones</text>
+  <text class="sub" x="65" y="446">= 118 slots in the app</text>
+
+  <!-- engine -->
+  <rect class="box" x="310" y="214" width="580" height="250"/>
+  <text class="lbl" x="334" y="242">ENGINE  ·  SRC/CORE, NO REACT</text>
+  <rect class="node" x="334" y="262" width="160" height="56"/><text class="ttl" x="350" y="286">GameRuntime</text><text class="sub" x="350" y="304">one canvas, one loop</text>
+  <rect class="node" x="334" y="338" width="160" height="56"/><text class="ttl" x="350" y="362">Registry</text><text class="sub" x="350" y="380">slug to game module</text>
+  <rect class="node" x="520" y="262" width="168" height="56"/><text class="ttl" x="536" y="286">Game</text><text class="sub" x="536" y="304">Feel · See · Prove</text>
+  <rect class="node" x="520" y="338" width="168" height="56"/><text class="ttl" x="536" y="362">EventBus</text><text class="sub" x="536" y="380">beat · announce · complete</text>
+  <rect class="node" x="714" y="262" width="152" height="56"/><text class="ttl" x="730" y="286">Surface</text><text class="sub" x="730" y="304">1:1 device pixels</text>
+  <rect class="node" x="714" y="338" width="152" height="56"/><text class="ttl" x="730" y="362">Painter</text><text class="sub" x="730" y="380">snapped text, discs</text>
+  <text class="sub" x="334" y="440">Damped motion  ·  Rng  ·  Palette and Theme  ·  Store  ·  Sound  ·  Haptics  ·  Viewport  ·  GestureGuard</text>
+
+  <!-- games -->
+  <rect class="box2" x="935" y="236" width="220" height="228"/>
+  <text class="lbl" x="955" y="264">GAMES  ·  SRC/GAMES/SLUG</text>
+  <text class="ttl" x="955" y="300">model.ts</text><text class="sub" x="955" y="318">pure, no DOM, tested</text>
+  <text class="ttl" x="955" y="356">Game class</text><text class="sub" x="955" y="374">draws everything in its canvas</text>
+  <text class="ttl" x="955" y="412">index.ts</text><text class="sub" x="955" y="430">module, hook and theory text</text>
+
+  <!-- background and tools -->
+  <rect class="box2" x="45" y="508" width="530" height="84"/>
+  <text class="lbl" x="65" y="536">TD  ·  SRC/TD</text>
+  <text class="ttl" x="65" y="566">WebGL2 background network</text><text class="sub" x="330" y="566">decorative only, never decides who is right</text>
+  <rect class="box2" x="625" y="508" width="530" height="84"/>
+  <text class="lbl" x="645" y="536">TOOLS</text>
+  <text class="ttl" x="645" y="566">tests · iPhone check · catalog sync · icons</text>
+
+  <!-- flows -->
+  <path id="f1" class="flow" d="M510 174V214"/><path class="head" d="M505 207L510 214L515 207"/>
+  <text class="fl" x="522" y="198">creates</text>
+  <path id="f2" class="flow" d="M780 214V174"/><path class="head" d="M775 181L780 174L785 181"/>
+  <text class="fl" x="792" y="198">beat, announce, complete</text>
+  <path id="f3" class="flow" d="M155 236V124H290"/><path class="head" d="M283 119L290 124L283 129"/>
+  <text class="fl" x="170" y="200">order and tiers</text>
+  <path id="f4" class="flow" d="M890 350H935"/><path class="head" d="M928 345L935 350L928 355"/>
+  <circle class="dot" r="3"><animateMotion dur="3.6s" repeatCount="indefinite" path="M510 174V214" keyTimes="0;1" calcMode="spline" keySplines=".16 .4 .15 1"/></circle>
+  <circle class="dot" r="3"><animateMotion dur="3.6s" begin="1.2s" repeatCount="indefinite" path="M780 214V174" keyTimes="0;1" calcMode="spline" keySplines=".16 .4 .15 1"/></circle>
+  <circle class="dot" r="3"><animateMotion dur="4.2s" begin=".6s" repeatCount="indefinite" path="M155 236V124H290" keyTimes="0;1" calcMode="spline" keySplines=".16 .4 .15 1"/></circle>
+  <circle class="dot" r="3"><animateMotion dur="3s" begin="1.8s" repeatCount="indefinite" path="M890 350H935" keyTimes="0;1" calcMode="spline" keySplines=".16 .4 .15 1"/></circle>
+  <text class="sub" x="45" y="624" style="font-size:9.5px">REACT NEVER REACHES INTO A GAME. THE GAME TALKS UPWARD ONLY THROUGH A TYPED EVENT BUS.</text>
+</svg>

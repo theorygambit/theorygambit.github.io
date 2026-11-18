@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="1200" height="360" role="img" aria-labelledby="t d">
+  <title id="t">Quality gates and deploy</title>
+  <desc id="d">Every push to main runs lint, type check, model tests and the build, in that order. Only when all pass are the built files published to GitHub Pages. The iPhone contract check runs locally before a release.</desc>
+  <defs>
+    <style>
+
+      .bg{fill:#08090b}
+      .disp{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300}
+      .mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+      .body{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300}
+      .k{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;letter-spacing:.26em;fill:#7f8589}
+      .hair{stroke:rgba(214,219,222,0.18);fill:none;stroke-width:1}
+      .card{fill:rgba(214,219,222,0.035);stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .bone{fill:#e6e3da} .fog{fill:#9aa3a8} .ash{fill:#7f8589}
+      .gate{fill:#0d1013;stroke:rgba(214,219,222,0.18);stroke-width:1}
+      .gt{font-family:'Cormorant Garamond','EB Garamond',Georgia,'Times New Roman',serif;font-style:italic;font-weight:300;font-size:19px;fill:#e6e3da}
+      .gs{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9.5px;fill:#7f8589}
+      .gn{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.22em;fill:#7f8589}
+      .rail{stroke:rgba(214,219,222,0.18);stroke-width:1;fill:none}
+      .tv{fill:#e6e3da;animation:tv 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes tv{0%{opacity:0;transform:translateX(114px)}2.5%{opacity:1;transform:translateX(114px)}7.94%{transform:translateX(114px)}14.58%{transform:translateX(276px)}20.02%{transform:translateX(276px)}26.67%{transform:translateX(438px)}32.1%{transform:translateX(438px)}38.75%{transform:translateX(600px)}44.19%{transform:translateX(600px)}50.83%{transform:translateX(762px)}56.27%{transform:translateX(762px)}62.92%{transform:translateX(924px)}68.35%{transform:translateX(924px)}75%{transform:translateX(1086px)}85%{opacity:1;transform:translateX(1086px)}89.17%{opacity:0;transform:translateX(1086px)}100%{opacity:0}}
+      .g0{animation:g0 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g0{0%,0.83%{stroke:rgba(214,219,222,0.18);fill:#0d1013}5.42%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g1{animation:g1 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g1{0%,12.92%{stroke:rgba(214,219,222,0.18);fill:#0d1013}17.5%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g2{animation:g2 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g2{0%,25%{stroke:rgba(214,219,222,0.18);fill:#0d1013}29.58%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g3{animation:g3 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g3{0%,37.08%{stroke:rgba(214,219,222,0.18);fill:#0d1013}41.67%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g4{animation:g4 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g4{0%,49.17%{stroke:rgba(214,219,222,0.18);fill:#0d1013}53.75%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g5{animation:g5 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g5{0%,61.25%{stroke:rgba(214,219,222,0.18);fill:#0d1013}65.83%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+      .g6{animation:g6 12s cubic-bezier(0.16,0.4,0.15,1) infinite}
+      @keyframes g6{0%,73.33%{stroke:rgba(214,219,222,0.18);fill:#0d1013}77.92%,86.67%{stroke:#e6e3da;fill:rgba(230,227,218,.06)}91.67%,100%{stroke:rgba(214,219,222,0.18);fill:#0d1013}}
+
+      .note{font-family:'Jost','DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:300;font-size:13.5px;fill:#9aa3a8}
+      .local{fill:none;stroke:rgba(214,219,222,0.18);stroke-dasharray:3 4}
+      @media (prefers-reduced-motion: reduce){*{animation:none!important}}
+    </style>
+    <radialGradient id="light" cx="50%" cy="0%" r="85%"><stop offset="0" stop-color="#e6e3da" stop-opacity=".10"/><stop offset="1" stop-color="#e6e3da" stop-opacity="0"/></radialGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .58  0 0 0 0 .6  0 0 0 .6 0"/></filter>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1200" height="360"/>
+  <rect x="0" y="0" width="1200" height="360" fill="url(#light)"/>
+  <rect x="0" y="0" width="1200" height="360" filter="url(#grain)" opacity=".05"/>
+  <text class="k" x="45" y="42">DEPLOY  ·  EVERY PUSH TO MAIN, IN THIS ORDER</text>
+  <path class="rail" d="M114 196H1086"/>
+  <path class="rail" d="M114 180V196"/>
+  <rect class="gate g0" x="48" y="112" width="132" height="68"/>
+  <text class="gn" x="62" y="132">01</text>
+  <text class="gt" x="62" y="154">Push</text>
+  <text class="gs" x="62" y="170">to main</text>
+  <path class="rail" d="M276 180V196"/>
+  <rect class="gate g1" x="210" y="112" width="132" height="68"/>
+  <text class="gn" x="224" y="132">02</text>
+  <text class="gt" x="224" y="154">Lint</text>
+  <text class="gs" x="224" y="170">oxlint src tools</text>
+  <path class="rail" d="M438 180V196"/>
+  <rect class="gate g2" x="372" y="112" width="132" height="68"/>
+  <text class="gn" x="386" y="132">03</text>
+  <text class="gt" x="386" y="154">Type check</text>
+  <text class="gs" x="386" y="170">tsc -b --noEmit</text>
+  <path class="rail" d="M600 180V196"/>
+  <rect class="gate g3" x="534" y="112" width="132" height="68"/>
+  <text class="gn" x="548" y="132">04</text>
+  <text class="gt" x="548" y="154">Test models</text>
+  <text class="gs" x="548" y="170">tools/test-models.ts</text>
+  <path class="rail" d="M762 180V196"/>
+  <rect class="gate g4" x="696" y="112" width="132" height="68"/>
+  <text class="gn" x="710" y="132">05</text>
+  <text class="gt" x="710" y="154">Build</text>
+  <text class="gs" x="710" y="170">tsc -b, vite build</text>
+  <path class="rail" d="M924 180V196"/>
+  <rect class="gate g5" x="858" y="112" width="132" height="68"/>
+  <text class="gn" x="872" y="132">06</text>
+  <text class="gt" x="872" y="154">Artifact</text>
+  <text class="gs" x="872" y="170">dist, upload-pages</text>
+  <path class="rail" d="M1086 180V196"/>
+  <rect class="gate g6" x="1020" y="112" width="132" height="68"/>
+  <text class="gn" x="1034" y="132">07</text>
+  <text class="gt" x="1034" y="154">Deploy</text>
+  <text class="gs" x="1034" y="170">deploy-pages</text>
+  <circle class="tv" cx="0" cy="196" r="4.5"/>
+  <text class="note" x="48" y="250">A failing step stops the run, so a broken build is never published.</text>
+  <text class="note" x="48" y="272">Run it by hand from the Actions tab (workflow_dispatch). A newer push cancels an older run.</text>
+  <rect class="local" x="48" y="294" width="1104" height="54"/>
+  <text class="gn" x="68" y="316">LOCAL, BEFORE A RELEASE</text>
+  <text class="note" x="68" y="336" style="font-size:13px">npm run verify:iphone  proves the home screen contract in headless Chromium, 390 by 797 window on a 390 by 844 screen.</text>
+</svg>
