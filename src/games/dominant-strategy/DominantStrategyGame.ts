@@ -1,6 +1,6 @@
 import { CanvasButton } from "../../core/CanvasButton";
 import { Damped } from "../../core/Damped";
-import { Game, type Beat } from "../../core/Game";
+import { Game, type Beat, type Frame } from "../../core/Game";
 import type { Colors } from "../../core/Palette";
 import { Type, type Painter } from "../../core/Painter";
 import { Glyph } from "../shared/glyphs";
@@ -91,15 +91,13 @@ export class DominantStrategyGame extends Game {
   }
 
   protected layout(): void {
-    const avail = this.h - 70 - 150;
-    this.mv.fit(this.cx, 0, this.colW, avail - 56);
-    const used = this.mv.colLabelH + 2 * this.mv.cell + 56;
-    this.mv.fit(this.cx, 150 + Math.max(0, (avail - used) / 2), this.colW, avail - 56);
-    const by = this.h - 80;
+    const f = this.frame;
+    this.mv.fit(this.cx, f.top, f.w, f.h);
+    const by = this.buttonY;
     this.toSee.place(this.cx - 80, by, 160);
     this.toProve.place(this.cx - 80, by, 160);
     this.again.place(this.cx - 80, by, 160);
-    const bw = Math.min(110, (this.colW - 24) / 3);
+    const bw = Math.min(110, (f.w - 24) / 3);
     this.ansUp.place(this.cx - bw * 1.5 - 12, by, bw);
     this.ansNone.place(this.cx - bw / 2, by, bw);
     this.ansDown.place(this.cx + bw / 2 + 12, by, bw);
@@ -223,6 +221,7 @@ export class DominantStrategyGame extends Game {
     this.arrow[0]!.set(1);
     this.arrow[1]!.set(1);
     const want = this.puzzles[this.pi]!.answer;
+    this.cue(this.isRight(a) ? "good" : "bad");
     if (this.isRight(a)) {
       if (want !== null) this.bracket.set(1);
       this.prompt.set(want === null ? "Right. Each column points a different way." : `Right. ${ROW_NAME[want]} wins in both columns.`);
@@ -274,20 +273,15 @@ export class DominantStrategyGame extends Game {
 
   // ---- Draw -------------------------------------------------------------
 
-  protected render(p: Painter, c: Colors): void {
+  protected render(p: Painter, c: Colors, f: Frame): void {
     const mv = this.mv;
     const a = this.intro.value;
-    this.prompt.draw(p, c, this.colX, 82, this.colW);
-
     mv.grid(p, c, a);
     this.drawLabels(p, c, a);
     this.drawDiscs(p, c);
     this.drawArrows(p, c);
-
-    this.note.draw(p, c, this.cx, mv.bottom + 34, this.colW, "center");
-
-    if (this.beat === "feel") this.drawRounds(p, c);
-    if (this.beat === "prove" || this.beat === "done") this.drawPuzzleTicks(p, c);
+    if (this.beat === "feel") this.drawRounds(p, c, f);
+    if (this.beat === "prove" || this.beat === "done") this.drawPuzzleTicks(p, c, f);
   }
 
   private drawLabels(p: Painter, c: Colors, a: number): void {
@@ -301,15 +295,15 @@ export class DominantStrategyGame extends Game {
     ([0, 1] as const).forEach((col) => {
       const x = mv.colX(col);
       const on = this.lastCol === col || this.seenCols.has(col);
-      p.text(COL_NAME[col], x, mv.y0 - 14, { font: Type.body(15, 400), color: on ? c.ink : c.fog, align: "center", alpha: a });
+      p.text(COL_NAME[col], x, mv.y0 - 16, { font: Type.body(15, 400), color: on ? c.ink : c.fog, align: "center", alpha: a });
     });
     // You: a filled disc that slides to the chosen row. Other: a ring that slides to the chosen column.
     const yy = mv.y0 + (this.youY.value + 0.5) * mv.cell;
     const xx = mv.x0 + (this.otherX.value + 0.5) * mv.cell;
     if (this.beat === "feel") {
-      Glyph.you(p, c, mv.x0 - mv.rowLabelW + 8, yy, 5, a * (youActive ? 1 : 0.55));
+      Glyph.you(p, c, mv.x0 - mv.rowLabelW + 10, yy, 5, a * (youActive ? 1 : 0.55));
       const idle = this.locked || this.lastCol !== null ? 1 : 0.55 + 0.25 * Math.sin(this.time * 2.2);
-      Glyph.other(p, c, xx, mv.y0 - 42, 7, a * idle);
+      Glyph.other(p, c, xx, mv.y0 - 46, 7, a * idle);
     }
   }
 
@@ -348,15 +342,13 @@ export class DominantStrategyGame extends Game {
     }
   }
 
-  private drawRounds(p: Painter, c: Colors): void {
+  private drawRounds(p: Painter, c: Colors, f: Frame): void {
     const x = this.cx - 30;
-    const y = this.h - 22 - (this.toSee.visible ? 0 : 0);
-    for (let i = 0; i < 4; i++) Glyph.step(p, c, x + i * 20, y, i < this.round, i === this.round);
+    for (let i = 0; i < 4; i++) Glyph.step(p, c, x + i * 20, f.tickY, i < this.round, i === this.round);
   }
 
-  private drawPuzzleTicks(p: Painter, c: Colors): void {
+  private drawPuzzleTicks(p: Painter, c: Colors, f: Frame): void {
     const x = this.cx - 20;
-    const y = this.h - 22;
-    for (let i = 0; i < 3; i++) Glyph.step(p, c, x + i * 20, y, i < this.solved, i === this.solved && this.beat === "prove");
+    for (let i = 0; i < 3; i++) Glyph.step(p, c, x + i * 20, f.tickY, i < this.solved, i === this.solved && this.beat === "prove");
   }
 }
