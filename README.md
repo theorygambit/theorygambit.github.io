@@ -44,17 +44,20 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with one game live and four more with models and tests" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with the five opening games live and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
 |---|---|---|
 | 001 | Dominant Strategy | Live |
-| 002 to 005 | Prisoner's Dilemma, Matching Pennies, Stag Hunt, Ultimatum Game | Models and tests done, game classes next (see `docs/NEXT.md`) |
-| 006 onward | The remaining 111 topics | Empty slots. Each opens the plain idea and a link to its Gambit entry |
+| 002 | Prisoner's Dilemma | Live |
+| 003 | Matching Pennies | Live |
+| 004 | Stag Hunt | Live |
+| 005 | Ultimatum Game | Live |
+| 006 onward | The remaining 111 topics | Empty slots. Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
 | 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
 
-Link straight to one topic with `https://theorygambit.github.io/#/g/<slug>`, for example `#/g/dominant-strategy`. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.
+Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.
 
 ---
 
@@ -102,7 +105,7 @@ Type is **Cormorant Garamond** italic 300 for titles, prompts and takeaways, **J
 - Games and engines are **classes**: a pure model, a game class, and an engine of small parts. No runtime dependency besides React.
 - **Canvas 2D** for every game, 1:1 with device pixels, text drawn inside the canvas.
 - **WebGL2** for a decorative background network. It never decides who is right.
-- **oxlint** for linting, **tsx** for model tests, **Playwright** for the iPhone check.
+- **oxlint** for linting, **tsx** for model tests, **Playwright** for the iPhone and layout checks.
 - Plain CSS with one token file. No CSS in JS, no utility framework, no state library.
 
 ---
@@ -124,7 +127,7 @@ src/
   theory/    the TheoryEntry type
   ui/        React shell
   styles/    tokens.css, the single source of colour
-tools/       model tests, iPhone check, catalog sync, icons
+tools/       model tests, iPhone check, layout check, catalog sync, icons
 docs/        read FOUNDATION first
 ```
 
@@ -142,6 +145,17 @@ A home screen app launches in a different window than Safari, and two bugs follo
 - **Icon.** The home screen icon is an opaque 180 pixel PNG served from the site root, `apple-touch-icon.png`, where iOS looks first.
 
 `npm run verify:iphone` proves the contract with numbers, not screenshots. **After deploying, delete the home screen icon and add the app again.** iOS keeps the old icon, meta tags and layout until you do.
+
+---
+
+## Layout that never collides
+
+Text overlapping text, and labels sitting on shapes, was a real bug on short phone screens. It is now prevented by structure and proved by a check.
+
+- **A frame.** Every game gets its prompt, body, note, action row and tick row from `Game.frame`, computed from the real canvas height. A game draws its figure only inside the body, so nothing can run into the prompt, the note or the buttons.
+- **An auditor.** In audit mode the painter records every text box, disc, ring and line. `npm run verify:layout` opens every game at seven screen sizes, drives it through every beat and the states between, and fails on any overlap, any text leaving the canvas, or any prompt or note longer than two lines.
+
+The rules for drawing a figure are in `docs/LAYOUT.md`. Read them before writing a game.
 
 ---
 
@@ -167,6 +181,7 @@ npm run typecheck
 npm run lint
 npm run build && npm run preview
 npm run verify:iphone    # needs: npx playwright install chromium
+npm run verify:layout    # every game, seven screen sizes, no overlaps
 ```
 
 Open the app with `?debug=1` to reach the running game on `window.__tg.game`, for example `__tg.game.debugGoto("prove")`.
@@ -183,7 +198,9 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `ARCHITECTURE` | The layers, the data flow, the curriculum |
 | `ART_DIRECTION` | Colour, type, shape and motion |
 | `ADDING_A_GAME` | The steps from paper design to a registered game |
+| `LAYOUT` | The frame, spacing rules and the overlap auditor. Read before drawing anything |
+| `FEEDBACK` | Sound and haptics on iPhone: what Safari allows and how it is wired |
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | The next four games, beat by beat |
+| `NEXT` | What is live, and where to go after 005 |
