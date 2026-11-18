@@ -598,6 +598,19 @@ summary:focus-visible {
   pointer-events: none;
 }
 
+/* Short viewports (iPhone Safari with its bars, small phones): give the game every pixel it can. */
+@media (max-height: 760px) {
+  .game-meta {
+    display: none;
+  }
+  .game-title {
+    font-size: 26px;
+  }
+  .game-head {
+    padding-bottom: 8px;
+  }
+}
+
 @media (min-width: 700px) {
   .home-body,
   .game-col {
