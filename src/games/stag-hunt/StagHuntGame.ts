@@ -1,11 +1,11 @@
 import { CanvasButton } from "../../core/CanvasButton";
 import { Damped } from "../../core/Damped";
-import { Game, type Beat } from "../../core/Game";
+import { Game, type Beat, type Frame } from "../../core/Game";
 import type { Colors } from "../../core/Palette";
 import { Type, type Painter } from "../../core/Painter";
 import { clamp } from "../../core/math";
 import { Glyph } from "../shared/glyphs";
-import { inside, type Box } from "../shared/MatrixView";
+import { inside } from "../shared/MatrixView";
 import { PARTNER_BELIEFS, PROVE_GAMES, PROVE_TOLERANCE, StagHunt, type Hunt } from "./model";
 
 const fmt = (v: number): string => String(Math.round(v * 100) / 100);
@@ -84,8 +84,12 @@ export class StagHuntGame extends Game {
     this.enterProve();
   }
 
+  protected override get actionH(): number {
+    return this.beat === "feel" ? (this.compact ? 80 : 96) : 44;
+  }
+
   protected layout(): void {
-    const by = this.h - 80;
+    const by = this.buttonY;
     this.toSee.place(this.cx - 80, by, 160);
     this.toProve.place(this.cx - 80, by, 160);
     this.lock.place(this.cx - 80, by, 160);
@@ -97,22 +101,13 @@ export class StagHuntGame extends Game {
     this.lock.visible = this.beat === "prove" && !this.locked;
   }
 
-  private zone(i: 0 | 1): Box {
-    const bw = (this.colW - 12) / 2;
-    return { x: this.colX + i * (bw + 12), y: this.h - 156, w: bw, h: 96 };
-  }
-
-  private get midY(): number {
-    return (160 + (this.h - 210)) / 2;
-  }
-
   // ---- Input ------------------------------------------------------------
 
   protected override onDown(x: number, y: number): void {
     if (this.beat === "feel") {
       if (this.stage === "choose") {
-        if (inside(this.zone(0), x, y)) this.armed = "stag";
-        else if (inside(this.zone(1), x, y)) this.armed = "hare";
+        if (inside(this.pair(0), x, y)) this.armed = "stag";
+        else if (inside(this.pair(1), x, y)) this.armed = "hare";
       } else if (this.stage === "result" && this.round < 5) this.nextPartner();
     } else if (this.beat === "see") this.advance();
     else if (this.beat === "prove" && !this.locked) {
@@ -129,7 +124,7 @@ export class StagHuntGame extends Game {
     this.dragging = false;
     const m = this.armed;
     this.armed = null;
-    if (m && this.stage === "choose" && inside(this.zone(m === "stag" ? 0 : 1), x, y)) this.play(m);
+    if (m && this.stage === "choose" && inside(this.pair(m === "stag" ? 0 : 1), x, y)) this.play(m);
   }
 
   // ---- Feel -------------------------------------------------------------
@@ -232,13 +227,23 @@ export class StagHuntGame extends Game {
     this.pm = Math.round(clamp((x - x0) / (x1 - x0), 0, 1) * 100) / 100;
   }
 
+  /** Prove layout, top to bottom: payoff discs, their labels, the title, the track. See proveGeometry. */
   private track(): { x0: number; x1: number; y: number } {
-    return { x0: this.colX + 20, x1: this.colX + this.colW - 20, y: Math.min(this.h - 270, 360) };
+    return { x0: this.colX + 24, x1: this.colX + this.colW - 24, y: this.proveGeometry().ty };
+  }
+
+  private proveGeometry(): { R: number; cy: number; ty: number } {
+    const f = this.frame;
+    const R = clamp((f.h - 150) / 2, 22, 38);
+    const cy = f.top + R + 2;
+    const ty = Math.min(f.bottom - 52, Math.max(cy + R + 108, f.top + (f.h - 52) * 0.62));
+    return { R, cy, ty };
   }
 
   private lockIn(): void {
     const game = PROVE_GAMES[this.pi]!;
     const off = Math.abs(this.pm - game.threshold);
+    this.cue(off <= PROVE_TOLERANCE ? "good" : "bad");
     if (off <= PROVE_TOLERANCE) {
       this.locked = true;
       this.solved++;
@@ -286,53 +291,40 @@ export class StagHuntGame extends Game {
 
   // ---- Draw -------------------------------------------------------------
 
-  protected render(p: Painter, c: Colors): void {
-    this.prompt.draw(p, c, this.colX, 82, this.colW);
-    this.note.draw(p, c, this.cx, this.h - 182, this.colW, "center");
-    if (this.beat === "feel") this.drawFeel(p, c);
-    else if (this.beat === "see") this.drawChart(p, c);
-    else this.drawProve(p, c);
+  protected render(p: Painter, c: Colors, f: Frame): void {
+    if (this.beat === "feel") this.drawFeel(p, c, f);
+    else if (this.beat === "see") this.drawChart(p, c, f);
+    else this.drawProve(p, c, f);
   }
 
-  private dashed(p: Painter, c: Colors, x: number, y: number, r: number, alpha: number): void {
-    if (r < 3 || alpha < 0.02) return;
-    const ctx = p.ctx;
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = c.ink;
-    ctx.lineWidth = 1.25;
-    ctx.setLineDash([3, 4]);
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  private drawFeel(p: Painter, c: Colors): void {
+  private drawFeel(p: Painter, c: Colors, f: Frame): void {
     const a = this.intro.value;
-    const y = this.midY;
-    const xl = this.cx - 86;
-    const xr = this.cx + 86;
+    const s = clamp((f.h - 56) / 150, 0.62, 1.1);
+    const y = f.top + 46 * s + 4;
+    const off = Math.min(86, f.w / 2 - 46 * s - 8);
+    const xl = this.cx - off;
+    const xr = this.cx + off;
     const belief = this.partners[Math.min(this.round, 4)]!;
     const k = Math.round(belief * 10);
     const idle = this.stage === "wait" ? 0.5 + 0.5 * Math.sin(this.time * 9) : 1;
+    const youMax = 50 * s;
 
-    this.dashed(p, c, xl, y, this.altR.value, 0.8);
-    p.disc(xl, y, this.youR.value, c.ink, 0.95 * a * idle);
-    p.text("You", xl, y + 78, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
-
-    p.ring(xr, y, 30, c.ink, 1.5, a * idle);
-    p.disc(xr, y, 9 * this.inner.value, c.ink, a);
+    p.dashedRing(xl, y, this.altR.value * s, c.ink, 0.8);
+    p.disc(xl, y, this.youR.value * s, c.ink, 0.95 * a * idle);
+    p.ring(xr, y, 30 * s, c.ink, 1.5, a * idle);
+    p.disc(xr, y, 9 * s * this.inner.value, c.ink, a);
     for (let i = 0; i < 10; i++) {
       const a0 = -Math.PI / 2 + (i / 10) * Math.PI * 2 + 0.07;
       const filled = i < k * this.notch.value;
-      p.arc(xr, y, 42, a0, a0 + (Math.PI * 2) / 10 - 0.14, c.ink, 3, (filled ? 0.95 : 0.2) * a);
+      p.arc(xr, y, 42 * s, a0, a0 + (Math.PI * 2) / 10 - 0.14, c.ink, 3, (filled ? 0.95 : 0.2) * a);
     }
-    p.text("They", xr, y + 78, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
-    p.text(`stag ${k} of 10 hunts`, xr, y + 96, { font: Type.body(12, 400), color: c.ash, align: "center", alpha: a });
+    const ly = y + Math.max(youMax, 46 * s) + 22;
+    p.text("You", xl, ly, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
+    p.text("They", xr, ly, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
+    p.text(`stag ${k} of 10 hunts`, xr, ly + 20, { font: Type.body(12, 400), color: c.ash, align: "center", alpha: a });
 
     for (const i of [0, 1] as const) {
-      const z = this.zone(i);
+      const z = this.pair(i);
       const m: Hunt = i === 0 ? "stag" : "hare";
       const live = this.stage === "choose";
       const chosen = this.mine === m;
@@ -340,47 +332,46 @@ export class StagHuntGame extends Game {
       p.frame(z.x, z.y, z.w, z.h, c.ink, 0.35 * al);
       p.rect(z.x, z.y, z.w, z.h, c.ink, this.armed === m ? 0.08 : 0);
       const gx = z.x + z.w / 2;
-      p.disc(gx, z.y + 32, 24 * Math.sqrt((m === "stag" ? this.g.stag : this.g.hare) / this.g.stag), c.ink, 0.92 * al);
-      p.text(m === "stag" ? "Stag" : "Hare", gx, z.y + 74, { font: Type.body(15, 400), color: c.ink, align: "center", alpha: al });
-      p.text(m === "stag" ? `${this.g.stag} if they join` : `${this.g.hare} for sure`, gx, z.y + 90, { font: Type.body(11, 400), color: c.fog, align: "center", alpha: al });
+      const dr = Math.min(22, z.h * 0.19) * Math.sqrt((m === "stag" ? this.g.stag : this.g.hare) / this.g.stag);
+      p.disc(gx, z.y + z.h * 0.3, dr, c.ink, 0.92 * al);
+      p.text(m === "stag" ? "Stag" : "Hare", gx, z.y + z.h * 0.68, { font: Type.body(15, 400), color: c.ink, align: "center", alpha: al });
+      p.text(m === "stag" ? `${this.g.stag} if they join` : `${this.g.hare} for sure`, gx, z.y + z.h - 9, { font: Type.body(11, 400), color: c.fog, align: "center", alpha: al });
     }
-    for (let i = 0; i < 5; i++) Glyph.step(p, c, this.cx - 40 + i * 20, this.h - 22, i < this.round, i === this.round);
+    for (let i = 0; i < 5; i++) Glyph.step(p, c, this.cx - 40 + i * 20, f.tickY, i < this.round, i === this.round);
   }
 
-  private chart(): { x0: number; w: number; top: number; h: number; X: (p: number) => number; Y: (v: number) => number } {
-    const x0 = this.colX + 20;
-    const w = this.colW - 40;
-    const top = 196;
-    const h = clamp(this.h - 200 - 250, 100, 220);
+  private chart(f: Frame): { x0: number; w: number; top: number; h: number; X: (p: number) => number; Y: (v: number) => number } {
+    const x0 = f.x + 24;
+    const w = f.w - 48;
+    const top = f.top + 28;
+    const h = Math.max(90, Math.min(210, f.h - 28 - 54));
     const maxY = this.g.stag * 1.08;
     return { x0, w, top, h, X: (p) => x0 + p * w, Y: (v) => top + h - (v / maxY) * h };
   }
 
-  private drawChart(p: Painter, c: Colors): void {
-    const { x0, w, top, h, X, Y } = this.chart();
+  private drawChart(p: Painter, c: Colors, f: Frame): void {
+    const { x0, w, top, h, X, Y } = this.chart(f);
     const base = top + h;
     p.rule(x0, base, x0 + w, base, c.ink, 0.5);
     p.rule(x0, top, x0, base, c.ink, 0.5);
-    p.text("payoff", x0, top - 10, { font: Type.body(12, 400), color: c.fog });
-    p.text("belief they hunt stag", x0 + w, base + 36, { font: Type.body(12, 400), color: c.fog, align: "right" });
-    p.text("0", x0, base + 14, { font: Type.mono(10), color: c.ash, align: "center" });
-    p.text("1", x0 + w, base + 14, { font: Type.mono(10), color: c.ash, align: "center" });
+    p.text("payoff", x0, top - 14, { font: Type.body(12, 400), color: c.fog });
+    p.text("belief they hunt stag", x0 + w, base + 40, { font: Type.body(12, 400), color: c.fog, align: "right" });
+    p.text("0", x0, base + 18, { font: Type.mono(10), color: c.ash, align: "center" });
+    p.text("1", x0 + w, base + 18, { font: Type.mono(10), color: c.ash, align: "center" });
 
     p.line(X(0), Y(this.g.hare), X(1), Y(this.g.hare), c.ink, 1.5, 0.55);
-    p.text(`Hare ${this.g.hare}`, X(1), Y(this.g.hare) - 8, { font: Type.body(12, 400), color: c.fog, align: "right" });
+    p.text(`Hare ${this.g.hare}`, X(0) + 8, Y(this.g.hare) - 10, { font: Type.body(12, 400), color: c.fog });
     const t = this.stagLine.value;
     if (t > 0.01) {
       p.line(X(0), Y(0), X(t), Y(this.g.stag * t), c.ink, 2, 1);
-      p.text("Stag", X(Math.min(t, 1)) - 4, Y(this.g.stag * t) - 10, { font: Type.body(12, 400), color: c.ink, align: "right", alpha: t });
+      p.text("Stag", X(0) + 8, Y(this.g.stag) + 6, { font: Type.body(12, 400), color: c.ink, alpha: t });
     }
     const cr = this.cross.value;
     if (cr > 0.01) {
       const th = this.g.threshold;
       p.line(X(th), Y(this.g.hare), X(th), base, c.ink, 1, 0.7 * cr, [3, 4]);
       p.ring(X(th), Y(this.g.hare), 8, c.ink, 1.5, cr);
-      p.text(fmt(th), X(th), base + 14, { font: Type.mono(11), color: c.ink, align: "center", alpha: cr });
-      p.text("hare", (X(0) + X(th)) / 2, base - 10, { font: Type.body(12, 400), color: c.fog, align: "center", alpha: cr });
-      p.text("stag", (X(th) + X(1)) / 2, base - 10, { font: Type.body(12, 400), color: c.fog, align: "center", alpha: cr });
+      p.text(fmt(th), X(th), base + 18, { font: Type.mono(11), color: c.ink, align: "center", alpha: cr });
       for (const ch of this.choices) {
         const yv = ch.mine === "stag" ? this.g.evStag(ch.p) : this.g.hare;
         p.disc(X(ch.p), Y(yv), 4.5, c.ink, cr);
@@ -389,32 +380,33 @@ export class StagHuntGame extends Game {
     }
   }
 
-  private drawProve(p: Painter, c: Colors): void {
+  private drawProve(p: Painter, c: Colors, f: Frame): void {
     const game = PROVE_GAMES[Math.min(this.pi, PROVE_GAMES.length - 1)]!;
-    const R = (v: number) => 38 * Math.sqrt(v / 4);
-    const y = 235;
-    p.disc(this.cx - 80, y, R(game.stag), c.ink, 0.92);
-    p.disc(this.cx + 80, y, R(game.hare), c.ink, 0.92);
-    p.text(`Stag ${fmt(game.stag)}`, this.cx - 80, y + 62, { font: Type.mono(13), color: c.ink, align: "center" });
-    p.text(`Hare ${fmt(game.hare)}`, this.cx + 80, y + 62, { font: Type.mono(13), color: c.ink, align: "center" });
+    const { R, cy, ty } = this.proveGeometry();
+    const rad = (v: number) => R * Math.sqrt(v / 4);
+    const off = Math.min(84, f.w / 2 - R - 12);
+    p.disc(this.cx - off, cy, rad(game.stag), c.ink, 0.92);
+    p.disc(this.cx + off, cy, rad(game.hare), c.ink, 0.92);
+    p.text(`Stag ${fmt(game.stag)}`, this.cx - off, cy + R + 22, { font: Type.mono(13), color: c.ink, align: "center" });
+    p.text(`Hare ${fmt(game.hare)}`, this.cx + off, cy + R + 22, { font: Type.mono(13), color: c.ink, align: "center" });
 
-    const { x0, x1, y: ty } = this.track();
-    p.text("Your belief they hunt stag", x0, ty - 40, { font: Type.body(13, 400), color: c.fog });
+    const { x0, x1 } = this.track();
+    p.text("Your belief they hunt stag", x0, ty - 54, { font: Type.body(13, 400), color: c.fog });
     p.rule(x0, ty, x1, ty, c.ink, 0.5);
     for (const v of [0, 0.5, 1]) {
       const x = x0 + v * (x1 - x0);
       p.rule(x, ty - 5, x, ty + 5, c.ink, 0.5);
-      p.text(String(v), x, ty + 22, { font: Type.mono(10), color: c.ash, align: "center" });
+      p.text(String(v), x, ty + 24, { font: Type.mono(10), color: c.ash, align: "center" });
     }
     const mx = x0 + this.pm * (x1 - x0);
-    p.text(fmt(this.pm), mx, ty - 18, { font: Type.mono(12), color: c.ink, align: "center" });
+    p.text(fmt(this.pm), mx, ty - 27, { font: Type.mono(12), color: c.ink, align: "center" });
     const tv = this.trueAt.value;
     if (tv > 0.01) {
       const tx = x0 + game.threshold * (x1 - x0);
       p.ring(tx, ty, 16, c.ink, 1.25, tv);
-      p.text(`${fmt(game.hare)} / ${fmt(game.stag)}`, tx, ty + 44, { font: Type.mono(11), color: c.ink, align: "center", alpha: tv });
+      p.text(`${fmt(game.hare)} / ${fmt(game.stag)}`, tx, ty + 46, { font: Type.mono(11), color: c.ink, align: "center", alpha: tv });
     }
     p.disc(mx, ty, 9, c.ink);
-    for (let i = 0; i < PROVE_GAMES.length; i++) Glyph.step(p, c, this.cx - 10 + i * 20, this.h - 22, i < this.solved, i === this.pi);
+    for (let i = 0; i < PROVE_GAMES.length; i++) Glyph.step(p, c, this.cx - 10 + i * 20, f.tickY, i < this.solved, i === this.pi);
   }
 }
