@@ -1,11 +1,11 @@
 import { CanvasButton } from "../../core/CanvasButton";
 import { Damped } from "../../core/Damped";
-import { Game, type Beat } from "../../core/Game";
+import { Game, type Beat, type Frame } from "../../core/Game";
 import type { Colors } from "../../core/Palette";
 import { Type, type Painter } from "../../core/Painter";
 import { clamp } from "../../core/math";
 import type { Rng } from "../../core/Rng";
-import { inside, type Box } from "../shared/MatrixView";
+import { inside } from "../shared/MatrixView";
 import { PatternPredictor, expectedScore, randomRun, statsOf, type PenniesStats, type Side } from "./model";
 
 const ROUNDS = 16;
@@ -41,8 +41,9 @@ class Timeline {
       if (prev) p.line(prev.x, prev.y, x, y, c.ink, 1, 0.22 * a);
       prev = { x, y };
       const caught = r.guess === r.move;
-      p.ring(xs[r.guess], y, caught ? 8 : 5.5, c.ink, 1.25, (caught ? 1 : 0.55) * a);
-      p.disc(x, y, 3.5, c.ink, a);
+      const rr = Math.min(8, rowH * 0.46);
+      p.ring(xs[r.guess], y, caught ? rr : rr * 0.72, c.ink, 1.25, (caught ? 1 : 0.55) * a);
+      p.disc(x, y, Math.min(3.5, rowH * 0.28), c.ink, a);
     });
   }
 }
@@ -114,8 +115,12 @@ export class MatchingPenniesGame extends Game {
     this.enterProve();
   }
 
+  protected override get actionH(): number {
+    return this.beat === "feel" || this.beat === "prove" ? (this.compact ? 64 : 80) : 44;
+  }
+
   protected layout(): void {
-    const by = this.h - 80;
+    const by = this.buttonY;
     this.toSee.place(this.cx - 80, by, 160);
     this.toProve.place(this.cx - 80, by, 160);
     this.runBtn.place(this.cx - 80, by, 160);
@@ -127,18 +132,16 @@ export class MatchingPenniesGame extends Game {
     this.runBtn.visible = this.beat === "prove" && this.flips >= FLIPS && !this.running && this.runDone === 0;
   }
 
-  private zone(i: 0 | 1 | 2): Box {
-    if (i === 2) return { x: this.colX, y: this.h - 150, w: this.colW, h: 90 };
-    const bw = (this.colW - 12) / 2;
-    return { x: this.colX + i * (bw + 12), y: this.h - 150, w: bw, h: 90 };
+  private zone(i: 0 | 1 | 2): { x: number; y: number; w: number; h: number } {
+    if (i === 2) {
+      const f = this.frame;
+      return { x: f.x, y: f.actionY, w: f.w, h: f.actionH };
+    }
+    return this.pair(i);
   }
 
   private get xs(): [number, number] {
-    return [this.cx - this.colW * 0.2, this.cx + this.colW * 0.2];
-  }
-
-  private get rowH(): number {
-    return Math.min(15, (this.h - 200 - 196) / ROUNDS);
+    return [this.cx - this.frame.w * 0.2, this.cx + this.frame.w * 0.2];
   }
 
   // ---- Input ------------------------------------------------------------
@@ -280,28 +283,28 @@ export class MatchingPenniesGame extends Game {
 
   // ---- Draw -------------------------------------------------------------
 
-  protected render(p: Painter, c: Colors): void {
+  protected render(p: Painter, c: Colors, f: Frame): void {
     const a = this.intro.value;
-    this.prompt.draw(p, c, this.colX, 82, this.colW);
-    this.note.draw(p, c, this.cx, this.h - 182, this.colW, "center");
-    if (this.beat === "feel") this.drawTimeline(p, c, this.feelTL, a);
-    else if (this.beat === "see") this.drawSee(p, c);
-    else if (this.runDone || this.running) this.drawRun(p, c);
-    else this.drawTimeline(p, c, this.proveTL, 1);
-    if (this.beat === "feel") this.drawPads(p, c, a);
-    if (this.beat === "prove" && !this.running && !this.runDone && this.flips < FLIPS) this.drawFlip(p, c);
+    if (this.beat === "feel") this.drawTimeline(p, c, f, this.feelTL, a);
+    else if (this.beat === "see") this.drawSee(p, c, f);
+    else if (this.runDone || this.running) this.drawRun(p, c, f);
+    else this.drawTimeline(p, c, f, this.proveTL, 1);
+    if (this.beat === "feel") this.drawPads(p, c, f, a);
+    if (this.beat === "prove" && !this.running && !this.runDone && this.flips < FLIPS) this.drawFlip(p, c, f);
   }
 
-  private drawTimeline(p: Painter, c: Colors, tl: Timeline, a: number): void {
+  private drawTimeline(p: Painter, c: Colors, f: Frame, tl: Timeline, a: number): void {
     const xs = this.xs;
-    p.text("Left", xs[0], 176, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
-    p.text("Right", xs[1], 176, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
-    p.rule(this.cx, 188, this.cx, this.h - 200, c.ink, 0.1 * a);
-    tl.draw(p, c, xs, 196, this.rowH, a);
-    if (tl.length === 0) p.text("disc: you   ring: its guess", this.cx, 230, { font: Type.body(13, 300), color: c.ash, align: "center", alpha: a });
+    const head = f.top + 12;
+    const top = f.top + 28;
+    const rowH = Math.max(10, Math.min(16, (f.bottom - top - 4) / ROUNDS));
+    p.text("Left", xs[0], head, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
+    p.text("Right", xs[1], head, { font: Type.body(13, 400), color: c.fog, align: "center", alpha: a });
+    tl.draw(p, c, xs, top, rowH, a);
+    if (tl.length === 0) p.text("disc is you, ring is its guess", this.cx, top + 40, { font: Type.body(13, 300), color: c.ash, align: "center", alpha: a });
   }
 
-  private drawPads(p: Painter, c: Colors, a: number): void {
+  private drawPads(p: Painter, c: Colors, f: Frame, a: number): void {
     const live = this.fm.length < ROUNDS;
     for (const i of [0, 1] as const) {
       const z = this.zone(i);
@@ -310,99 +313,90 @@ export class MatchingPenniesGame extends Game {
       p.rect(z.x, z.y, z.w, z.h, c.ink, this.armed === i ? 0.08 : 0);
       p.text(SIDE[i], z.x + z.w / 2, z.y + z.h / 2, { font: Type.body(18, 400), color: c.ink, align: "center", base: "middle", alpha: al });
     }
-    if (live) {
-      const n = this.fm.length;
-      p.text(`${n} of ${ROUNDS}`, this.cx, this.h - 22, { font: Type.mono(12), color: c.ash, align: "center" });
-    }
+    if (live) p.text(`${this.fm.length} of ${ROUNDS}`, this.cx, f.tickY, { font: Type.mono(12), color: c.ash, align: "center", base: "middle" });
   }
 
-  private drawFlip(p: Painter, c: Colors): void {
+  private drawFlip(p: Painter, c: Colors, f: Frame): void {
     const z = this.zone(2);
     p.frame(z.x, z.y, z.w, z.h, c.ink, 0.35);
     p.rect(z.x, z.y, z.w, z.h, c.ink, this.armed === 2 ? 0.08 : 0);
-    const gx = z.x + z.w / 2 - 44;
+    const gx = z.x + z.w / 2 - 46;
     const gy = z.y + z.h / 2;
-    p.ring(gx, gy, 18, c.ink, 1.5);
+    p.ring(gx, gy, 16, c.ink, 1.5);
     const ctx = p.ctx;
     ctx.fillStyle = c.ink;
     ctx.beginPath();
-    ctx.arc(gx, gy, 18, Math.PI / 2, (3 * Math.PI) / 2);
+    ctx.arc(gx, gy, 16, Math.PI / 2, (3 * Math.PI) / 2);
     ctx.fill();
-    p.text("Flip", z.x + z.w / 2 + 10, gy, { font: Type.body(18, 400), color: c.ink, align: "center", base: "middle" });
-    p.text(`${this.flips} of ${FLIPS}`, this.cx, this.h - 22, { font: Type.mono(12), color: c.ash, align: "center" });
+    p.text("Flip", z.x + z.w / 2 + 6, gy, { font: Type.body(18, 400), color: c.ink, align: "center", base: "middle" });
+    p.text(`${this.flips} of ${FLIPS}`, this.cx, f.tickY, { font: Type.mono(12), color: c.ash, align: "center", base: "middle" });
   }
 
-  private drawSee(p: Painter, c: Colors): void {
+  private drawSee(p: Painter, c: Colors, f: Frame): void {
     const s = this.stats;
     if (!s) return;
-    const avail = this.h - 200 - 178;
-    const th = clamp(avail * 0.5, 56, 120);
-    const x0 = this.colX + 14;
-    const w = this.colW - 28;
-    const ty = 196;
+    const x0 = f.x + 14;
+    const w = f.w - 28;
+    const ty = f.top + 26;
+    const th = clamp(f.h - 26 - 18 - 20 - 76, 40, 110);
     const a = this.panelA.value;
     if (a > 0.01) {
       const bottom = ty + th;
       p.rule(x0, ty, x0 + w, ty, c.ink, 0.25 * a);
       p.line(x0, bottom, x0 + w / 2, ty, c.ink, 1.5, a);
       p.line(x0 + w / 2, ty, x0 + w, bottom, c.ink, 1.5, a);
-      p.text("Your score", x0, ty - 8, { font: Type.body(12, 400), color: c.fog, alpha: a });
-      p.text("all Right", x0, bottom + 16, { font: Type.body(12, 400), color: c.fog, alpha: a });
-      p.text("all Left", x0 + w, bottom + 16, { font: Type.body(12, 400), color: c.fog, align: "right", alpha: a });
-      p.text("50/50", x0 + w / 2, bottom + 16, { font: Type.body(12, 400), color: c.fog, align: "center", alpha: a });
+      p.text("Your score", x0, ty - 12, { font: Type.body(12, 400), color: c.fog, alpha: a });
+      p.text("all Right", x0, bottom + 20, { font: Type.body(12, 400), color: c.fog, alpha: a });
+      p.text("all Left", x0 + w, bottom + 20, { font: Type.body(12, 400), color: c.fog, align: "right", alpha: a });
+      p.text("50/50", x0 + w / 2, bottom + 20, { font: Type.body(12, 400), color: c.fog, align: "center", alpha: a });
       p.ring(x0 + w / 2, ty, 9, c.ink, 1.25, a);
       const mx = x0 + s.pLeft * w;
       const my = ty + -expectedScore(s.pLeft) * th;
       p.disc(mx, my, 6, c.ink, a);
-      p.text("you", mx + (s.pLeft > 0.5 ? -12 : 12), my + 4, { font: Type.body(12, 400), color: c.ink, align: s.pLeft > 0.5 ? "right" : "left", alpha: a });
+      p.text("you", mx, my + 26, { font: Type.body(12, 400), color: c.ink, align: "center", alpha: a });
     }
     const b = this.panelB.value;
     if (b > 0.01) {
       const by0 = ty + th + 56;
-      this.bar(p, c, x0, w, by0, "After Left, you repeated", s.repeatAfterLeft, b);
-      this.bar(p, c, x0, w, by0 + 34, "After Right, you repeated", s.repeatAfterRight, b);
+      this.bar(p, c, x0, w, by0, "After Left, repeated", s.repeatAfterLeft, b);
+      this.bar(p, c, x0, w, by0 + 34, "After Right, repeated", s.repeatAfterRight, b);
     }
   }
 
   private bar(p: Painter, c: Colors, x0: number, w: number, y: number, label: string, v: number, a: number): void {
     p.text(label, x0, y, { font: Type.body(13, 400), color: c.fog, alpha: a });
-    const tx = x0 + w * 0.56;
-    const tw = w * 0.34;
+    const tx = x0 + w * 0.5;
+    const tw = w * 0.3;
     p.rule(tx, y - 4, tx + tw, y - 4, c.ink, 0.25 * a);
-    p.rect(tx, y - 7, tw * v, 6, c.ink, 0.9 * a);
-    p.rule(tx + tw / 2, y - 12, tx + tw / 2, y + 4, c.ink, 0.7 * a);
+    p.rect(tx, y - 7, Math.max(1, tw * v), 6, c.ink, 0.9 * a);
+    p.line(tx + tw / 2, y - 14, tx + tw / 2, y + 4, c.ink, 1, 0.7 * a);
     p.text(`${Math.round(v * 100)}%`, x0 + w, y, { font: Type.mono(12), color: c.ink, align: "right", alpha: a });
   }
 
-  private drawRun(p: Painter, c: Colors): void {
-    const x0 = this.colX + 14;
-    const w = this.colW - 28;
-    const top = 200;
-    const h = Math.min(220, this.h - 200 - 220);
+  private drawRun(p: Painter, c: Colors, f: Frame): void {
+    const marginR = 44;
+    const x0 = f.x + 14;
+    const w = f.w - 28 - marginR;
+    const top = f.top + 28;
+    const h = Math.max(70, f.h - 28 - 30);
     const lo = 0.3;
     const hi = 0.8;
     const yOf = (v: number) => top + (1 - (v - lo) / (hi - lo)) * h;
+    p.text("how often it guesses right", x0, f.top + 12, { font: Type.body(12, 400), color: c.fog });
     p.rule(x0, yOf(lo), x0 + w, yOf(lo), c.ink, 0.25);
     p.line(x0, yOf(0.5), x0 + w, yOf(0.5), c.ink, 1, 0.5, [3, 4]);
-    p.text("50%", x0 + w, yOf(0.5) - 8, { font: Type.mono(11), color: c.fog, align: "right" });
+    p.text("50%", x0 + w + 8, yOf(0.5), { font: Type.mono(11), color: c.fog, base: "middle" });
     if (this.stats) {
       const yy = yOf(clamp(this.stats.caught, lo, hi));
       p.line(x0, yy, x0 + w, yy, c.ink, 1.25, 0.9);
-      p.text(`you ${Math.round(this.stats.caught * 100)}%`, x0, yy < top + 16 ? yy + 16 : yy - 8, { font: Type.mono(11), color: c.ink });
+      const near = Math.abs(yy - yOf(0.5)) < 16;
+      p.text(`you ${Math.round(this.stats.caught * 100)}%`, x0 + w + 8, near ? yy + (yy < yOf(0.5) ? -10 : 12) : yy, { font: Type.mono(11), color: c.ink, base: "middle" });
     }
     const n = Math.max(2, Math.floor(this.run.length * clamp(this.runT.value, 0, 1)));
-    const ctx = p.ctx;
-    ctx.strokeStyle = c.ink;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    for (let i = 0; i < n; i++) {
-      const x = x0 + Math.sqrt(i / (this.run.length - 1)) * w;
-      const y = yOf(clamp(this.run[i]!, lo, hi));
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-    p.text("rounds, 1 to 1000", x0 + w, yOf(lo) + 18, { font: Type.body(12, 400), color: c.fog, align: "right" });
-    p.text("how often it guesses right", x0, top - 24, { font: Type.body(12, 400), color: c.fog });
+    const pts: [number, number][] = [];
+    const stride = Math.max(1, Math.floor(n / 220));
+    for (let i = 0; i < n; i += stride) pts.push([x0 + Math.sqrt(i / (this.run.length - 1)) * w, yOf(clamp(this.run[i]!, lo, hi))]);
+    p.path(pts, c.ink, 1.5);
+    p.text("rounds, 1 to 1000", x0 + w, yOf(lo) + 20, { font: Type.body(12, 400), color: c.fog, align: "right" });
   }
 }

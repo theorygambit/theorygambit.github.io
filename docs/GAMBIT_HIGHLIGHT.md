@@ -9,6 +9,6 @@ This repo does not edit the Gambit repo. When ready, add a block at the top of t
 </a>
 ```
 
-Deep link a single topic with `https://theorygambit.github.io/#/g/<slug>`. A topic with no game yet opens an empty slot screen that links back to its Gambit entry, so links are safe to add before every game exists.
+Deep link a single topic with `https://theorygambit.github.io/g/<slug>`. A topic with no game yet opens an empty slot screen that links back to its Gambit entry, so links are safe to add before every game exists.
 
 Style it as a hairline bordered block on the Void ground with Cormorant italic for the title and Jost 300 for the line, matching the existing hero cards.

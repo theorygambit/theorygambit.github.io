@@ -7,7 +7,7 @@ import { prefs, progress } from "../core/Store";
 import { theme } from "../core/Theme";
 import { GameGlyph, MoonIcon, SoundOffIcon, SoundOnIcon, SunIcon } from "./Icons";
 import { Hero } from "./Hero";
-import { HashRouter } from "./Router";
+import { PathRouter } from "./Router";
 
 const TIERS: Tier[] = ["foundations", "core", "advanced", "synthesis"];
 
@@ -44,7 +44,7 @@ export function Home() {
           <ol className="games">
             {playable.map((i) => (
               <li key={i.slug}>
-                <a className="row" href={HashRouter.href(i.slug)}>
+                <a className="row" href={PathRouter.href(i.slug)}>
                   <span className="row-glyph">
                     <GameGlyph slug={i.slug} />
                   </span>
@@ -74,7 +74,7 @@ export function Home() {
                   {items.map((i) => (
                     <li className="slot" key={i.slug} aria-label={`${i.name}, ${chapterOf(i.chapter).title}`}>
                       <span className="slot-n">{String(i.order).padStart(3, "0")}</span>
-                      <a className="slot-name" style={GameRegistry.has(i.slug) ? { color: "var(--text)" } : undefined} href={HashRouter.href(i.slug)}>
+                      <a className="slot-name" style={GameRegistry.has(i.slug) ? { color: "var(--text)" } : undefined} href={PathRouter.href(i.slug)}>
                         {i.name}
                       </a>
                     </li>

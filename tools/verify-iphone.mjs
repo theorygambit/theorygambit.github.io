@@ -89,12 +89,15 @@ await page.goto(BASE);
 await page.waitForTimeout(2500);
 await audit("Home");
 
-await page.evaluate(() => (location.hash = "#/g/dominant-strategy"));
+await page.evaluate(() => {
+  history.pushState(null, "", "/g/dominant-strategy");
+  dispatchEvent(new PopStateEvent("popstate"));
+});
 await page.waitForTimeout(2500);
 const g = await audit("Game");
 check("a gameplay canvas exists on the game screen", g.canvases.length === 1);
 
-await page.goto(`${BASE}?debug=layout#/`);
+await page.goto(`${BASE}?debug=layout`);
 await page.waitForTimeout(2800);
 const dbg = await page.evaluate(() => document.getElementById("debug-layout")?.textContent ?? "");
 check("?debug=layout prints the numbers", /appH/.test(dbg) && /gapUnderRoot/.test(dbg));

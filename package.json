@@ -12,7 +12,8 @@
     "test": "tsx tools/test-models.ts",
     "preview": "vite preview",
     "sync:catalog": "node tools/sync-catalog.mjs",
-    "verify:iphone": "node tools/verify-iphone.mjs"
+    "verify:iphone": "node tools/verify-iphone.mjs",
+    "verify:layout": "node tools/verify-layout.mjs"
   },
   "dependencies": {
     "react": "^19.2.7",

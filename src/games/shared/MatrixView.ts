@@ -1,17 +1,15 @@
 import type { Colors } from "../../core/Palette";
 import { Type, type Painter } from "../../core/Painter";
 
-export interface Box {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+import { inside, type Box } from "../../core/Geometry";
+
+export { inside };
+export type { Box };
 
 /** Geometry and hairlines of a 2x2 table. Rows belong to you, columns to the other player. */
 export class MatrixView {
-  readonly rowLabelW = 66;
-  readonly colLabelH = 58;
+  readonly rowLabelW = 84;
+  readonly colLabelH = 66;
   cell = 110;
   x0 = 0;
   y0 = 0;
@@ -33,7 +31,7 @@ export class MatrixView {
   }
   /** Largest payoff disc radius. Area, not radius, carries the value. */
   get maxR(): number {
-    return this.cell * 0.4;
+    return this.cell * 0.36;
   }
 
   radius(value: number, max = 9): number {
@@ -80,8 +78,7 @@ export class MatrixView {
   /** A small payoff number in the corner of a cell. */
   number(p: Painter, c: Colors, r: number, col: number, value: number, alpha = 1): void {
     const b = this.rect(r, col);
-    p.text(String(Math.round(value * 10) / 10), b.x + b.w - 9, b.y + b.h - 9, { font: Type.mono(11), color: c.fog, align: "right", alpha });
+    p.text(String(Math.round(value * 10) / 10), b.x + b.w - 7, b.y + b.h - 7, { font: Type.mono(11), color: c.fog, align: "right", alpha });
   }
 }
 
-export const inside = (b: Box, x: number, y: number): boolean => x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h;
