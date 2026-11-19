@@ -83,6 +83,86 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="14" cy="20.5" r="1.5" />
         </svg>
       );
+    case "information-types":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M3 12h18" />
+          <circle className="solid" cx="12" cy="7.5" r="2.5" />
+        </svg>
+      );
+    case "short-long-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5" cy="12" r="2" />
+          <circle cx="12" cy="12" r="3" />
+          <circle className="solid" cx="19" cy="12" r="4" />
+        </svg>
+      );
+    case "iterated-elimination":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.25" y="3.25" width="17.5" height="17.5" />
+          <rect x="7.25" y="7.25" width="9.5" height="9.5" />
+          <circle className="solid" cx="12" cy="12" r="2.4" />
+        </svg>
+      );
+    case "nash-equilibrium":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 18L21 6M3 6L21 18" />
+          <circle className="solid" cx="12" cy="12" r="2.8" />
+          <circle cx="12" cy="12" r="5.5" />
+        </svg>
+      );
+    case "mixed-strategy":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" />
+          <path className="solid" d="M12 12V4A8 8 0 0 1 18.9 16Z" />
+        </svg>
+      );
+    case "minimax-theorem":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8Q12 22 21 8" />
+          <path d="M12 3V21" />
+          <circle className="solid" cx="12" cy="14.5" r="2.4" />
+        </svg>
+      );
+    case "backward-induction":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 12H5M9 8l-4 4 4 4" />
+          <circle className="solid" cx="20" cy="12" r="1.8" />
+        </svg>
+      );
+    case "public-goods":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="12" r="3" />
+          <circle cx="5" cy="5" r="2" />
+          <circle cx="19" cy="5" r="2" />
+          <circle cx="5" cy="19" r="2" />
+          <circle cx="19" cy="19" r="2" />
+        </svg>
+      );
+    case "centipede":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12H21" />
+          <circle className="solid" cx="5" cy="12" r="1.8" />
+          <circle cx="10.5" cy="12" r="2.6" />
+          <circle className="solid" cx="16" cy="12" r="3.4" />
+        </svg>
+      );
+    case "travelers-dilemma":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 5H9V10H15V15H21" />
+          <circle className="solid" cx="18" cy="19" r="2.2" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">

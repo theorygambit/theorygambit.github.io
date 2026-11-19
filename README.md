@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with the five opening games live and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with fifteen games live (001 to 005 and 026 to 035) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -54,7 +54,18 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 003 | Matching Pennies | Live |
 | 004 | Stag Hunt | Live |
 | 005 | Ultimatum Game | Live |
-| 006 onward | The remaining 111 topics | Empty slots. Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
+| 006 to 025 | Empty slots | Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
+| 026 | Perfect, Imperfect, Complete and Incomplete Information | Live |
+| 027 | Short vs Long Games | Live |
+| 028 | Iterated Elimination | Live |
+| 029 | Nash Equilibrium | Live |
+| 030 | Mixed Strategy | Live |
+| 031 | Minimax Theorem | Live |
+| 032 | Backward Induction | Live |
+| 033 | Public Goods Game | Live |
+| 034 | Centipede Game | Live |
+| 035 | Traveler's Dilemma | Live |
+| 036 onward | The remaining 83 slots | Empty slots, same as above |
 | 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
 
 Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.
