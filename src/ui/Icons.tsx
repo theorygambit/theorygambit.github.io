@@ -83,6 +83,91 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="14" cy="20.5" r="1.5" />
         </svg>
       );
+    case "focal-points":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="3.5" cy="12" r="1.5" />
+          <circle cx="7.5" cy="12" r="1.5" />
+          <circle className="solid" cx="12.5" cy="12" r="3.2" />
+          <circle cx="17.5" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+        </svg>
+      );
+    case "chicken":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="9" cy="12" r="3.5" />
+          <circle cx="15" cy="12" r="3.5" />
+          <path d="M2 9.5h3.5M2 14.5h3.5M18.5 9.5H22M18.5 14.5H22" />
+        </svg>
+      );
+    case "battle-of-sexes":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9.5" cy="12" r="6.5" />
+          <circle cx="14.5" cy="12" r="6.5" />
+          <path className="solid" d="M12 6A6.5 6.5 0 0 1 12 18A6.5 6.5 0 0 1 12 6Z" />
+        </svg>
+      );
+    case "dictator":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="7" r="4" />
+          <path d="M12 12.5v3" />
+          <circle cx="12" cy="19" r="2.5" />
+        </svg>
+      );
+    case "trust-game":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5" cy="12" r="2" />
+          <path d="M8.5 12h3" />
+          <circle cx="17" cy="12" r="5" />
+        </svg>
+      );
+    case "tragedy-commons":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <circle className="solid" cx="12" cy="7.5" r="1.6" />
+          <circle className="solid" cx="7.8" cy="14.5" r="1.6" />
+          <circle className="solid" cx="16.2" cy="14.5" r="1.6" />
+        </svg>
+      );
+    case "axelrod-tit-for-tat":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="4.5" cy="8.5" r="1.7" />
+          <circle className="solid" cx="9.5" cy="8.5" r="1.7" />
+          <circle className="solid" cx="14.5" cy="8.5" r="1.7" />
+          <circle cx="9.5" cy="15.5" r="2" />
+          <circle cx="14.5" cy="15.5" r="2" />
+          <circle cx="19.5" cy="15.5" r="2" />
+        </svg>
+      );
+    case "flow-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 14L14 3M10 21L21 10" />
+          <circle className="solid" cx="12" cy="12" r="2.2" />
+        </svg>
+      );
+    case "design-ethics":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20.5h18" />
+          <path d="M3.5 18L20.5 5" />
+          <path d="M3.5 18C8 6 14 6 20.5 18" />
+        </svg>
+      );
+    case "expected-utility":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.5 20.5Q6 6 20.5 4" />
+          <path d="M3.5 20.5L20.5 4" />
+          <circle className="solid" cx="12" cy="12.2" r="1.8" />
+        </svg>
+      );
     case "information-types":
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
