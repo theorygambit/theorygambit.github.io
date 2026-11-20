@@ -83,6 +83,91 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="14" cy="20.5" r="1.5" />
         </svg>
       );
+    case "focal-points":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="3.5" cy="12" r="1.5" />
+          <circle cx="7.5" cy="12" r="1.5" />
+          <circle className="solid" cx="12.5" cy="12" r="3.2" />
+          <circle cx="17.5" cy="12" r="1.5" />
+          <circle cx="21" cy="12" r="1.5" />
+        </svg>
+      );
+    case "chicken":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="9" cy="12" r="3.5" />
+          <circle cx="15" cy="12" r="3.5" />
+          <path d="M2 9.5h3.5M2 14.5h3.5M18.5 9.5H22M18.5 14.5H22" />
+        </svg>
+      );
+    case "battle-of-sexes":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="9.5" cy="12" r="6.5" />
+          <circle cx="14.5" cy="12" r="6.5" />
+          <path className="solid" d="M12 6A6.5 6.5 0 0 1 12 18A6.5 6.5 0 0 1 12 6Z" />
+        </svg>
+      );
+    case "dictator":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="7" r="4" />
+          <path d="M12 12.5v3" />
+          <circle cx="12" cy="19" r="2.5" />
+        </svg>
+      );
+    case "trust-game":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5" cy="12" r="2" />
+          <path d="M8.5 12h3" />
+          <circle cx="17" cy="12" r="5" />
+        </svg>
+      );
+    case "tragedy-commons":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <circle className="solid" cx="12" cy="7.5" r="1.6" />
+          <circle className="solid" cx="7.8" cy="14.5" r="1.6" />
+          <circle className="solid" cx="16.2" cy="14.5" r="1.6" />
+        </svg>
+      );
+    case "axelrod-tit-for-tat":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="4.5" cy="8.5" r="1.7" />
+          <circle className="solid" cx="9.5" cy="8.5" r="1.7" />
+          <circle className="solid" cx="14.5" cy="8.5" r="1.7" />
+          <circle cx="9.5" cy="15.5" r="2" />
+          <circle cx="14.5" cy="15.5" r="2" />
+          <circle cx="19.5" cy="15.5" r="2" />
+        </svg>
+      );
+    case "flow-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 14L14 3M10 21L21 10" />
+          <circle className="solid" cx="12" cy="12" r="2.2" />
+        </svg>
+      );
+    case "design-ethics":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20.5h18" />
+          <path d="M3.5 18L20.5 5" />
+          <path d="M3.5 18C8 6 14 6 20.5 18" />
+        </svg>
+      );
+    case "expected-utility":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3.5 20.5Q6 6 20.5 4" />
+          <path d="M3.5 20.5L20.5 4" />
+          <circle className="solid" cx="12" cy="12.2" r="1.8" />
+        </svg>
+      );
     case "information-types":
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -161,6 +246,93 @@ export function GameGlyph({ slug }: { slug: string }) {
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M3 5H9V10H15V15H21" />
           <circle className="solid" cx="18" cy="19" r="2.2" />
+        </svg>
+      );
+    case "volunteers-dilemma":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="7.5" r="3.5" />
+          <circle cx="5.5" cy="17" r="3" />
+          <circle cx="12" cy="17" r="3" />
+          <circle cx="18.5" cy="17" r="3" />
+        </svg>
+      );
+    case "beauty-contest":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 17.5h18" />
+          <circle cx="6" cy="12" r="2.2" />
+          <circle cx="11" cy="12" r="2.2" />
+          <circle cx="16" cy="12" r="2.2" />
+          <circle className="solid" cx="13.5" cy="6" r="2.8" />
+        </svg>
+      );
+    case "dollar-auction":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="9" r="5" strokeDasharray="2 2.5" />
+          <circle className="solid" cx="7" cy="18" r="3" />
+          <circle cx="17" cy="18" r="3.5" />
+        </svg>
+      );
+    case "colonel-blotto":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="16" r="3.5" />
+          <circle className="solid" cx="12" cy="16" r="2" />
+          <circle cx="18" cy="16" r="3.5" />
+          <circle cx="12" cy="6" r="2.5" strokeDasharray="2 2" />
+        </svg>
+      );
+    case "cournot":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="4" y1="20" x2="4" y2="4" />
+          <line x1="4" y1="20" x2="20" y2="20" />
+          <line x1="6" y1="5" x2="19" y2="18" />
+          <line x1="6" y1="17" x2="19" y2="7" strokeDasharray="2 2.5" />
+          <circle className="solid" cx="12.5" cy="12" r="2.3" />
+        </svg>
+      );
+    case "bertrand":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7.5" cy="9" r="3.2" />
+          <circle cx="16.5" cy="9" r="3.2" />
+          <path d="M3 20.5h18M12 14.5v6" />
+        </svg>
+      );
+    case "stackelberg":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="12" r="4.5" />
+          <circle cx="18" cy="12" r="2.8" />
+          <line x1="11.5" y1="12" x2="15" y2="12" strokeDasharray="1.5 2" />
+        </svg>
+      );
+    case "hotelling":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="10" cy="8" r="3.2" />
+          <circle cx="15" cy="8" r="3.2" />
+          <path d="M3 18.5h18M3 16.5v4M21 16.5v4" />
+        </svg>
+      );
+    case "repeated-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5.5" cy="12" r="3.5" />
+          <circle className="solid" cx="13" cy="12" r="2.5" />
+          <circle cx="19" cy="12" r="1.8" />
+          <path d="M3 20.5h18" />
+        </svg>
+      );
+    case "dynamic-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" />
+          <circle className="solid" cx="8.5" cy="12" r="3" />
+          <circle cx="15.5" cy="12" r="2.2" />
         </svg>
       );
     default:
