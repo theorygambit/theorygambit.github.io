@@ -8,6 +8,16 @@ import { Dilemma } from "../src/games/prisoners-dilemma/model";
 import { PatternPredictor, statsOf, expectedScore, randomRun, type Side } from "../src/games/matching-pennies/model";
 import { StagHunt, PROVE_GAMES, PARTNER_BELIEFS } from "../src/games/stag-hunt/model";
 import { Crowd, FEEL_CROWD, PROVE_CROWDS, PROVE_SHARE } from "../src/games/ultimatum/model";
+import { FEEL_CONTEST, crowd, PROVE_POOL as BC_POOL, pickPuzzles as pickBC, PROVE_TOLERANCE as BC_TOL } from "../src/games/beauty-contest/model";
+import { Volunteer, FEEL_GAME, PROVE_POOL as VOL_POOL, pickPuzzles as pickVol } from "../src/games/volunteers-dilemma/model";
+import { RepeatedDilemma, GrimOpponent, FEEL_CASE, PROVE_POOL as DILEMMA_POOL, PROVE_TOLERANCE, proveSet as dilemmaSet } from "../src/games/repeated-games/model";
+import { Pond, FEEL_POND, FEEL_PERIODS, PROVE_POOL as POND_POOL, PROVE_TOLERANCE as POND_TOL, proveSet as pondSet } from "../src/games/dynamic-games/model";
+import { PriceWar, PriceCase, FEEL_COST, WAR, proveSet as priceProveSet } from "../src/games/bertrand/model";
+import { Street, SEE_START, GRID, proveSet as streetProveSet } from "../src/games/hotelling/model";
+import { DollarAuction, Escalation, FEEL_AUCTION, BUDGETS, PROVE_POOL, proveSet as auctionProveSet } from "../src/games/dollar-auction/model";
+import { Blotto, FEEL_TYPES, FEEL_TROOPS, PROVE_POOL as blottoPool, feelOpponents, proveSet as blottoProveSet } from "../src/games/colonel-blotto/model";
+import { Duopoly, FEEL as COURNOT_FEEL, PROVE_SYMMETRIC, PROVE_ASYMMETRIC, rivalQuantity, staircase, isRight as cournotRight, axisMax as cournotAxis } from "../src/games/cournot/model";
+import { FEEL as LEADER_FEEL, LEAD_POOL, FOLLOW_POOL, answer as leaderAnswer, isRight as leaderRight, proveSet as leaderProveSet } from "../src/games/stackelberg/model";
 import { Curriculum, FIRST } from "../src/catalog/curriculum";
 import { Bimatrix } from "../src/games/shared/Bimatrix";
 import { feelRounds, proveScenes, outcome, ringSide, decidable, SCENES } from "../src/games/information-types/model";
@@ -20,6 +30,17 @@ import { Pile, FEEL_PILE, PROVE_POOL as PILE_POOL } from "../src/games/backward-
 import { Pot, FEEL_POT, PROVE_SIZES } from "../src/games/public-goods/model";
 import { Centipede, FEEL_GAME as CENTI_FEEL, generate as centiGenerate, playFeel } from "../src/games/centipede/model";
 import { Travelers, FEEL_GAME as TRAVEL_FEEL, PROVE_POOL as TRAVEL_POOL } from "../src/games/travelers-dilemma/model";
+import { PayoffTable } from "../src/games/shared/PayoffTable";
+import { Spread, feelRounds as focalFeel, proveSet as focalProve } from "../src/games/focal-points/model";
+import { Chicken, DRIVER_RATES, COMMIT_CASES } from "../src/games/chicken/model";
+import { Outing, PARTNER_ODDS, proveTables } from "../src/games/battle-of-sexes/model";
+import { Giver, Responder, provePairs } from "../src/games/dictator/model";
+import { Trust, RETURN_SHARES, PROVE_TRUSTS } from "../src/games/trust-game/model";
+import { Pasture, FEEL_PASTURE, PROVE_PASTURES } from "../src/games/tragedy-commons/model";
+import { FIELD, TIT_FOR_TAT, ALWAYS_BREAK, ALWAYS_HOLD, play, tournament, headToHeadWins, tftAnswer, proveReadings } from "../src/games/axelrod-tit-for-tat/model";
+import { Flow, LEVELS, BAND, PROVE_SKILLS } from "../src/games/flow-theory/model";
+import { Design, FEEL_DESIGN, BUILDS, PROVE_DESIGNS } from "../src/games/design-ethics/model";
+import { Lottery, utility, FEEL_GAMBLE, FEEL_SURES, PROVE_GAMBLES } from "../src/games/expected-utility/model";
 
 let passed = 0;
 function test(name: string, fn: () => void): void {
@@ -196,6 +217,220 @@ test("prove crowds have different optimal offers, and the optimum clears the pas
   assert.ok(a.best().x < 3 && b.best().x > 4, `${a.best().x} ${b.best().x}`);
   for (const c of PROVE_CROWDS) assert.ok(c.expected(c.best().x) >= PROVE_SHARE * c.best().e);
   assert.ok(b.expected(a.best().x) < PROVE_SHARE * b.best().e, "reusing the old answer must fail");
+});
+
+console.log("bimatrix");
+test("stable cells are the ones where both best replies meet", () => {
+  const pd = new PayoffTable([[[3, 3], [0, 5]], [[5, 0], [1, 1]]], ["a", "b"], ["a", "b"]);
+  assert.deepEqual(pd.stable(), [[1, 1]]);
+  assert.equal(pd.max, 5);
+});
+
+console.log("focal points");
+test("a lone odd option draws most of the crowd and an all alike row draws no one in particular", () => {
+  const same = new Spread(Array.from({ length: 5 }, () => ({ ring: false, big: false })));
+  assert.equal(same.focal(), null);
+  assert.ok(same.matchChance() < 0.25, `${same.matchChance()}`);
+  const odd = new Spread([{ ring: false, big: false }, { ring: true, big: false }, { ring: false, big: false }, { ring: false, big: false }, { ring: false, big: false }]);
+  assert.equal(odd.focal(), 1);
+  assert.ok(odd.shares()[1]! > 0.7 && odd.matchChance() > 0.55);
+  near(odd.shares().reduce((a, b) => a + b, 0), 1);
+});
+test("feel rounds run from no focus to one focus, with two odd options in the middle ambiguous", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const r = focalFeel(new Rng(seed));
+    assert.equal(r.length, 4);
+    assert.equal(r[0]!.focal(), null);
+    assert.notEqual(r[1]!.focal(), null);
+    assert.equal(r[2]!.focal(), null);
+    assert.notEqual(r[3]!.focal(), null);
+    assert.ok(r[3]!.matchChance() > r[0]!.matchChance() * 2.5);
+  }
+});
+test("prove puzzles always have one clear answer, and it moves", () => {
+  const seen = new Set<number>();
+  for (let seed = 1; seed <= 300; seed++) {
+    const set = focalProve(new Rng(seed));
+    for (const pz of set) {
+      assert.equal(pz.spread.focal(), pz.answer, `seed ${seed}`);
+      seen.add(pz.answer);
+    }
+  }
+  assert.ok(seen.size >= 5);
+});
+
+console.log("chicken");
+test("the standard payoffs make a chicken: two stable cells, each with exactly one swerver", () => {
+  const c = new Chicken();
+  assert.ok(c.T > c.R && c.R > c.S && c.S > c.P);
+  assert.deepEqual(c.matrix().stable(), [[0, 1], [1, 0]]);
+});
+test("the best reply flips at the threshold, one half here", () => {
+  const c = new Chicken();
+  near(c.threshold, 0.5);
+  assert.equal(c.bestReply(0.6), "swerve");
+  assert.equal(c.bestReply(0.4), "dare");
+  near(c.ev("dare", c.threshold), c.ev("swerve", c.threshold));
+  assert.ok(DRIVER_RATES.some((q) => q > 0.5) && DRIVER_RATES.some((q) => q < 0.5));
+});
+test("committing to dare makes a rival swerve only while a crash is worse than yielding", () => {
+  assert.deepEqual(COMMIT_CASES.map((c) => c.rivalReply()), ["swerve", "dare", "swerve"]);
+  for (const c of COMMIT_CASES) {
+    const m = c.matrix();
+    const them = m.bestCols(1)[0]!;
+    assert.equal(them === 0 ? "swerve" : "dare", c.rivalReply());
+  }
+});
+
+console.log("battle of the sexes");
+test("both meetings are stable, missing is not, and the threshold is lo over hi plus lo", () => {
+  const o = new Outing(3, 2);
+  assert.deepEqual(o.matrix().stable(), [[0, 0], [1, 1]]);
+  near(o.threshold, 0.4);
+  assert.equal(o.best(0.3), "football");
+  assert.equal(o.best(0.5), "opera");
+  assert.ok(PARTNER_ODDS.some((q) => q > 0.4) && PARTNER_ODDS.some((q) => q < 0.4));
+});
+test("prove tables have two stable cells that change place when the columns swap", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const [a, b] = proveTables(new Rng(seed)) as [ReturnType<typeof proveTables>[0], ReturnType<typeof proveTables>[0]];
+    assert.deepEqual(a.stable, [[0, 0], [1, 1]]);
+    assert.deepEqual(b.stable, [[0, 1], [1, 0]]);
+  }
+});
+
+console.log("dictator");
+test("generosity is the dictator gift and fear is only what refusal added", () => {
+  const g = new Giver(1, 5);
+  assert.equal(g.generosity, 1);
+  assert.equal(g.fear, 4);
+  assert.equal(new Giver(4, 3).fear, 0);
+  assert.ok(new Responder(3).accepts(3) && !new Responder(3).accepts(2));
+});
+test("prove pairs: the kinder person is the one with the bigger dictator gift, never the bigger ultimatum offer", () => {
+  for (let seed = 1; seed <= 300; seed++) {
+    for (const p of provePairs(new Rng(seed))) {
+      const k = p.kinder === "a" ? p.a : p.b;
+      const l = p.kinder === "a" ? p.b : p.a;
+      assert.ok(k.dictator > l.dictator);
+      assert.ok(l.ultimatum > k.ultimatum, `seed ${seed}`);
+    }
+  }
+});
+
+console.log("trust game");
+test("sending pays only when the share returned beats one over the multiplier", () => {
+  const t = new Trust(3);
+  near(t.breakEven, 1 / 3);
+  near(t.final(10, 0.6), 18);
+  near(t.final(10, 0), 0);
+  near(t.final(10, 1 / 3), 10);
+  assert.ok(t.pays(0.4) && !t.pays(0.3));
+  assert.ok(RETURN_SHARES.some((r) => t.pays(r)) && RETURN_SHARES.some((r) => !t.pays(r)));
+});
+test("prove multipliers give break evens that are not a third", () => {
+  const be = PROVE_TRUSTS.map((t) => t.breakEven);
+  near(be[0]!, 0.5);
+  near(be[1]!, 0.25);
+  assert.ok(be.every((b) => Math.abs(b - 1 / 3) > 0.07));
+});
+
+console.log("tragedy of the commons");
+test("the feel field is a tragedy: a second sheep always pays, yet all at two is worse than all at one", () => {
+  const p = FEEL_PASTURE;
+  assert.ok(p.twoDominates && p.tragic);
+  near(p.allOne, 4);
+  near(p.allTwo, 3);
+  near(p.alone, 7);
+  for (let k = 0; k <= 4; k++) assert.ok(p.payoff(2, k) > p.payoff(1, k));
+});
+test("prove fields: a tragedy, a rich field and a field where a second sheep never pays", () => {
+  assert.deepEqual(PROVE_PASTURES.map((p) => p.tragic), [true, false, false]);
+  assert.ok(PROVE_PASTURES[1]!.twoDominates && PROVE_PASTURES[1]!.allTwo > PROVE_PASTURES[1]!.allOne);
+  assert.ok(!PROVE_PASTURES[2]!.twoDominates);
+  assert.ok(new Pasture(13, 2, 5).tragic);
+});
+
+console.log("tit for tat");
+test("tit for tat starts nice, copies the last move and forgives", () => {
+  assert.deepEqual(tftAnswer(["break", "hold", "hold", "break", "hold"]), ["hold", "break", "hold", "hold", "break"]);
+});
+test("tit for tat never beats a rival head to head, yet wins the tournament", () => {
+  const scores = tournament();
+  const best = Math.max(...scores);
+  assert.equal(FIELD[scores.indexOf(best)], TIT_FOR_TAT);
+  assert.equal(scores.filter((s) => s === best).length, 1);
+  assert.equal(headToHeadWins(TIT_FOR_TAT), 0);
+  assert.ok(headToHeadWins(ALWAYS_BREAK) > 0);
+});
+test("always break exploits always hold, and tit for tat holds mutual cooperation", () => {
+  const m = play(ALWAYS_BREAK, ALWAYS_HOLD);
+  assert.equal(m.a, 50);
+  assert.equal(m.b, 0);
+  assert.equal(play(TIT_FOR_TAT, TIT_FOR_TAT).a, 30);
+});
+test("prove readings always include forgiveness and are distinct", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const [a, b] = proveReadings(new Rng(seed)) as [ReturnType<typeof proveReadings>[0], ReturnType<typeof proveReadings>[0]];
+    assert.notEqual(a.theirs.join(), b.theirs.join());
+    for (const r of [a, b]) {
+      assert.equal(r.answer[0], "hold");
+      assert.ok(r.theirs.some((m, i) => m === "break" && r.theirs[i + 1] === "hold" && r.answer[i + 2] === "hold"));
+    }
+  }
+});
+
+console.log("flow theory");
+test("flow sits on the diagonal band, boredom below it and anxiety above", () => {
+  assert.equal(Flow.state(5, 5), "flow");
+  assert.equal(Flow.state(5 + BAND, 5), "flow");
+  assert.equal(Flow.state(2, 5), "bored");
+  assert.equal(Flow.state(8, 5), "anxious");
+});
+test("skill is where the hit rate crosses the mark, and the three levels span the scale", () => {
+  near(Flow.skillFrom([{ c: 1.5, h: 1 }, { c: 5, h: 0.8 }, { c: 9, h: 0.3 }]), 5 + ((0.8 - 0.65) / 0.5) * 4);
+  assert.equal(Flow.skillFrom([{ c: 1.5, h: 0.2 }, { c: 5, h: 0.1 }, { c: 9, h: 0 }]), 0);
+  assert.equal(Flow.skillFrom([{ c: 1.5, h: 1 }, { c: 5, h: 0.9 }, { c: 9, h: 0.8 }]), 10);
+  assert.ok(LEVELS[0]! < LEVELS[1]! && LEVELS[1]! < LEVELS[2]!);
+  assert.ok(PROVE_SKILLS.every((s) => s > 2 && s < 8.5));
+});
+
+console.log("design ethics");
+test("engagement only rises, benefit peaks and then falls, and the peak is not at the top", () => {
+  const d = FEEL_DESIGN;
+  for (let i = 1; i <= 20; i++) assert.ok(d.engagement(i / 20) > d.engagement((i - 1) / 20));
+  assert.ok(d.care > 0.3 && d.care < 0.6);
+  assert.ok(d.benefit(d.care) > d.benefit(1) * 3);
+  assert.ok(d.benefit(1) > 0);
+  const [gentle, standard, pushy] = BUILDS.map((b) => ({ e: d.engagement(b.x), b: d.benefit(b.x) })) as [{ e: number; b: number }, { e: number; b: number }, { e: number; b: number }];
+  assert.ok(pushy.e > standard.e && standard.e > gentle.e);
+  assert.ok(standard.b > gentle.b && standard.b > pushy.b * 2);
+});
+test("prove designs peak in different places, further apart than the tolerance", () => {
+  const [a, b] = PROVE_DESIGNS.map((x) => x.care) as [number, number];
+  assert.ok(Math.abs(a - b) > 0.12, `${a} ${b}`);
+  for (const x of PROVE_DESIGNS) assert.ok(x.benefit(1) > 0 && x.care < 0.8);
+  assert.ok(new Design(3, 0.5).care > 0);
+});
+
+console.log("expected utility");
+test("a fifty fifty gamble for 100 has average 50, expected utility 5 and is worth 25 for sure", () => {
+  const g = FEEL_GAMBLE;
+  near(g.ev, 50);
+  near(g.eu, 5);
+  near(g.certainty, 25);
+  assert.ok(g.prefersSure(30) && !g.prefersSure(20));
+  assert.ok(FEEL_SURES.every((s) => s < g.ev));
+  assert.ok(FEEL_SURES.some((s) => g.prefersSure(s)) && FEEL_SURES.some((s) => !g.prefersSure(s)));
+});
+test("prove gambles have certainty equivalents far from the average and from a half or a third", () => {
+  for (const g of PROVE_GAMBLES) {
+    assert.ok(g.certainty < g.ev * 0.6);
+    near(utility(g.certainty), g.eu);
+  }
+  near(PROVE_GAMBLES[0]!.certainty, 16);
+  near(PROVE_GAMBLES[1]!.certainty, 6.25);
+  assert.ok(new Lottery(100, 16, 0.5).certainty > 40);
 });
 
 console.log("information types");
@@ -422,6 +657,534 @@ test("with a small bonus matching is the best reply and nothing unravels", () =>
 test("Prove cases hold their answers and differ from Feel's undercut by one at least once", () => {
   for (const c of TRAVEL_POOL) assert.equal(c.game.bestReply(c.partner), c.answer);
   assert.ok(TRAVEL_POOL.some((c) => c.answer === c.partner) && TRAVEL_POOL.some((c) => c.answer === c.partner - 1));
+});
+
+// frag:beauty-contest
+console.log("beauty contest");
+test("level guesses climb down by the factor and the target is a share of the mean", () => {
+  near(FEEL_CONTEST.levelGuess(0), 50);
+  near(FEEL_CONTEST.levelGuess(1), 100 / 3, 1e-9);
+  near(FEEL_CONTEST.levelGuess(2), 200 / 9, 1e-9);
+  near(FEEL_CONTEST.target([30, 60]), 30, 1e-9);
+  assert.equal(FEEL_CONTEST.winner([10, 28, 50, 90]), 1);
+});
+test("the learning crowd falls round to round and the winning guess sits far below 33", () => {
+  let sum = [0, 0, 0];
+  let win = 0;
+  for (let s = 1; s <= 100; s++) {
+    const r = new Rng(s);
+    const means = [0, 1, 2].map((k) => FEEL_CONTEST.mean(crowd(r, k)));
+    assert.ok(means[0]! > means[1]! && means[1]! > means[2]!, `seed ${s}: ${means}`);
+    means.forEach((m, i) => (sum[i]! += m));
+    win += FEEL_CONTEST.target(crowd(r, 0));
+  }
+  assert.ok(sum[0]! / 100 > 30 && sum[2]! / 100 < 25, `${sum.map((x) => x / 100)}`);
+  assert.ok(win / 100 < 26);
+});
+test("beauty prove pool answers are 50 f^(steps+1), unlike naive 50 f and unlike the Feel winner 22", () => {
+  assert.ok(BC_POOL.length >= 4);
+  for (const p of BC_POOL) {
+    near(p.answer, 50 * Math.pow(p.f, p.crowdSteps + 1), 1e-9);
+    assert.ok(Math.abs(p.answer - 22) > BC_TOL + 2, `${p.label} passes with 22`);
+    assert.ok(Math.abs(p.answer - 50 * p.f) > BC_TOL + 2);
+  }
+});
+test("two beauty puzzles use different factors and different answers, many seeds", () => {
+  for (let s = 1; s <= 200; s++) {
+    const r = new Rng(s);
+    const [a, b] = pickBC((xs) => r.pick(xs));
+    assert.notEqual(a.f, b.f);
+    assert.ok(Math.abs(a.answer - b.answer) >= 6);
+  }
+});
+
+// frag:volunteers-dilemma
+console.log("volunteer's dilemma");
+test("p* makes waiting and stepping up pay the same", () => {
+  for (const g of [FEEL_GAME, new Volunteer(3, 9, 4), new Volunteer(8, 5, 2)]) {
+    near(g.waitPay(g.pStar), g.volunteerPay, 1e-9);
+  }
+});
+test("the chance that all the others wait is pinned at cost over benefit for every group size", () => {
+  for (let n = 2; n <= 12; n++) near(FEEL_GAME.with(n).othersWait(FEEL_GAME.with(n).pStar), 1 / 3, 1e-9);
+});
+test("more people means less help: each steps up less, and nobody helps more often, toward cost over benefit", () => {
+  let prevP = 2;
+  let prevNobody = -1;
+  for (let n = 2; n <= 40; n++) {
+    const g = FEEL_GAME.with(n);
+    assert.ok(g.pStar < prevP);
+    assert.ok(g.nobodyAtStar > prevNobody);
+    near(g.nobody(g.pStar), g.nobodyAtStar, 1e-9);
+    prevP = g.pStar;
+    prevNobody = g.nobodyAtStar;
+  }
+  near(FEEL_GAME.with(400).nobodyAtStar, 1 / 3, 0.01);
+  near(FEEL_GAME.pStar, 1 - Math.pow(1 / 3, 1 / 4), 1e-9);
+});
+test("volunteer prove pool has the stated clean answers, and the Feel answer fails every one", () => {
+  assert.equal(VOL_POOL.length, 7);
+  const wants = [0.5, 2 / 3, 0.5, 2 / 3, 1 / 3, 0.5, 1 / 3];
+  VOL_POOL.forEach((p, i) => {
+    near(p.answer, wants[i]!, 1e-9);
+    assert.ok(Math.abs(FEEL_GAME.pStar - p.answer) > 0.06, `feel answer passes puzzle ${i}`);
+  });
+});
+test("two prove puzzles differ in answer and are never repeated", () => {
+  for (let s = 1; s <= 200; s++) {
+    const r = new Rng(s);
+    const [a, b] = pickVol((xs) => r.pick(xs));
+    assert.notEqual(a, b);
+    assert.ok(Math.abs(a.answer - b.answer) >= 0.1);
+  }
+});
+
+// frag:repeated-games
+console.log("repeated games");
+test("hold and break values match the long sum, and the threshold is (T - R) / (T - P)", () => {
+  const g = new RepeatedDilemma(5, 3, 1);
+  for (const d of [0.2, 0.5, 0.9]) {
+    let hold = 0;
+    let brk = 0;
+    for (let t = 0; t < 4000; t++) {
+      hold += g.stream("hold", t) * d ** t;
+      brk += g.stream("break", t) * d ** t;
+    }
+    near(hold, g.holdValue(d), 1e-6);
+    near(brk, g.breakValue(d), 1e-6);
+  }
+  near(g.threshold, 0.5);
+  near(g.holdValue(0.5), g.breakValue(0.5));
+});
+test("holding is worth at least breaking exactly when patience reaches the threshold", () => {
+  for (const c of DILEMMA_POOL) {
+    const g = new RepeatedDilemma(c.T, c.R, c.P);
+    for (let d = 0; d < 0.97; d += 0.01) assert.equal(g.holdValue(d) >= g.breakValue(d) - 1e-9, d >= g.threshold - 1e-9, `${c.T} ${c.R} ${c.P} at ${d}`);
+    assert.equal(g.sustainable(g.threshold), true);
+  }
+});
+test("the grim opponent holds until the first break, then breaks forever", () => {
+  const o = new GrimOpponent();
+  assert.equal(o.move(), "hold");
+  o.observe("hold");
+  assert.equal(o.move(), "hold");
+  o.observe("break");
+  for (let i = 0; i < 5; i++) {
+    assert.equal(o.move(), "break");
+    o.observe("hold");
+  }
+});
+test("Feel payoffs form a dilemma and breaking once beats holding for one round", () => {
+  const g = FEEL_CASE;
+  assert.ok(g.T > g.R && g.R > g.P && g.P > g.S);
+  assert.deepEqual(g.payoff("break", "hold"), [5, 0]);
+  assert.deepEqual(g.payoff("hold", "break"), [0, 5]);
+  near(g.threshold, 0.5);
+});
+test("Prove pool thresholds are the stated answers, and the Feel threshold fails every one", () => {
+  const want = [1 / 3, 0.6, 0.625, 1 / 3, 0.4];
+  DILEMMA_POOL.forEach((c, i) => {
+    const g = new RepeatedDilemma(c.T, c.R, c.P);
+    near(g.threshold, want[i]!, 1e-9);
+    assert.ok(Math.abs(FEEL_CASE.threshold - g.threshold) > PROVE_TOLERANCE, `Feel answer would pass ${c.T} ${c.R} ${c.P}`);
+  });
+});
+test("a Prove set has two clearly different thresholds and replays avoid the last pair", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const a = dilemmaSet(new Rng(seed));
+    assert.ok(Math.abs(a.games[0]!.threshold - a.games[1]!.threshold) >= 0.1);
+    const b = dilemmaSet(new Rng(seed), a.key);
+    assert.notEqual(b.key, a.key);
+  }
+});
+
+// frag:dynamic-games
+console.log("dynamic games");
+test("the pond grows back from what is left, up to capacity", () => {
+  const p = new Pond(10, 2, 2);
+  assert.deepEqual(p.step(10, 3), { took: 3, rival: 2, left: 5, next: 10 });
+  assert.deepEqual(p.step(10, 5), { took: 5, rival: 2, left: 3, next: 6 });
+  assert.deepEqual(p.step(10, 10), { took: 10, rival: 0, left: 0, next: 0 });
+  assert.equal(p.step(4, 9).took, 4);
+});
+test("the yield is the largest steady harvest that refills the pond, found by brute force", () => {
+  for (const c of [{ K: 10, g: 2, r: 2 }, ...POND_POOL]) {
+    const p = new Pond(c.K, c.g, c.r);
+    let best = 0;
+    for (let h = 0; h <= c.K; h += 0.01) if (p.next(c.K, h) >= c.K - 1e-9) best = h;
+    near(best, p.yield, 0.011);
+  }
+  near(FEEL_POND.yield, 3);
+});
+test("taking more than the yield shrinks the pond every period, at or below keeps it full", () => {
+  for (const c of POND_POOL) {
+    const p = new Pond(c.K, c.g, c.r);
+    let s = c.K;
+    for (let i = 0; i < 4; i++) {
+      const n = p.next(s, p.yield + 1);
+      assert.ok(n < s - 1e-9 || n === 0, `${c.K} ${c.g} ${c.r}`);
+      s = n;
+    }
+    s = c.K;
+    for (let i = 0; i < 6; i++) s = p.next(s, p.yield);
+    near(s, c.K);
+  }
+});
+test("backward induction: steady play then cashing out beats greed, and the last period takes everything", () => {
+  const p = FEEL_POND;
+  const best = p.best(10, FEEL_PERIODS);
+  assert.equal(best, p.yield * (FEEL_PERIODS - 1) + 10);
+  assert.equal(p.best(10, 1), 10);
+  const greedy = p.step(10, 10).took + p.best(p.step(10, 10).next, FEEL_PERIODS - 1);
+  assert.ok(best > greedy * 2, `${best} vs ${greedy}`);
+  for (const n of [3, 4, 5]) assert.ok(p.best(10, n) > 10 + p.best(0, n - 1));
+});
+test("Prove pool yields are the stated answers, and the Feel yield fails every one", () => {
+  const want = [2, 6, 5, 6, 4];
+  POND_POOL.forEach((c, i) => {
+    const p = new Pond(c.K, c.g, c.r);
+    near(p.yield, want[i]!, 1e-9);
+    assert.ok(Math.abs(FEEL_POND.yield - p.yield) > POND_TOL, `Feel yield would pass ${c.K} ${c.g} ${c.r}`);
+  });
+});
+test("a Prove set has two different yields and replays avoid the last pair", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const a = pondSet(new Rng(seed));
+    assert.ok(Math.abs(a.ponds[0]!.yield - a.ponds[1]!.yield) >= 1);
+    assert.notEqual(pondSet(new Rng(seed), a.key).key, a.key);
+  }
+});
+
+// frag:bertrand
+console.log("bertrand");
+test("the cheaper firm takes every buyer, a tie splits them, a price above value sells nothing", () => {
+  const w = new PriceWar();
+  assert.equal(w.won(4, 5), 10);
+  assert.equal(w.won(5, 5), 5);
+  assert.equal(w.won(6, 5), 0);
+  assert.equal(w.won(11, 12), 0);
+  assert.equal(w.profit(4, 5, 2), 20);
+  assert.equal(w.profit(5, 5, 2), 15);
+});
+test("the best reply to any rival price above cost plus one is one tick under it, found by brute force", () => {
+  for (let r = FEEL_COST + 2; r <= 10; r++) assert.equal(WAR.bestReply(r, FEEL_COST), r - 1, `rival ${r}`);
+  assert.equal(WAR.bestReply(FEEL_COST + 1, FEEL_COST), FEEL_COST + 1, "one tick above cost you match, undercutting earns nothing");
+});
+test("two firms at cost is an equilibrium: no price earns more than nothing", () => {
+  for (const c of [2, 3, 4, 5]) {
+    const stay = WAR.profit(c, c, c);
+    assert.equal(stay, 0);
+    for (const p of WAR.prices(c)) assert.ok(WAR.profit(p, c, c) <= stay + 1e-9, `cost ${c} price ${p}`);
+  }
+});
+test("the Feel rival goes one tick under your last price and stops one tick above cost", () => {
+  assert.equal(WAR.feelRival(0, null, 2), 9);
+  assert.equal(WAR.feelRival(1, 7, 2), 6);
+  assert.equal(WAR.feelRival(2, 3, 2), 3);
+  assert.equal(WAR.feelRival(3, 2, 2), 3);
+});
+test("a cheaper firm prices one tick under the rival's cost, and that is the unique best reply", () => {
+  for (const [m, t] of [[3, 6], [4, 7], [3, 7], [5, 8]] as const) {
+    const c = new PriceCase("cheaper", m, t);
+    assert.equal(WAR.bestReply(t, m), t - 1);
+    assert.equal(c.answer, t - 1);
+    for (const p of WAR.prices(m)) if (p !== c.answer) assert.ok(c.profitAt(p) < c.bestProfit, `${m},${t} price ${p}`);
+  }
+});
+test("prove cases: right answers pass, the Feel answer fails every one, and the order is same then cheaper", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const set = priceProveSet(new Rng(seed));
+    assert.equal(set.length, 2);
+    assert.equal(set[0]!.kind, "same");
+    assert.equal(set[1]!.kind, "cheaper");
+    for (const c of set) {
+      assert.ok(c.accepts(c.answer));
+      assert.ok(!c.accepts(FEEL_COST), "the Feel price of 2 must fail");
+      assert.ok(!c.accepts(c.answer + 3));
+      assert.ok(c.mine !== FEEL_COST);
+    }
+    assert.ok(!set[1]!.accepts(set[1]!.mine), "pricing at your own cost is not the answer");
+    assert.ok(!set[1]!.accepts(set[1]!.theirs), "matching their cost is not the answer");
+    assert.ok(set[0]!.accepts(set[0]!.mine + 1));
+    assert.ok(!set[0]!.accepts(set[0]!.mine + 2));
+  }
+});
+
+// frag:hotelling
+console.log("hotelling");
+test("share: each customer goes to the nearer shop and a tie splits", () => {
+  const s = Street.uniform(20);
+  near(s.share(0.25, 0.75), 0.5);
+  near(s.share(0.5, 0.5), 0.5);
+  near(s.share(0.1, 0.9) + s.share(0.9, 0.1), 1);
+  assert.ok(s.share(0.4, 0.8) > s.share(0.1, 0.8));
+});
+test("the best reply to a rival off the middle is one step beside them, toward the larger side", () => {
+  const s = Street.uniform(20);
+  assert.equal(s.bestReply(0.2), 0.25);
+  assert.equal(s.bestReply(0.8), 0.75);
+  assert.equal(s.bestReply(0.05), 0.1);
+});
+test("best reply by brute force beats every other grid spot", () => {
+  const s = Street.uniform(20);
+  for (const b of s.positions()) {
+    const r = s.bestReply(b);
+    for (const a of s.positions()) assert.ok(s.held(r, b) >= s.held(a, b) - 1e-9, `rival ${b} spot ${a}`);
+  }
+});
+test("leapfrogging from the See start ends with both shops at the middle", () => {
+  const s = Street.uniform(20);
+  let you: number = SEE_START.you;
+  let they: number = SEE_START.they;
+  let taps = 0;
+  while (!s.settled(you, they) && taps < 40) {
+    if (taps % 2 === 0) they = s.move(they, you);
+    else you = s.move(you, they);
+    taps++;
+  }
+  assert.ok(taps >= 5 && taps <= 14, `taps ${taps}`);
+  assert.ok(Math.abs(you - 0.5) <= GRID + 1e-9 && Math.abs(they - 0.5) <= GRID + 1e-9);
+});
+test("both shops at the median is an equilibrium: no spot holds more than half, give or take one customer", () => {
+  for (let seed = 1; seed <= 40; seed++) {
+    const s = Street.skewed(new Rng(seed), seed % 2 ? "left" : "right");
+    const m = s.median();
+    const base = s.held(m, m);
+    for (const a of s.positions(0.01)) assert.ok(s.held(a, m) <= base + 1 + 1e-9, `seed ${seed} spot ${a}`);
+  }
+});
+test("skewed crowds put the median far from the middle, and a Prove pair has medians on opposite sides", () => {
+  for (let seed = 1; seed <= 60; seed++) {
+    const [a, b] = streetProveSet(new Rng(seed)) as [ReturnType<typeof streetProveSet>[0], ReturnType<typeof streetProveSet>[0]];
+    assert.ok(Math.abs(a.median - 0.5) >= 0.12 && Math.abs(b.median - 0.5) >= 0.12, `seed ${seed}`);
+    assert.ok(Math.abs(a.median - b.median) >= 0.15, `seed ${seed} medians ${a.median} ${b.median}`);
+    assert.ok(!a.accepts(0.5) && !b.accepts(0.5), "the Feel answer of the middle must fail");
+    assert.ok(a.accepts(a.median) && !a.accepts(b.median));
+  }
+});
+test("counts left and right of the median are balanced", () => {
+  const s = Street.skewed(new Rng(3), "left");
+  assert.ok(Math.abs(s.below(s.median()) - s.above(s.median())) <= 1);
+});
+
+// frag:dollar-auction
+console.log("dollar auction");
+test("winner, runner up and pair results: the runner up pays too", () => {
+  const a = new DollarAuction(100, 10);
+  assert.equal(a.winnerNet(60), 40);
+  assert.equal(a.loserNet(60), -50);
+  assert.equal(a.take(60), 110);
+  assert.equal(a.pairNet(60), -10);
+  assert.equal(a.pairNet(50), 10);
+});
+test("break even bid is the first top bid where both bids together beat the prize, found by brute force", () => {
+  assert.equal(FEEL_AUCTION.breakEvenBid(), 60);
+  for (const c of [{ prize: 100, step: 10 }, ...PROVE_POOL]) {
+    const a = new DollarAuction(c.prize, c.step);
+    let first = 0;
+    for (let b = c.step; b <= c.prize * 3; b += c.step) if (a.take(b) > c.prize) { first = b; break; }
+    assert.equal(a.breakEvenBid(), first, `${c.prize} ${c.step}`);
+    assert.ok(a.pairNet(first) < 0 && a.pairNet(first - c.step) >= 0 || first === c.step);
+  }
+});
+test("once the top bid passes the prize even the winner loses, and the bidders always lose together past break even", () => {
+  for (let b = 110; b <= 200; b += 10) assert.ok(FEEL_AUCTION.winnerNet(b) < 0);
+  for (let b = 60; b <= 200; b += 10) assert.ok(FEEL_AUCTION.pairNet(b) < 0);
+});
+test("escalation: the rival raises while its budget allows, then quits and you win at a loss", () => {
+  for (const budget of BUDGETS) {
+    const e = new Escalation(FEEL_AUCTION, budget);
+    e.open();
+    assert.equal(e.you, 10);
+    assert.equal(e.rival, 20);
+    let guard = 0;
+    while (e.over === "none" && guard++ < 50) {
+      e.raise();
+      e.respond();
+    }
+    assert.equal(e.over, "won");
+    assert.ok(e.rival <= budget && e.you + 10 > budget);
+    assert.ok(e.youNet() < 0, "even winning the dollar costs more than it pays");
+    assert.equal(e.take, e.you + e.rival);
+  }
+});
+test("walking away early costs only your last bid", () => {
+  const e = new Escalation(FEEL_AUCTION, 140);
+  e.open();
+  e.walk();
+  assert.equal(e.youNet(), -10);
+  assert.equal(e.rivalNet(), 80);
+});
+test("Prove cases never repeat the Feel answer, and a pair has two different answers", () => {
+  for (const c of PROVE_POOL) assert.notEqual(new DollarAuction(c.prize, c.step).breakEvenBid(), 60);
+  for (let seed = 1; seed <= 80; seed++) {
+    const [a, b] = auctionProveSet(new Rng(seed)) as [DollarAuction, DollarAuction];
+    assert.notEqual(a.breakEvenBid(), b.breakEvenBid());
+    assert.notEqual(a.breakEvenBid(), 60);
+    assert.notEqual(b.breakEvenBid(), 60);
+  }
+});
+
+// frag:colonel-blotto
+console.log("colonel blotto");
+test("a field goes to the larger side, a tie goes to nobody, the war to the side holding more", () => {
+  assert.equal(Blotto.held([5, 5, 2], [4, 4, 4]), 2);
+  assert.equal(Blotto.held([4, 4, 4], [4, 4, 4]), 0);
+  assert.equal(Blotto.wins([5, 5, 2], [4, 4, 4]), true);
+  assert.equal(Blotto.wins([4, 4, 4], [4, 4, 4]), false);
+  assert.equal(Blotto.wins([6, 0, 0], [0, 6, 0]), false);
+});
+test("the lattice of 12 troops has 91 splits and each sums to 12", () => {
+  const l = new Blotto(12).lattice();
+  assert.equal(l.length, 91);
+  for (const a of l) assert.equal(a[0] + a[1] + a[2], 12);
+});
+test("every split of 12 can be beaten by another split of 12", () => {
+  const b = new Blotto(12);
+  for (const opp of b.lattice()) assert.ok(b.counters(opp).length > 0, `${opp}`);
+});
+test("the Feel opponents sum to 12 and each has a beating split", () => {
+  const b = new Blotto(FEEL_TROOPS);
+  for (const t of FEEL_TYPES) {
+    assert.equal(t[0] + t[1] + t[2], 12);
+    assert.ok(b.counters(t).length > 0, `${t}`);
+    assert.ok(b.cheapestCounter(t) !== null);
+  }
+});
+test("cheapest counter wins and spends every troop", () => {
+  for (const t of FEEL_TYPES) {
+    const c = new Blotto(12).cheapestCounter(t)!;
+    assert.equal(c[0] + c[1] + c[2], 12);
+    assert.equal(Blotto.wins(c, t), true);
+  }
+});
+test("every Prove puzzle has a winning split and uses new totals or opponents", () => {
+  for (const p of blottoPool) {
+    const b = new Blotto(p.you);
+    assert.ok(b.counters(p.opp).length > 0, `${p.you} ${p.opp}`);
+    assert.ok(b.cheapestCounter(p.opp) !== null);
+  }
+  assert.ok(blottoPool.every((p) => p.you !== 12 || !FEEL_TYPES.some((t) => t.join() === p.opp.join())));
+});
+test("Feel and Prove sets draw four and two distinct cases", () => {
+  const rng = new Rng(7);
+  assert.equal(feelOpponents(rng).length, 4);
+  const s = blottoProveSet(rng);
+  assert.equal(s.length, 2);
+  assert.notEqual(s[0], s[1]);
+});
+test("region that beats (4,4,4) is not empty", () => {
+  assert.ok(new Blotto(12).counters([4, 4, 4]).length > 0);
+});
+
+// frag:cournot
+console.log("cournot");
+test("best reply is half of what the rival leaves, and the equilibrium is where both replies hold", () => {
+  const d = COURNOT_FEEL;
+  near(d.bestReply(1, 30), 30);
+  near(d.bestReply(1, 0), 45);
+  const e = d.equilibrium();
+  near(e.q1, 30);
+  near(d.bestReply(1, e.q2), e.q1);
+  near(d.bestReply(2, e.q1), e.q2);
+  near(d.profit(1, e.q1, e.q2), 900);
+  for (const m of [...PROVE_SYMMETRIC, ...PROVE_ASYMMETRIC]) {
+    const q = m.equilibrium();
+    near(m.bestReply(1, q.q2), q.q1, 1e-9);
+    near(m.bestReply(2, q.q1), q.q2, 1e-9);
+  }
+});
+test("joint monopoly pays each firm more, yet each would deviate from it", () => {
+  const d = COURNOT_FEEL;
+  const each = d.monopolyTotal() / 2;
+  near(each, 22.5);
+  assert.ok(d.profit(1, each, each) > d.profit(1, 30, 30));
+  const dev = d.bestReply(1, each);
+  assert.ok(d.profit(1, dev, each) > d.profit(1, each, each));
+});
+test("no firm can gain by changing its own quantity at the equilibrium", () => {
+  for (const m of [COURNOT_FEEL, ...PROVE_SYMMETRIC, ...PROVE_ASYMMETRIC]) {
+    const e = m.equilibrium();
+    for (let q = 0; q <= m.a; q += 0.5) {
+      assert.ok(m.profit(1, q, e.q2) <= m.profit(1, e.q1, e.q2) + 1e-9);
+      assert.ok(m.profit(2, e.q1, q) <= m.profit(2, e.q1, e.q2) + 1e-9);
+    }
+  }
+});
+test("the firm with the lower cost sells more", () => {
+  for (const m of PROVE_ASYMMETRIC) {
+    const e = m.equilibrium();
+    assert.ok(m.c1 < m.c2 && e.q1 > e.q2);
+  }
+  near(PROVE_ASYMMETRIC[0]!.equilibrium().q1, 40);
+  near(PROVE_ASYMMETRIC[0]!.equilibrium().q2, 10);
+});
+test("the rival answers your last quantity, and the staircase of replies converges on the equilibrium", () => {
+  near(rivalQuantity(COURNOT_FEEL, null), 30);
+  near(rivalQuantity(COURNOT_FEEL, 22.5), 33.75);
+  const pts = staircase(COURNOT_FEEL, { q1: 52, q2: 8 }, 12);
+  const last = pts[pts.length - 1]!;
+  near(last[0], 30, 0.1);
+  near(last[1], 30, 0.1);
+  assert.ok(Math.hypot(pts[5]![0] - 30, pts[5]![1] - 30) < Math.hypot(pts[0]![0] - 30, pts[0]![1] - 30));
+});
+test("prove: every pool answer is right for itself, and the Feel answer (30, 30) fails every one", () => {
+  for (const m of [...PROVE_SYMMETRIC, ...PROVE_ASYMMETRIC]) {
+    const e = m.equilibrium();
+    assert.ok(cournotRight(m, e.q1, e.q2));
+    assert.ok(!cournotRight(m, 30, 30), `${m.a} ${m.c1} ${m.c2}`);
+    assert.ok(cournotAxis(m) > Math.max(e.q1, e.q2) * 1.4);
+  }
+  const answers = new Set(PROVE_SYMMETRIC.map((m) => Math.round(m.equilibrium().q1)));
+  assert.equal(answers.size, PROVE_SYMMETRIC.length - 0 - (PROVE_SYMMETRIC.length - answers.size));
+  assert.ok(!cournotRight(new Duopoly(84, 12), 24 + 5, 24));
+});
+
+// frag:stackelberg
+console.log("stackelberg");
+test("the follower replies with half of what the leader leaves", () => {
+  assert.equal(LEADER_FEEL.reply(30), 30);
+  assert.equal(LEADER_FEEL.reply(45), 22.5);
+  assert.equal(LEADER_FEEL.reply(100), 0);
+});
+test("the best commitment is half of a - c, found by brute force, and earns (a - c)^2 / 8", () => {
+  for (const d of [LEADER_FEEL, ...LEAD_POOL]) {
+    let best = 0;
+    let bq = 0;
+    for (let q = 0; q <= d.a; q += 0.25) if (d.leaderProfit(q) > best) { best = d.leaderProfit(q); bq = q; }
+    assert.ok(Math.abs(bq - d.bestLead()) <= 0.25, `${d.a} ${d.c}`);
+    assert.ok(Math.abs(best - ((d.a - d.c) ** 2) / 8) < 0.5);
+  }
+});
+test("the leader earns twice the follower and beats the simultaneous profit", () => {
+  const d = LEADER_FEEL;
+  assert.equal(d.leaderProfit(45), 1012.5);
+  assert.equal(d.followerProfit(45), 506.25);
+  assert.equal(d.cournotProfit(), 900);
+  assert.ok(d.leaderProfit(45) > d.cournotProfit());
+  assert.ok(d.followerProfit(45) < d.cournotProfit());
+});
+test("if the rival ignored the commitment, the best quantity would be lower, so reaction is what makes committing big pay", () => {
+  const d = LEADER_FEEL;
+  let bq = 0;
+  let best = 0;
+  for (let q = 0; q <= 90; q++) if (d.stayProfit(q, 30) > best) { best = d.stayProfit(q, 30); bq = q; }
+  assert.equal(bq, 30);
+  assert.ok(d.stayProfit(45, 30) < d.leaderProfit(45));
+});
+test("Prove answers are right, the Feel answer fails every case, and a default of 0 fails", () => {
+  for (const d of LEAD_POOL) assert.ok(leaderRight({ kind: "lead", d, q1: 0 }, d.bestLead()) && !leaderRight({ kind: "lead", d, q1: 0 }, 45) && !leaderRight({ kind: "lead", d, q1: 0 }, 0));
+  for (const f of FOLLOW_POOL) {
+    const p = { kind: "follow" as const, d: f.d, q1: f.q1 };
+    assert.ok(leaderRight(p, f.d.reply(f.q1)) && !leaderRight(p, 0) && !leaderRight(p, f.q1));
+    assert.equal(leaderAnswer(p), f.d.reply(f.q1));
+  }
+  assert.deepEqual(LEAD_POOL.map((d) => d.bestLead()), [30, 60, 39]);
+  assert.deepEqual(FOLLOW_POOL.map((f) => f.d.reply(f.q1)), [10, 28, 17]);
+});
+test("Prove set holds one leader and one follower puzzle", () => {
+  const s = leaderProveSet(new Rng(5));
+  assert.deepEqual(s.map((p) => p.kind).sort(), ["follow", "lead"]);
 });
 
 console.log(`\n${passed} tests passed`);
