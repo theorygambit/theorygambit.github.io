@@ -385,7 +385,15 @@ export class PrisonersDilemmaGame extends Game {
       mv.number(p, c, r, col, r === 1 && col === 0 ? Math.round(v * 2) / 2 : v);
     }
     const t = mv.center(1, 0);
-    if (this.hint.value > 0.02) p.dashedRing(t.x, t.y, mv.radius(this.tShown.value, 6) + 4 + 1.5 * Math.sin(this.time * 3), c.ink, 0.7 * this.hint.value);
+    if (this.hint.value > 0.02) {
+      // A dashed ring that leaves the lower right open, where the cell's number sits.
+      const hr = mv.radius(this.tShown.value, 6) + 2.5 + 0.7 * Math.sin(this.time * 3);
+      for (let k = 0; k < 18; k++) {
+        const a0 = (k / 18) * Math.PI * 2;
+        if (a0 > -0.3 && a0 < 1.5) continue;
+        p.line(t.x + hr * Math.cos(a0), t.y + hr * Math.sin(a0), t.x + hr * Math.cos(a0 + 0.17), t.y + hr * Math.sin(a0 + 0.17), c.ink, 1.25, 0.7 * this.hint.value);
+      }
+    }
     ([0, 1] as const).forEach((col) => {
       const s = this.sArrow[col]!.value;
       if (Math.abs(s) < 0.06) return;
