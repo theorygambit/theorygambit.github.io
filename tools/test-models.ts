@@ -20,6 +20,17 @@ import { Pile, FEEL_PILE, PROVE_POOL as PILE_POOL } from "../src/games/backward-
 import { Pot, FEEL_POT, PROVE_SIZES } from "../src/games/public-goods/model";
 import { Centipede, FEEL_GAME as CENTI_FEEL, generate as centiGenerate, playFeel } from "../src/games/centipede/model";
 import { Travelers, FEEL_GAME as TRAVEL_FEEL, PROVE_POOL as TRAVEL_POOL } from "../src/games/travelers-dilemma/model";
+import { PayoffTable } from "../src/games/shared/PayoffTable";
+import { Spread, feelRounds as focalFeel, proveSet as focalProve } from "../src/games/focal-points/model";
+import { Chicken, DRIVER_RATES, COMMIT_CASES } from "../src/games/chicken/model";
+import { Outing, PARTNER_ODDS, proveTables } from "../src/games/battle-of-sexes/model";
+import { Giver, Responder, provePairs } from "../src/games/dictator/model";
+import { Trust, RETURN_SHARES, PROVE_TRUSTS } from "../src/games/trust-game/model";
+import { Pasture, FEEL_PASTURE, PROVE_PASTURES } from "../src/games/tragedy-commons/model";
+import { FIELD, TIT_FOR_TAT, ALWAYS_BREAK, ALWAYS_HOLD, play, tournament, headToHeadWins, tftAnswer, proveReadings } from "../src/games/axelrod-tit-for-tat/model";
+import { Flow, LEVELS, BAND, PROVE_SKILLS } from "../src/games/flow-theory/model";
+import { Design, FEEL_DESIGN, BUILDS, PROVE_DESIGNS } from "../src/games/design-ethics/model";
+import { Lottery, utility, FEEL_GAMBLE, FEEL_SURES, PROVE_GAMBLES } from "../src/games/expected-utility/model";
 
 let passed = 0;
 function test(name: string, fn: () => void): void {
@@ -196,6 +207,220 @@ test("prove crowds have different optimal offers, and the optimum clears the pas
   assert.ok(a.best().x < 3 && b.best().x > 4, `${a.best().x} ${b.best().x}`);
   for (const c of PROVE_CROWDS) assert.ok(c.expected(c.best().x) >= PROVE_SHARE * c.best().e);
   assert.ok(b.expected(a.best().x) < PROVE_SHARE * b.best().e, "reusing the old answer must fail");
+});
+
+console.log("bimatrix");
+test("stable cells are the ones where both best replies meet", () => {
+  const pd = new PayoffTable([[[3, 3], [0, 5]], [[5, 0], [1, 1]]], ["a", "b"], ["a", "b"]);
+  assert.deepEqual(pd.stable(), [[1, 1]]);
+  assert.equal(pd.max, 5);
+});
+
+console.log("focal points");
+test("a lone odd option draws most of the crowd and an all alike row draws no one in particular", () => {
+  const same = new Spread(Array.from({ length: 5 }, () => ({ ring: false, big: false })));
+  assert.equal(same.focal(), null);
+  assert.ok(same.matchChance() < 0.25, `${same.matchChance()}`);
+  const odd = new Spread([{ ring: false, big: false }, { ring: true, big: false }, { ring: false, big: false }, { ring: false, big: false }, { ring: false, big: false }]);
+  assert.equal(odd.focal(), 1);
+  assert.ok(odd.shares()[1]! > 0.7 && odd.matchChance() > 0.55);
+  near(odd.shares().reduce((a, b) => a + b, 0), 1);
+});
+test("feel rounds run from no focus to one focus, with two odd options in the middle ambiguous", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const r = focalFeel(new Rng(seed));
+    assert.equal(r.length, 4);
+    assert.equal(r[0]!.focal(), null);
+    assert.notEqual(r[1]!.focal(), null);
+    assert.equal(r[2]!.focal(), null);
+    assert.notEqual(r[3]!.focal(), null);
+    assert.ok(r[3]!.matchChance() > r[0]!.matchChance() * 2.5);
+  }
+});
+test("prove puzzles always have one clear answer, and it moves", () => {
+  const seen = new Set<number>();
+  for (let seed = 1; seed <= 300; seed++) {
+    const set = focalProve(new Rng(seed));
+    for (const pz of set) {
+      assert.equal(pz.spread.focal(), pz.answer, `seed ${seed}`);
+      seen.add(pz.answer);
+    }
+  }
+  assert.ok(seen.size >= 5);
+});
+
+console.log("chicken");
+test("the standard payoffs make a chicken: two stable cells, each with exactly one swerver", () => {
+  const c = new Chicken();
+  assert.ok(c.T > c.R && c.R > c.S && c.S > c.P);
+  assert.deepEqual(c.matrix().stable(), [[0, 1], [1, 0]]);
+});
+test("the best reply flips at the threshold, one half here", () => {
+  const c = new Chicken();
+  near(c.threshold, 0.5);
+  assert.equal(c.bestReply(0.6), "swerve");
+  assert.equal(c.bestReply(0.4), "dare");
+  near(c.ev("dare", c.threshold), c.ev("swerve", c.threshold));
+  assert.ok(DRIVER_RATES.some((q) => q > 0.5) && DRIVER_RATES.some((q) => q < 0.5));
+});
+test("committing to dare makes a rival swerve only while a crash is worse than yielding", () => {
+  assert.deepEqual(COMMIT_CASES.map((c) => c.rivalReply()), ["swerve", "dare", "swerve"]);
+  for (const c of COMMIT_CASES) {
+    const m = c.matrix();
+    const them = m.bestCols(1)[0]!;
+    assert.equal(them === 0 ? "swerve" : "dare", c.rivalReply());
+  }
+});
+
+console.log("battle of the sexes");
+test("both meetings are stable, missing is not, and the threshold is lo over hi plus lo", () => {
+  const o = new Outing(3, 2);
+  assert.deepEqual(o.matrix().stable(), [[0, 0], [1, 1]]);
+  near(o.threshold, 0.4);
+  assert.equal(o.best(0.3), "football");
+  assert.equal(o.best(0.5), "opera");
+  assert.ok(PARTNER_ODDS.some((q) => q > 0.4) && PARTNER_ODDS.some((q) => q < 0.4));
+});
+test("prove tables have two stable cells that change place when the columns swap", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const [a, b] = proveTables(new Rng(seed)) as [ReturnType<typeof proveTables>[0], ReturnType<typeof proveTables>[0]];
+    assert.deepEqual(a.stable, [[0, 0], [1, 1]]);
+    assert.deepEqual(b.stable, [[0, 1], [1, 0]]);
+  }
+});
+
+console.log("dictator");
+test("generosity is the dictator gift and fear is only what refusal added", () => {
+  const g = new Giver(1, 5);
+  assert.equal(g.generosity, 1);
+  assert.equal(g.fear, 4);
+  assert.equal(new Giver(4, 3).fear, 0);
+  assert.ok(new Responder(3).accepts(3) && !new Responder(3).accepts(2));
+});
+test("prove pairs: the kinder person is the one with the bigger dictator gift, never the bigger ultimatum offer", () => {
+  for (let seed = 1; seed <= 300; seed++) {
+    for (const p of provePairs(new Rng(seed))) {
+      const k = p.kinder === "a" ? p.a : p.b;
+      const l = p.kinder === "a" ? p.b : p.a;
+      assert.ok(k.dictator > l.dictator);
+      assert.ok(l.ultimatum > k.ultimatum, `seed ${seed}`);
+    }
+  }
+});
+
+console.log("trust game");
+test("sending pays only when the share returned beats one over the multiplier", () => {
+  const t = new Trust(3);
+  near(t.breakEven, 1 / 3);
+  near(t.final(10, 0.6), 18);
+  near(t.final(10, 0), 0);
+  near(t.final(10, 1 / 3), 10);
+  assert.ok(t.pays(0.4) && !t.pays(0.3));
+  assert.ok(RETURN_SHARES.some((r) => t.pays(r)) && RETURN_SHARES.some((r) => !t.pays(r)));
+});
+test("prove multipliers give break evens that are not a third", () => {
+  const be = PROVE_TRUSTS.map((t) => t.breakEven);
+  near(be[0]!, 0.5);
+  near(be[1]!, 0.25);
+  assert.ok(be.every((b) => Math.abs(b - 1 / 3) > 0.07));
+});
+
+console.log("tragedy of the commons");
+test("the feel field is a tragedy: a second sheep always pays, yet all at two is worse than all at one", () => {
+  const p = FEEL_PASTURE;
+  assert.ok(p.twoDominates && p.tragic);
+  near(p.allOne, 4);
+  near(p.allTwo, 3);
+  near(p.alone, 7);
+  for (let k = 0; k <= 4; k++) assert.ok(p.payoff(2, k) > p.payoff(1, k));
+});
+test("prove fields: a tragedy, a rich field and a field where a second sheep never pays", () => {
+  assert.deepEqual(PROVE_PASTURES.map((p) => p.tragic), [true, false, false]);
+  assert.ok(PROVE_PASTURES[1]!.twoDominates && PROVE_PASTURES[1]!.allTwo > PROVE_PASTURES[1]!.allOne);
+  assert.ok(!PROVE_PASTURES[2]!.twoDominates);
+  assert.ok(new Pasture(13, 2, 5).tragic);
+});
+
+console.log("tit for tat");
+test("tit for tat starts nice, copies the last move and forgives", () => {
+  assert.deepEqual(tftAnswer(["break", "hold", "hold", "break", "hold"]), ["hold", "break", "hold", "hold", "break"]);
+});
+test("tit for tat never beats a rival head to head, yet wins the tournament", () => {
+  const scores = tournament();
+  const best = Math.max(...scores);
+  assert.equal(FIELD[scores.indexOf(best)], TIT_FOR_TAT);
+  assert.equal(scores.filter((s) => s === best).length, 1);
+  assert.equal(headToHeadWins(TIT_FOR_TAT), 0);
+  assert.ok(headToHeadWins(ALWAYS_BREAK) > 0);
+});
+test("always break exploits always hold, and tit for tat holds mutual cooperation", () => {
+  const m = play(ALWAYS_BREAK, ALWAYS_HOLD);
+  assert.equal(m.a, 50);
+  assert.equal(m.b, 0);
+  assert.equal(play(TIT_FOR_TAT, TIT_FOR_TAT).a, 30);
+});
+test("prove readings always include forgiveness and are distinct", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    const [a, b] = proveReadings(new Rng(seed)) as [ReturnType<typeof proveReadings>[0], ReturnType<typeof proveReadings>[0]];
+    assert.notEqual(a.theirs.join(), b.theirs.join());
+    for (const r of [a, b]) {
+      assert.equal(r.answer[0], "hold");
+      assert.ok(r.theirs.some((m, i) => m === "break" && r.theirs[i + 1] === "hold" && r.answer[i + 2] === "hold"));
+    }
+  }
+});
+
+console.log("flow theory");
+test("flow sits on the diagonal band, boredom below it and anxiety above", () => {
+  assert.equal(Flow.state(5, 5), "flow");
+  assert.equal(Flow.state(5 + BAND, 5), "flow");
+  assert.equal(Flow.state(2, 5), "bored");
+  assert.equal(Flow.state(8, 5), "anxious");
+});
+test("skill is where the hit rate crosses the mark, and the three levels span the scale", () => {
+  near(Flow.skillFrom([{ c: 1.5, h: 1 }, { c: 5, h: 0.8 }, { c: 9, h: 0.3 }]), 5 + ((0.8 - 0.65) / 0.5) * 4);
+  assert.equal(Flow.skillFrom([{ c: 1.5, h: 0.2 }, { c: 5, h: 0.1 }, { c: 9, h: 0 }]), 0);
+  assert.equal(Flow.skillFrom([{ c: 1.5, h: 1 }, { c: 5, h: 0.9 }, { c: 9, h: 0.8 }]), 10);
+  assert.ok(LEVELS[0]! < LEVELS[1]! && LEVELS[1]! < LEVELS[2]!);
+  assert.ok(PROVE_SKILLS.every((s) => s > 2 && s < 8.5));
+});
+
+console.log("design ethics");
+test("engagement only rises, benefit peaks and then falls, and the peak is not at the top", () => {
+  const d = FEEL_DESIGN;
+  for (let i = 1; i <= 20; i++) assert.ok(d.engagement(i / 20) > d.engagement((i - 1) / 20));
+  assert.ok(d.care > 0.3 && d.care < 0.6);
+  assert.ok(d.benefit(d.care) > d.benefit(1) * 3);
+  assert.ok(d.benefit(1) > 0);
+  const [gentle, standard, pushy] = BUILDS.map((b) => ({ e: d.engagement(b.x), b: d.benefit(b.x) })) as [{ e: number; b: number }, { e: number; b: number }, { e: number; b: number }];
+  assert.ok(pushy.e > standard.e && standard.e > gentle.e);
+  assert.ok(standard.b > gentle.b && standard.b > pushy.b * 2);
+});
+test("prove designs peak in different places, further apart than the tolerance", () => {
+  const [a, b] = PROVE_DESIGNS.map((x) => x.care) as [number, number];
+  assert.ok(Math.abs(a - b) > 0.12, `${a} ${b}`);
+  for (const x of PROVE_DESIGNS) assert.ok(x.benefit(1) > 0 && x.care < 0.8);
+  assert.ok(new Design(3, 0.5).care > 0);
+});
+
+console.log("expected utility");
+test("a fifty fifty gamble for 100 has average 50, expected utility 5 and is worth 25 for sure", () => {
+  const g = FEEL_GAMBLE;
+  near(g.ev, 50);
+  near(g.eu, 5);
+  near(g.certainty, 25);
+  assert.ok(g.prefersSure(30) && !g.prefersSure(20));
+  assert.ok(FEEL_SURES.every((s) => s < g.ev));
+  assert.ok(FEEL_SURES.some((s) => g.prefersSure(s)) && FEEL_SURES.some((s) => !g.prefersSure(s)));
+});
+test("prove gambles have certainty equivalents far from the average and from a half or a third", () => {
+  for (const g of PROVE_GAMBLES) {
+    assert.ok(g.certainty < g.ev * 0.6);
+    near(utility(g.certainty), g.eu);
+  }
+  near(PROVE_GAMBLES[0]!.certainty, 16);
+  near(PROVE_GAMBLES[1]!.certainty, 6.25);
+  assert.ok(new Lottery(100, 16, 0.5).certainty > 40);
 });
 
 console.log("information types");
