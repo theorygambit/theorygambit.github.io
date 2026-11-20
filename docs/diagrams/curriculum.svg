@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
   <title id="t">The curriculum</title>
-  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. The five opening games and slots 26 to 35 are live, and the rest are empty slots.</desc>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Twenty-five games are live: the first five and slots 16 to 35. The rest are empty slots.</desc>
   <defs>
     <style>
 
@@ -50,18 +50,19 @@
   <circle class="em d" style="--i:12" cx="445.6" cy="130" r="4.6"/>
   <circle class="em d" style="--i:13" cx="466.4" cy="130" r="4.6"/>
   <circle class="em d" style="--i:14" cx="487.2" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:15" cx="508" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:16" cx="528.8" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:17" cx="549.6" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:18" cx="570.4" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:19" cx="591.2" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:20" cx="612" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:21" cx="632.8" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:22" cx="653.6" cy="130" r="4.6"/>
-  <circle class="em d" style="--i:23" cx="674.4" cy="130" r="4.6"/>
+  <circle class="lv d" style="--i:15" cx="508" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:16" cx="528.8" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:17" cx="549.6" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:18" cx="570.4" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:19" cx="591.2" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:20" cx="612" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:21" cx="632.8" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:22" cx="653.6" cy="130" r="5.4"/>
+  <circle class="lv d" style="--i:23" cx="674.4" cy="130" r="5.4"/>
   <path class="br" d="M189 110H286.2M189 110V115M286.2 110V115"/><text class="rs" x="189" y="102">THE FIRST FIVE</text>
+  <path class="br" d="M501 110H681.4M501 110V115M681.4 110V115"/><text class="rs" x="501" y="102">SLOTS 16 TO 24</text>
   <text class="rt" x="45" y="220">Core</text><text class="rs" x="45" y="240">46 ENTRIES</text>
-  <circle class="em d" style="--i:24" cx="196" cy="214" r="4.6"/>
+  <circle class="lv d" style="--i:24" cx="196" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:25" cx="216.8" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:26" cx="237.6" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:27" cx="258.4" cy="214" r="5.4"/>
