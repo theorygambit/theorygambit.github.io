@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with fifteen games live (001 to 005 and 026 to 035) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with twenty-five games live (001 to 005 and 016 to 035) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -54,7 +54,17 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 003 | Matching Pennies | Live |
 | 004 | Stag Hunt | Live |
 | 005 | Ultimatum Game | Live |
-| 006 to 025 | Empty slots | Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
+| 006 to 015 | Ten topics, next in line | Empty slots. Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
+| 016 | Focal Points (Schelling Points) | Live |
+| 017 | Chicken and Hawk-Dove | Live |
+| 018 | Battle of the Sexes | Live |
+| 019 | Dictator Game | Live |
+| 020 | Trust Game | Live |
+| 021 | Tragedy of the Commons | Live |
+| 022 | Axelrod's Tournaments and Tit for Tat | Live |
+| 023 | Flow Theory | Live |
+| 024 | Designing With Care: Ethics of Applied Game Theory | Live |
+| 025 | Expected Utility Theory | Live |
 | 026 | Perfect, Imperfect, Complete and Incomplete Information | Live |
 | 027 | Short vs Long Games | Live |
 | 028 | Iterated Elimination | Live |
@@ -214,4 +224,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and where to go after 005 |
+| `NEXT` | What is live, and where to go next (006 to 015, then 026 on) |
