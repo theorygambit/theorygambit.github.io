@@ -73,16 +73,16 @@
   <circle class="lv d" style="--i:32" cx="362.4" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:33" cx="383.2" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:34" cx="404" cy="214" r="5.4"/>
-  <circle class="em d" style="--i:35" cx="424.8" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:36" cx="445.6" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:37" cx="466.4" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:38" cx="487.2" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:39" cx="508" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:40" cx="528.8" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:41" cx="549.6" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:42" cx="570.4" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:43" cx="591.2" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:44" cx="612" cy="214" r="4.6"/>
+  <circle class="lv d" style="--i:35" cx="424.8" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:36" cx="445.6" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:37" cx="466.4" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:38" cx="487.2" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:39" cx="508" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:40" cx="528.8" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:41" cx="549.6" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:42" cx="570.4" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:43" cx="591.2" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:44" cx="612" cy="214" r="5.4"/>
   <circle class="em d" style="--i:45" cx="632.8" cy="214" r="4.6"/>
   <circle class="em d" style="--i:46" cx="653.6" cy="214" r="4.6"/>
   <circle class="em d" style="--i:47" cx="674.4" cy="214" r="4.6"/>
@@ -160,7 +160,7 @@
   <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="sy d" style="--i:116" cx="196" cy="382" r="3.4"/>
   <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="sy d" style="--i:117" cx="230" cy="382" r="3.4"/>
   <path class="hair" d="M45 436H1155"/>
-  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 005 and 026 to 035</text>
+  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 005 and 016 to 045</text>
   <circle class="em" cx="420" cy="466" r="4.6"/><text class="lg" x="436" y="470">Empty slot: opens the idea and a Gambit link</text>
   <circle class="sy" cx="956" cy="466" r="7.2"/><circle class="sy" cx="956" cy="466" r="3.4"/><text class="lg" x="974" y="470">Synthesis capstone</text>
 </svg>
