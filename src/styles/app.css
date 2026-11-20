@@ -114,7 +114,12 @@ summary:focus-visible {
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   /* Safe area goes on the content column only, never on the background or a canvas. */
-  padding-top: calc(var(--safe-top) + 8px);
+  /*
+    The top bar sits well below the status bar. On a home screen app the area under the
+    clock and Dynamic Island is covered by iOS's own translucent bar and reads as a blur,
+    so the buttons start clear of it: at least 20px even when the safe area reports 0.
+  */
+  padding-top: calc(max(var(--safe-top), 20px) + 18px);
   padding-bottom: calc(var(--safe-bottom) + 24px);
 }
 
@@ -174,7 +179,13 @@ summary:focus-visible {
 .hero {
   position: relative;
   width: 100%;
-  height: 236px;
+  height: 372px;
+  margin-top: 6px;
+}
+@media (min-width: 560px) {
+  .hero {
+    height: 420px;
+  }
 }
 .hero canvas {
   position: absolute;
@@ -325,7 +336,7 @@ summary:focus-visible {
 .game {
   display: flex;
   justify-content: center;
-  padding-top: calc(var(--safe-top) + 8px);
+  padding-top: calc(max(var(--safe-top), 20px) + 12px);
   padding-bottom: calc(var(--safe-bottom) + 8px);
   background: var(--bg);
 }

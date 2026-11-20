@@ -1,31 +1,66 @@
-// Regenerates public/favicon.svg and public/icons/*.png from one SVG mark. Needs `sharp`:
-//   npm i -D sharp && node tools/make-icons.mjs
+// Regenerates public/favicon.svg and public/icons/*.png from one SVG mark, "The Approach":
+// a downward triangle inside opened rings, with one thread curling in to the edge of a vertex
+// and stopping a hair short of it. Bone on Void. Needs `sharp`:  npm i -D sharp && node tools/make-icons.mjs
 import sharp from "sharp";
 import { writeFileSync, mkdirSync } from "node:fs";
 
-const arc = (r, a0, a1, w, o) => {
-  const p = (a) => [(256 + r * Math.cos(a)).toFixed(2), (256 + r * Math.sin(a)).toFixed(2)];
-  const [x0, y0] = p(a0);
-  const [x1, y1] = p(a1);
-  return `<path d="M${x0} ${y0}A${r} ${r} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${x1} ${y1}" fill="none" stroke="#e6e3da" stroke-width="${w}" stroke-opacity="${o}" stroke-linecap="butt"/>`;
-};
-const mark = (k) => {
-  const radii = [30, 62, 98, 138, 180];
-  const rings = radii.map((r, i) => {
-    const a0 = 0.5 + i * 0.7;
-    return arc(r * k, a0, a0 + Math.PI * 2 - 0.6, Math.max(3, 7 * k), (0.95 - (i / 4) * 0.5).toFixed(2));
-  });
-  return rings.join("") + `<circle cx="256" cy="256" r="${(8 * k).toFixed(1)}" fill="#e6e3da"/>`;
-};
-const svg = (k, bg = true) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">${bg ? '<rect width="512" height="512" fill="#08090b"/>' : ""}${mark(k)}</svg>`;
+const C = 256;
+const BONE = "#e6e3da";
+const pol = (r, a) => [C + r * Math.cos(a), C + r * Math.sin(a)];
+const f = (n) => n.toFixed(2);
 
-mkdirSync("public/icons", { recursive: true });
-writeFileSync("public/favicon.svg", svg(1.15));
-const jobs = [
-  ["apple-touch-icon.png", 180, 1.15],
-  ["icon-192.png", 192, 1.15],
-  ["icon-512.png", 512, 1.15],
-  ["icon-maskable-512.png", 512, 0.85],
-];
-for (const [name, size, k] of jobs) await sharp(Buffer.from(svg(k))).resize(size, size).png().toFile(`public/icons/${name}`);
-console.log("icons written");
+const mark = (k) => {
+  const parts = [];
+  // rings, gaps turned toward the thread's entry at the lower left
+  [[100, 0.5], [140, 0.42], [182, 0.36]].forEach(([r, gap], i) => {
+    const gc = 2.5 + i * 0.35;
+    const [x0, y0] = pol(r * k, gc + gap / 2);
+    const [x1, y1] = pol(r * k, gc - gap / 2);
+    parts.push(`<path d="M${f(x0)} ${f(y0)}A${f(r * k)} ${f(r * k)} 0 1 1 ${f(x1)} ${f(y1)}" fill="none" stroke="${BONE}" stroke-opacity="${(0.85 - i * 0.22).toFixed(2)}" stroke-width="${(5 - i * 0.6) * k}" stroke-linecap="round"/>`);
+  });
+  // the triangle, pointing down, with a whisper of light from above
+  const Rt = 66 * k;
+  const v = [0, 1, 2].map((j) => pol(Rt, Math.PI / 2 + (j * 2 * Math.PI) / 3));
+  const tri = v.map((p) => `${f(p[0])} ${f(p[1])}`).join("L");
+  parts.push(`<path d="M${tri}Z" fill="url(#fill)" stroke="${BONE}" stroke-width="${5.5 * k}" stroke-linejoin="round"/>`);
+  const inner = v.map((p) => `${f(C + (p[0] - C) * 0.55)} ${f(C + (p[1] - C) * 0.55)}`).join("L");
+  parts.push(`<path d="M${inner}Z" fill="none" stroke="${BONE}" stroke-opacity="0.4" stroke-width="${3.5 * k}" stroke-linejoin="round"/>`);
+  // the thread: a spiral that closes in on the upper right vertex and stops short of it
+  const target = -Math.PI / 6;
+  const pts = [];
+  const N = 70;
+  for (let i = 0; i <= N; i++) {
+    const u = i / N;
+    const a = target + 3.35 * (1 - u);
+    const r = (Rt + 13 * k) + (232 * k - Rt - 13 * k) * Math.pow(1 - u, 1.7);
+    pts.push(pol(r, a));
+  }
+  const path = pts.map((p, i) => `${i ? "L" : "M"}${f(p[0])} ${f(p[1])}`).join("");
+  parts.push(`<path d="${path}" fill="none" stroke="url(#thread)" stroke-width="${5 * k}" stroke-linecap="round" stroke-linejoin="round"/>`);
+  const [hx, hy] = pts[N];
+  parts.push(`<circle cx="${f(hx)}" cy="${f(hy)}" r="${f(15 * k)}" fill="url(#glow)"/><circle cx="${f(hx)}" cy="${f(hy)}" r="${f(6.5 * k)}" fill="${BONE}"/>`);
+  return parts.join("");
+};
+
+const defs = `<defs>
+  <radialGradient id="bg" cx="50%" cy="-6%" r="95%"><stop offset="0" stop-color="#1b1d21"/><stop offset="0.6" stop-color="#0c0d10"/><stop offset="1" stop-color="#08090b"/></radialGradient>
+  <linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${BONE}" stop-opacity="0.16"/><stop offset="1" stop-color="${BONE}" stop-opacity="0.01"/></linearGradient>
+  <linearGradient id="thread" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="${BONE}" stop-opacity="0"/><stop offset="0.5" stop-color="${BONE}" stop-opacity="0.55"/><stop offset="1" stop-color="${BONE}" stop-opacity="1"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="${BONE}" stop-opacity="0.6"/><stop offset="1" stop-color="${BONE}" stop-opacity="0"/></radialGradient>
+</defs>`;
+export const svg = (k, bg = true) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">${defs}${bg ? '<rect width="512" height="512" fill="url(#bg)"/>' : ""}${mark(k)}</svg>`;
+
+if (process.argv[1]?.endsWith("make-icons.mjs")) {
+  mkdirSync("public/icons", { recursive: true });
+  writeFileSync("public/favicon.svg", svg(1.08));
+  const jobs = [
+    ["apple-touch-icon.png", 180, 1.08],
+    ["icons/apple-touch-icon.png", 180, 1.08],
+    ["apple-touch-icon-precomposed.png", 180, 1.08],
+    ["icons/icon-192.png", 192, 1.08],
+    ["icons/icon-512.png", 512, 1.08],
+    ["icons/icon-maskable-512.png", 512, 0.8],
+  ];
+  for (const [name, size, k] of jobs) await sharp(Buffer.from(svg(k)), { density: 300 }).resize(size, size).png().toFile(`public/${name}`);
+  console.log("icons written");
+}

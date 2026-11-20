@@ -1,6 +1,6 @@
 # Art direction
 
-The site's Abyssal Liturgy brand, in black and white, followed to the letter.
+The site's Abyssal Liturgy brand: black and white for interface and games, with a warm champagne rose reserved for the hero, logo and icons.
 
 ## Colour
 
@@ -32,9 +32,16 @@ Load only these weights. `font-synthesis: none` is set so the browser never fake
 - One soft light from above and a coarse grain on the ground. Nothing else is decorative.
 - Generous negative space. A screen holds one question.
 
-## Home
+## Home: The Approach
 
-A hero mark (concentric rings with a gap) and the wordmark, both drawn in a canvas over a faint contour field. Below, solid rows joined by hairline seams.
+The hero is one scene, `src/ui/heroScene.ts`: a small physics simulation drawn in a canvas, shared with the promo banner (`tools/make-banner.mjs`). No figures. Seduction through geometry: tension kept just short of release.
+
+- **Palette.** Void and Bone only, exactly the brand. One hairline. One soft light from above.
+- **Cast.** A downward triangle (the old sign for water, the feminine) is the still, angular body. Three hairline threads are the soft body: each follows the path of a damped head that orbits, leans in, dwells, and slides along the edges holding a gap of a few pixels. Five echo triangles trail the main one like silk. Five opened rings (the brand mark) surround it.
+- **Physics.** Critically damped springs everywhere, nothing bounces. The gap is a real collision margin (signed distance to the triangle). The thread pushes back on the triangle, so it shivers when brushed. Ripples travel at a fixed speed and leave nodes of light where they cross a ring.
+- **Seduction rules.** Proximity without contact. Slow push and pull with long dwells. Lag and follow-through. Breath (0.2 Hz) always; a heartbeat while held. An opening that turns toward you. Never fast, never loud.
+- **Touch.** Press: ripple, small start, the thread leaves the triangle to circle your fingertip a few pixels off, the triangle turns a vertex toward you, ring gaps open toward you. Hold: arousal rises, everything draws closer, the heartbeat starts. Release: it unwinds slowly. Mouse hover is the lighter version. Vertical swipes still scroll. Reduced motion shows the finished still frame.
+- **Mark.** App icon and favicon are the same idea frozen: triangle, opened rings, one thread stopping a hair short of a vertex. Regenerate with `node tools/make-icons.mjs`.
 
 ## Sound and touch
 
