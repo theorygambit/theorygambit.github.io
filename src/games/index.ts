@@ -36,24 +36,34 @@ import { matchingPennies } from "./matching-pennies";
 import { minimaxTheorem } from "./minimax-theorem";
 import { mixedStrategy } from "./mixed-strategy";
 import { nashEquilibrium } from "./nash-equilibrium";
+import { negativeSum } from "./negative-sum";
+import { normalVsExtensive } from "./normal-vs-extensive";
+import { paretoEfficiency } from "./pareto-efficiency";
 import { perfectBayesian } from "./perfect-bayesian";
+import { playersCount } from "./players-count";
+import { positiveSum } from "./positive-sum";
 import { preferenceManipulation } from "./preference-manipulation";
 import { prisonersDilemma } from "./prisoners-dilemma";
 import { prospectTheory } from "./prospect-theory";
 import { publicGoods } from "./public-goods";
+import { rationalityCommonKnowledge } from "./rationality-common-knowledge";
 import { repeatedGames } from "./repeated-games";
 import { rulesEngines } from "./rules-engines";
 import { sequentialEquilibrium } from "./sequential-equilibrium";
 import { shortLongGames } from "./short-long-games";
+import { simultaneousSequential } from "./simultaneous-sequential";
 import { stackelberg } from "./stackelberg";
 import { stagHunt } from "./stag-hunt";
 import { subgamePerfect } from "./subgame-perfect";
+import { taxonomy } from "./taxonomy";
 import { tragedyCommons } from "./tragedy-commons";
 import { travelersDilemma } from "./travelers-dilemma";
 import { tremblingHand } from "./trembling-hand";
 import { trustGame } from "./trust-game";
 import { ultimatum } from "./ultimatum";
 import { volunteersDilemma } from "./volunteers-dilemma";
+import { whatIsAGame } from "./what-is-a-game";
+import { zeroSum } from "./zero-sum";
 
 /** Every playable game. Order in the app comes from src/catalog/curriculum.ts, not from this list. */
 const MODULES = [
@@ -94,24 +104,34 @@ const MODULES = [
   minimaxTheorem,
   mixedStrategy,
   nashEquilibrium,
+  negativeSum,
+  normalVsExtensive,
+  paretoEfficiency,
   perfectBayesian,
+  playersCount,
+  positiveSum,
   preferenceManipulation,
   prisonersDilemma,
   prospectTheory,
   publicGoods,
+  rationalityCommonKnowledge,
   repeatedGames,
   rulesEngines,
   sequentialEquilibrium,
   shortLongGames,
+  simultaneousSequential,
   stackelberg,
   stagHunt,
   subgamePerfect,
+  taxonomy,
   tragedyCommons,
   travelersDilemma,
   tremblingHand,
   trustGame,
   ultimatum,
   volunteersDilemma,
+  whatIsAGame,
+  zeroSum,
 ];
 
 export function registerGames(): void {
