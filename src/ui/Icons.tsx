@@ -506,6 +506,66 @@ export function GameGlyph({ slug }: { slug: string }) {
           <path d="M3 12h18" />
         </svg>
       );
+    case "what-is-a-game":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 3v18M16 3v18" /><circle className="solid" cx="8" cy="15" r="2.6" /><circle cx="16" cy="8" r="2.6" />
+        </svg>
+      );
+    case "rationality-common-knowledge":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect className="solid" x="4" y="3.5" width="16" height="3" /><rect className="solid" x="4" y="8.5" width="11" height="3" /><rect className="solid" x="4" y="13.5" width="7" height="3" /><rect className="solid" x="4" y="18.5" width="3" height="2.5" />
+        </svg>
+      );
+    case "normal-vs-extensive":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5L6 18M12 5L18 18" /><circle className="solid" cx="12" cy="5" r="2.6" /><circle cx="6" cy="18" r="2.4" /><circle cx="18" cy="18" r="2.4" />
+        </svg>
+      );
+    case "zero-sum":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20L20 4" /><circle className="solid" cx="8.5" cy="15.5" r="2.4" /><circle className="solid" cx="15.5" cy="8.5" r="2.4" />
+        </svg>
+      );
+    case "positive-sum":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.5" /><circle className="solid" cx="8.5" cy="12" r="3" /><circle className="solid" cx="15.5" cy="12" r="3" />
+        </svg>
+      );
+    case "negative-sum":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="9.5" /><circle className="solid" cx="12" cy="12" r="3.2" />
+        </svg>
+      );
+    case "simultaneous-sequential":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8h13M13 5l3 3-3 3" /><path d="M8 16h13M18 13l3 3-3 3" />
+        </svg>
+      );
+    case "players-count":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="4.5" cy="12" r="2.4" /><circle cx="10.5" cy="12" r="2.4" /><circle cx="16.5" cy="12" r="2.4" /><circle cx="22" cy="12" r="1.6" />
+        </svg>
+      );
+    case "taxonomy":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.25" y="3.25" width="17.5" height="17.5" /><path d="M12 3.25v17.5M3.25 12h17.5" /><circle className="solid" cx="7.6" cy="16.4" r="2.4" />
+        </svg>
+      );
+    case "pareto-efficiency":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 3.5V20H20.5" /><path d="M4 6.5A14.5 14.5 0 0 1 18 20" /><circle className="solid" cx="12.2" cy="11.2" r="2.4" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
