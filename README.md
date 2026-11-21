@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with fifty-five games live (001 to 005, 016 to 055 and 066 to 075) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with sixty-five games live (001 to 075 except 056 to 065) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -54,7 +54,16 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 003 | Matching Pennies | Live |
 | 004 | Stag Hunt | Live |
 | 005 | Ultimatum Game | Live |
-| 006 to 015 | Ten topics, next in line | Empty slots. Each opens the plain idea and a link to its Gambit entry (see `docs/NEXT.md`) |
+| 006 | What Is a Game? | Live |
+| 007 | Rationality and Common Knowledge | Live |
+| 008 | Normal Form vs Extensive Form | Live |
+| 009 | Zero-Sum Games | Live |
+| 010 | Positive-Sum Games | Live |
+| 011 | Negative-Sum Games | Live |
+| 012 | Simultaneous vs Sequential Games | Live |
+| 013 | Single, Two and Multi-Player Games | Live |
+| 014 | A Taxonomy of Games | Live |
+| 015 | Pareto Efficiency | Live |
 | 016 | Focal Points (Schelling Points) | Live |
 | 017 | Chicken and Hawk-Dove | Live |
 | 018 | Battle of the Sexes | Live |
@@ -246,4 +255,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and where to go next (006 to 015, then 026 on) |
+| `NEXT` | What is live, and where to go next (056 to 065, then 076 on) |
