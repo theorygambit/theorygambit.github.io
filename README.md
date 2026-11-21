@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with forty-five games live (001 to 005 and 016 to 055) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with fifty-five games live (001 to 005, 016 to 055 and 066 to 075) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -86,7 +86,18 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 053 | Loss Aversion and Streak Systems | Live |
 | 054 | Preference Manipulation | Live |
 | 055 | Behavioral Game Theory | Live |
-| 056 onward | The remaining 63 slots | Empty slots, same as above |
+| 056 to 065 | The next 10 slots | Empty slots, same as above |
+| 066 | Elo, Glicko and TrueSkill Ratings | Live |
+| 067 | Dynamic Difficulty Adjustment | Live |
+| 068 | Player Lifetime Value Prediction | Live |
+| 069 | Rules Engines and Experimentation Systems | Live |
+| 070 | The Engagement Stack: How the Layers Combine | Live |
+| 071 | Correlated Equilibrium | Live |
+| 072 | Subgame Perfect Equilibrium | Live |
+| 073 | Trembling Hand Perfect Equilibrium | Live |
+| 074 | Sequential Equilibrium | Live |
+| 075 | Perfect Bayesian Equilibrium | Live |
+| 076 onward | The remaining 43 slots | Empty slots, same as above |
 | 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
 
 Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.

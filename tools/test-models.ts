@@ -18,6 +18,16 @@ import { DollarAuction, Escalation, FEEL_AUCTION, BUDGETS, PROVE_POOL, proveSet 
 import { Blotto, FEEL_TYPES, FEEL_TROOPS, PROVE_POOL as blottoPool, feelOpponents, proveSet as blottoProveSet } from "../src/games/colonel-blotto/model";
 import { Duopoly, FEEL as COURNOT_FEEL, PROVE_SYMMETRIC, PROVE_ASYMMETRIC, rivalQuantity, staircase, isRight as cournotRight, axisMax as cournotAxis } from "../src/games/cournot/model";
 import { FEEL as LEADER_FEEL, LEAD_POOL, FOLLOW_POOL, answer as leaderAnswer, isRight as leaderRight, proveSet as leaderProveSet } from "../src/games/stackelberg/model";
+import { Elo, FEEL_ELO, FEEL_START, FEEL_OPPONENTS, play as eloPlay, PROVE_POOL as ELO_POOL, answer as eloAnswer, isRight as eloRight, proveSet as eloProveSet } from "../src/games/elo-trueskill/model";
+import { Challenge, FEEL_SKILL, TARGET, thermostat, PROVE_POOL as DDA_POOL, answer as ddaAnswer, isRight as ddaRight, proveSet as ddaProveSet } from "../src/games/dynamic-difficulty/model";
+import { Cohort, HORIZON, FEEL_PAIRS as LTV_PAIRS, feelPairs as ltvFeelPairs, PROVE_POOL as LTV_POOL, answer as ltvAnswer, isRight as ltvRight, proveSet as ltvProveSet } from "../src/games/ltv-prediction/model";
+import { FEEL_LIST as RULES_FEEL, FEEL_PLAYERS as RULES_PLAYERS, SEE_PLAYER, PROVE_POOL as RULES_POOL, TRAITS, feelPlayers as rulesFeelPlayers, proveSet as rulesProveSet } from "../src/games/rules-engines/model";
+import { FEEL as STACK_FEEL, MAX_LAYERS, PROVE_MAX, PROVE_POOL as STACK_POOL, answer as stackAnswer, proveSet as stackProveSet } from "../src/games/engagement-stack/model";
+import { FEEL as LIGHT_FEEL, FEEL_A, PROFILES as LIGHT_PROFILES, feelSignals as lightSignals, PROVE_POOL as LIGHT_POOL, isRight as lightRight, proveSet as lightProveSet } from "../src/games/correlated-equilibrium/model";
+import { FEEL_MARKETS as ENTRY_FEEL, SEE_MARKET as ENTRY_SEE, PROVE_CREDIBLE as ENTRY_CRED, PROVE_EMPTY as ENTRY_EMPTY, feelMarkets as entryFeel, proveSet as entryProveSet } from "../src/games/subgame-perfect/model";
+import { FEEL as TREM_FEEL, FEEL_SAFE as TREM_SAFE, PROVE_TABLES as TREM_TABLES, proveSet as tremProveSet, feelSlips as tremFeelSlips } from "../src/games/trembling-hand/model";
+import { Belief as SeqBelief, FEEL as SEQ_FEEL, FEEL_BELIEFS as SEQ_BELIEFS, PROVE_POOL as SEQ_POOL, feelBeliefs as seqFeel, proveSet as seqProveSet } from "../src/games/sequential-equilibrium/model";
+import { Market as PbMarket, FEEL as PB_FEEL, HIRE as PB_HIRE, PASS as PB_PASS, hireValue as pbHire, bestMove as pbBest, PROVE_POOL as PB_POOL, proveSet as pbProveSet, isRight as pbRight, feelSignals as pbSignals } from "../src/games/perfect-bayesian/model";
 import { Curriculum, FIRST } from "../src/catalog/curriculum";
 import { Bimatrix } from "../src/games/shared/Bimatrix";
 import { feelRounds, proveScenes, outcome, ringSide, decidable, SCENES } from "../src/games/information-types/model";
@@ -1361,6 +1371,346 @@ test("levels of reasoning shrink by p each step, and the crowd target is below t
     near(b.level(2), Math.round(b.level(2) * 10) / 10, 1e-9);
   }
   assert.ok(new Beauty(0.5).levelsToZero(1) > 4);
+});
+
+// frag:elo-trueskill
+console.log("elo");
+test("equal ratings give an even chance, 400 points gives about 91 to 9, and the two chances sum to one", () => {
+  const e = new Elo(32);
+  assert.equal(e.expected(1200, 1200), 0.5);
+  assert.ok(Math.abs(e.expected(1600, 1200) - 0.909) < 0.001);
+  assert.ok(Math.abs(e.expected(1200, 1700) + e.expected(1700, 1200) - 1) < 1e-12);
+});
+test("a result moves a rating by K times the surprise, and the two players move equal and opposite", () => {
+  const e = new Elo(32);
+  assert.equal(e.delta(1200, 1200, 1), 16);
+  assert.equal(e.delta(1200, 1200, 0), -16);
+  assert.ok(Math.abs(e.delta(1200, 1400, 1) + e.delta(1400, 1200, 0)) < 1e-9);
+  assert.ok(e.delta(1200, 1400, 1) > e.delta(1200, 1000, 1));
+  assert.ok(Math.abs(e.delta(1200, 1400, 0)) < Math.abs(e.delta(1200, 1000, 0)));
+});
+test("an average over the expected chance leaves a rating where it is", () => {
+  const e = FEEL_ELO;
+  for (const o of FEEL_OPPONENTS) {
+    const p = e.expected(FEEL_START, o);
+    assert.ok(Math.abs(p * e.delta(FEEL_START, o, 1) + (1 - p) * e.delta(FEEL_START, o, 0)) < 1e-9);
+  }
+});
+test("play draws wins at about the Elo chance", () => {
+  const rng = new Rng(11);
+  let w = 0;
+  for (let i = 0; i < 4000; i++) w += eloPlay(rng, 1200, 1400);
+  assert.ok(Math.abs(w / 4000 - FEEL_ELO.expected(1200, 1400)) < 0.03);
+});
+test("Prove answers are right, no answer is the old rating, and the Feel update does not fit", () => {
+  for (const p of ELO_POOL) {
+    assert.ok(eloRight(p, eloAnswer(p)));
+    assert.ok(!eloRight(p, p.you), `${p.you}`);
+    assert.ok(Math.abs(eloAnswer(p) - p.you) > 3);
+  }
+  assert.equal(eloProveSet(new Rng(2)).length, 2);
+});
+
+// frag:dynamic-difficulty
+console.log("dynamic difficulty");
+test("the chance of winning is a half at the skill level and falls as the level rises", () => {
+  const c = new Challenge(5);
+  assert.equal(c.chance(5), 0.5);
+  for (let d = 0; d < 10; d++) assert.ok(c.chance(d + 1) < c.chance(d));
+});
+test("the level that gives the target chance matches the chance function", () => {
+  for (const s of [3, 5, 8]) for (const t of [0.5, 0.6, 0.7, 0.8]) assert.ok(Math.abs(new Challenge(s).chance(new Challenge(s).level(t)) - t) < 1e-9);
+  assert.ok(Math.abs(new Challenge(FEEL_SKILL).level(0.5) - 5) < 1e-9);
+});
+test("the thermostat raises the level on a win, lowers it on a loss, and settles where wins happen at the target rate", () => {
+  assert.ok(thermostat(5, true) > 5 && thermostat(5, false) < 5);
+  const rng = new Rng(21);
+  const c = new Challenge(5);
+  let d = 1;
+  let wins = 0;
+  let sum = 0;
+  const n = 30000;
+  for (let i = 0; i < n; i++) {
+    const w = c.attempt(rng, d);
+    d = thermostat(d, w);
+    if (i > 5000) {
+      wins += w ? 1 : 0;
+      sum += d;
+    }
+  }
+  assert.ok(Math.abs(wins / (n - 5001) - TARGET) < 0.03);
+  assert.ok(Math.abs(sum / (n - 5001) - c.level(TARGET)) < 0.6);
+});
+test("Prove answers are right, the Feel level does not pass, and a level of 0 fails", () => {
+  for (const p of DDA_POOL) {
+    assert.ok(ddaRight(p, ddaAnswer(p)));
+    assert.ok(!ddaRight(p, 0), `${p.skill}`);
+    assert.ok(!ddaRight(p, new Challenge(FEEL_SKILL).level(TARGET)) || p.skill === FEEL_SKILL);
+  }
+  assert.equal(ddaProveSet(new Rng(4)).length, 2);
+});
+
+// frag:ltv-prediction
+console.log("lifetime value");
+test("the value over n weeks adds up the weekly spend of those who stay, and grows toward the lifetime value", () => {
+  const c = new Cohort(5, 0.5);
+  assert.equal(c.value(1), 5);
+  assert.equal(c.value(2), 7.5);
+  let sum = 0;
+  for (let t = 0; t < 12; t++) sum += 5 * Math.pow(0.5, t);
+  assert.ok(Math.abs(c.value(12) - sum) < 1e-9);
+  assert.ok(c.value(12) < c.lifetime() && Math.abs(c.lifetime() - 10) < 1e-9);
+});
+test("lifetime value is spend times expected weeks, and rises sharply as retention nears one", () => {
+  assert.ok(Math.abs(new Cohort(3, 0.8).weeks() - 5) < 1e-9);
+  assert.ok(Math.abs(new Cohort(3, 0.8).lifetime() - 15) < 1e-9);
+  const g1 = new Cohort(4, 0.9).lifetime() - new Cohort(4, 0.8).lifetime();
+  const g2 = new Cohort(4, 0.6).lifetime() - new Cohort(4, 0.5).lifetime();
+  assert.ok(g1 > g2);
+});
+test("in the Feel pairs the bigger first week spender wins in some pairs and the better keeper in others", () => {
+  let first = 0;
+  let keeper = 0;
+  for (const p of LTV_PAIRS) {
+    const lv = p.left.value(HORIZON);
+    const rv = p.right.value(HORIZON);
+    assert.ok(Math.abs(lv - rv) > 0.5);
+    const spenderWins = (p.left.a > p.right.a) === (lv > rv);
+    if (spenderWins) first++;
+    else keeper++;
+  }
+  assert.ok(first >= 1 && keeper >= 1);
+  assert.equal(ltvFeelPairs(new Rng(8)).length, 4);
+});
+test("Prove answers are right, a guess of 0 fails, and a first week spend alone fails", () => {
+  for (const p of LTV_POOL) {
+    assert.ok(ltvRight(p, ltvAnswer(p)));
+    assert.ok(!ltvRight(p, 0));
+    assert.ok(!ltvRight(p, p.a));
+  }
+  assert.equal(ltvProveSet(new Rng(3)).length, 2);
+});
+
+// frag:rules-engines
+console.log("rules engines");
+test("the first matching rule fires, later matches are shadowed, and no match gives the default", () => {
+  assert.deepEqual(RULES_FEEL.matches(["paid", "idle"]), [0, 1]);
+  assert.equal(RULES_FEEL.fired(["paid", "idle"]), 0);
+  assert.equal(RULES_FEEL.offer(["paid", "idle"]), "pack");
+  assert.equal(RULES_FEEL.offer(["idle", "rookie"]), "bonus");
+  assert.equal(RULES_FEEL.fired([]), -1);
+  assert.equal(RULES_FEEL.offer([]), "none");
+});
+test("moving a rule to the top changes who gets which offer, and the player who matches everything gets the top rule", () => {
+  for (let i = 0; i < 3; i++) {
+    const l = RULES_FEEL.toTop(i);
+    assert.equal(l.rules[0], RULES_FEEL.rules[i]);
+    assert.equal(l.rules.length, 3);
+    assert.equal(l.offer(SEE_PLAYER), RULES_FEEL.rules[i]!.give);
+  }
+  const offers = new Set([0, 1, 2].map((i) => RULES_FEEL.toTop(i).offer(SEE_PLAYER)));
+  assert.equal(offers.size, 3);
+});
+test("every Feel player has an answer, several overlap two rules, and one gets nothing", () => {
+  assert.ok(RULES_PLAYERS.some((p) => RULES_FEEL.matches(p).length >= 2));
+  assert.ok(RULES_PLAYERS.some((p) => RULES_FEEL.fired(p) === -1));
+  assert.equal(rulesFeelPlayers(new Rng(6)).length, 5);
+});
+test("every Prove puzzle has overlapping rules that give different offers, and the Feel order would answer it differently", () => {
+  for (const q of RULES_POOL) {
+    const m = q.list.matches(q.traits);
+    assert.ok(m.length >= 2);
+    assert.notEqual(q.list.rules[m[0]!]!.give, q.list.rules[m[1]!]!.give);
+    assert.notEqual(q.list.offer(q.traits), RULES_FEEL.offer(q.traits));
+    assert.equal(new Set(q.list.rules.map((r) => r.when)).size, 3);
+  }
+  assert.equal(rulesProveSet(new Rng(1)).length, 2);
+  assert.equal(TRAITS.length, 3);
+});
+
+// frag:engagement-stack
+console.log("engagement stack");
+test("engagement grows faster than the number of layers because layers feed each other, and strain grows with the square", () => {
+  const s = STACK_FEEL;
+  assert.equal(s.engagement(0), 0);
+  assert.equal(s.engagement(1), 10);
+  assert.equal(s.engagement(2), 24);
+  assert.ok(s.engagement(4) - s.engagement(3) > s.engagement(2) - s.engagement(1));
+  assert.equal(s.strain(3), 36);
+});
+test("the Feel stack nets most at two layers, and five layers nets less than none beyond three", () => {
+  const s = STACK_FEEL;
+  assert.equal(s.best(MAX_LAYERS), 2);
+  assert.ok(s.net(2) > s.net(1) && s.net(2) > s.net(3));
+  assert.ok(s.net(5) < 0);
+});
+test("every Prove stack has one clear best number of layers, found by brute force, below the top and above zero", () => {
+  for (const s of STACK_POOL) {
+    const b = stackAnswer(s);
+    assert.ok(b >= 1 && b < PROVE_MAX, `${s.e} ${s.s} ${s.q}`);
+    for (let n = 0; n <= PROVE_MAX; n++) if (n !== b) assert.ok(s.net(n) < s.net(b), `${n}`);
+  }
+  assert.equal(stackProveSet(new Rng(9)).length, 2);
+});
+
+// frag:correlated-equilibrium
+console.log("correlated equilibrium");
+test("chicken payoffs and the chance the rival was told to go, given you were told to wait", () => {
+  const l = LIGHT_FEEL;
+  assert.equal(l.pay("go", "wait"), 7);
+  assert.equal(l.pay("go", "go"), 0);
+  assert.equal(l.pay("wait", "go"), 2);
+  assert.equal(l.pay("wait", "wait"), 6);
+  assert.ok(Math.abs(l.rivalGoesGivenWait(FEEL_A) - 0.5) < 1e-9);
+});
+test("with a third on each profile, obeying wait pays 4 and going anyway pays 3.5, and obeying go pays more than waiting", () => {
+  const l = LIGHT_FEEL;
+  assert.ok(Math.abs(l.obeyWait(FEEL_A) - 4) < 1e-9);
+  assert.ok(Math.abs(l.goWait(FEEL_A) - 3.5) < 1e-9);
+  assert.ok(l.obedient(FEEL_A));
+  assert.ok(l.obeyGo() > l.ignoreGo());
+});
+test("obeying a wait holds from the minimum chance up, found by brute force", () => {
+  for (const l of [LIGHT_FEEL, ...LIGHT_POOL]) {
+    let first = -1;
+    for (let a = 0; a <= 0.5; a += 0.0005) if (l.obedient(a)) { first = a; break; }
+    assert.ok(Math.abs(first - l.minChance()) < 0.002, `${l.r} ${l.s} ${l.t}`);
+    assert.ok(!l.obedient(l.minChance() - 0.01));
+    assert.ok(l.obedient(l.minChance() + 0.01));
+  }
+  assert.ok(Math.abs(LIGHT_FEEL.minChance() - 0.25) < 1e-9);
+});
+test("Prove answers pass, the Feel answer and the ends fail, and the signals use every profile", () => {
+  for (const l of LIGHT_POOL) {
+    assert.ok(lightRight(l, l.minChance()));
+    assert.ok(!lightRight(l, 0) && !lightRight(l, 0.5));
+    assert.ok(!lightRight(l, LIGHT_FEEL.minChance()), `${l.r}`);
+  }
+  const s = lightSignals(new Rng(5));
+  assert.equal(s.length, 5);
+  for (const p of LIGHT_PROFILES) assert.ok(s.some((q) => q[0] === p[0] && q[1] === p[1]));
+  assert.equal(lightProveSet(new Rng(2)).length, 2);
+});
+
+// frag:subgame-perfect
+console.log("subgame perfect");
+test("the incumbent replies with what is better for it once the entrant is in, and a threat is believable only if that is to fight", () => {
+  const m = ENTRY_SEE;
+  assert.equal(m.reply(), "accept");
+  assert.equal(m.credible(), false);
+  assert.deepEqual(m.enterPay(), [5, 6]);
+  assert.equal(m.enters(), true);
+  assert.deepEqual(m.outcome(), [5, 6]);
+  const c = ENTRY_FEEL[1]!;
+  assert.equal(c.reply(), "fight");
+  assert.equal(c.enters(), false);
+  assert.deepEqual(c.outcome(), [2, 10]);
+});
+test("staying out under an empty threat looks stable but is not subgame perfect, because the entrant gains by entering", () => {
+  for (const m of [...ENTRY_FEEL, ...ENTRY_EMPTY, ...ENTRY_CRED]) {
+    if (!m.credible()) {
+      assert.equal(m.nashOutWithThreat(), true);
+      assert.equal(m.enters(), true);
+    } else {
+      assert.equal(m.enters(), false);
+    }
+  }
+});
+test("Feel has two believable and two empty threats, and Prove gives one of each, with no Feel market reused", () => {
+  assert.equal(ENTRY_FEEL.filter((m) => m.credible()).length, 2);
+  assert.equal(entryFeel(new Rng(3)).length, 4);
+  const s = entryProveSet(new Rng(2));
+  assert.deepEqual(s.map((m) => m.credible()).sort(), [false, true]);
+  for (const m of [...ENTRY_CRED, ...ENTRY_EMPTY]) assert.ok(!ENTRY_FEEL.some((f) => JSON.stringify(f) === JSON.stringify(m)));
+});
+
+// frag:trembling-hand
+console.log("trembling hand");
+test("the safe cell is stable but rests on a weak move, and a slip makes the other move strictly better", () => {
+  assert.deepEqual(TREM_FEEL.table.stable(), [[0, 0], [1, 1]]);
+  assert.equal(TREM_FEEL.weakRow(1), true);
+  assert.equal(TREM_FEEL.weakRow(0), false);
+  assert.equal(TREM_FEEL.survives(1, 1), false);
+  assert.deepEqual(TREM_FEEL.perfect(), [0, 0]);
+  assert.equal(TREM_FEEL.rowPay(0, TREM_SAFE, 0), TREM_FEEL.rowPay(1, TREM_SAFE, 0));
+  assert.ok(TREM_FEEL.rowPay(0, TREM_SAFE, 0.2) > TREM_FEEL.rowPay(1, TREM_SAFE, 0.2));
+});
+test("every Prove table has two stable cells and exactly one survives a tremble", () => {
+  for (const t of TREM_TABLES) {
+    assert.equal(t.table.stable().length, 2);
+    assert.equal(t.table.stable().filter(([r, c]) => t.survives(r, c)).length, 1);
+    assert.notEqual(t.perfect(), null);
+  }
+});
+test("Prove gives one table whose survivor pays more and one whose survivor pays less, and explains a wrong tap", () => {
+  const s = tremProveSet(new Rng(5));
+  const better = s.map((t) => { const [r, c] = t.perfect()!; const o = t.table.stable().find(([a, b]) => a !== r || b !== c)!; return t.table.payoff(r, c)[0] > t.table.payoff(o[0], o[1])[0]; });
+  assert.deepEqual([...better].sort(), [false, true]);
+  const t = TREM_TABLES[0]!;
+  assert.ok(t.why(0, 1).includes("Someone gains"));
+  assert.ok(t.why(1, 1).includes("never beats"));
+  assert.equal(t.why(0, 0), "");
+  assert.equal(tremFeelSlips(new Rng(1)).filter(Boolean).length, 2);
+});
+
+// frag:sequential-equilibrium
+console.log("sequential equilibrium");
+test("the best move flips at the belief where L and R pay the same", () => {
+  const b = SEQ_FEEL;
+  assert.ok(Math.abs(b.threshold() - 0.4) < 1e-9);
+  assert.ok(Math.abs(b.payL(0.4) - b.payR(0.4)) < 1e-9);
+  assert.equal(b.best(0.4), "tie");
+  assert.equal(b.best(0.9), "L");
+  assert.equal(b.best(0.1), "R");
+  assert.equal(b.isRight(0.42), true);
+  assert.equal(b.isRight(0.5), false);
+});
+test("every table has L better at X and R better at Y, with a threshold strictly inside zero and one", () => {
+  for (const b of [SEQ_FEEL, ...SEQ_POOL]) {
+    assert.ok(b.xL > b.xR && b.yR > b.yL);
+    assert.ok(b.threshold() > 0.1 && b.threshold() < 0.9);
+  }
+  assert.ok(Math.abs(new SeqBelief(8, 2, 0, 3).threshold() - 1 / 3) < 1e-9);
+});
+test("Feel uses both best moves, and Prove thresholds differ from Feel and each other", () => {
+  assert.ok(SEQ_BELIEFS.some((p) => SEQ_FEEL.best(p) === "L") && SEQ_BELIEFS.some((p) => SEQ_FEEL.best(p) === "R"));
+  assert.equal(seqFeel(new Rng(2)).length, 5);
+  const s = seqProveSet(new Rng(4));
+  assert.equal(s.length, 2);
+  assert.notEqual(s[0]!.threshold(), s[1]!.threshold());
+  for (const b of SEQ_POOL) assert.notEqual(Math.round(b.threshold() * 100), 40);
+});
+
+// frag:perfect-bayesian
+console.log("perfect bayesian");
+test("a signal sent more by strong types raises the share strong, and its absence lowers it", () => {
+  assert.ok(Math.abs(PB_FEEL.posterior(true) - 0.8) < 1e-9);
+  assert.ok(Math.abs(PB_FEEL.posterior(false) - 0.2) < 1e-9);
+  const c = PB_FEEL.counts(true, 20);
+  assert.ok(Math.abs(c.strong - 8) < 1e-9 && Math.abs(c.weak - 2) < 1e-9);
+  assert.ok(Math.abs(new PbMarket(0.25, 0.6, 0.2).posterior(true) - 0.5) < 1e-9);
+  assert.ok(Math.abs(new PbMarket(0.5, 0.7, 0.1).posterior(false) - 0.25) < 1e-9);
+});
+test("hiring pays when the share strong beats the pass payoff over the hire payoff", () => {
+  assert.equal(pbBest(PB_FEEL.posterior(true)), "hire");
+  assert.equal(pbBest(PB_FEEL.posterior(false)), "pass");
+  assert.equal(pbBest(PB_PASS / PB_HIRE), "tie");
+  assert.ok(Math.abs(pbHire(0.8) - 3.2) < 1e-9);
+});
+test("Prove cases come in whole people out of 100, differ from Feel, and the answer window is plus or minus five points", () => {
+  for (const k of PB_POOL) {
+    const sc = k.m.counts(k.sent, 100);
+    assert.ok(Math.abs(sc.strong - Math.round(sc.strong)) < 1e-9 && Math.abs(sc.weak - Math.round(sc.weak)) < 1e-9);
+    assert.notEqual(Math.round(k.m.posterior(k.sent) * 100), 80);
+    assert.notEqual(Math.round(k.m.posterior(k.sent) * 100), 20);
+  }
+  const k = PB_POOL[0]!;
+  assert.equal(pbRight(k, 0.52), true);
+  assert.equal(pbRight(k, 0.6), false);
+  const s = pbProveSet(new Rng(6));
+  assert.equal(s.length, 2);
+  assert.notEqual(s[0], s[1]);
+  assert.equal(pbSignals(new Rng(1)).filter(Boolean).length, 2);
 });
 
 console.log(`\n${passed} tests passed`);
