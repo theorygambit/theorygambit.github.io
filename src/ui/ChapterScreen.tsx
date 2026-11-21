@@ -24,7 +24,7 @@ export function ChapterScreen({ id }: { id: string }) {
     <main className="screen chapter" ref={scroller}>
       <div className="home-col">
         <div className="top-bar">
-          <button className="link-btn" type="button" onClick={() => router.back("/")}>
+          <button className="link-btn" type="button" onClick={() => router.home(true)}>
             Chapters
           </button>
           <span className="top-bar-n">

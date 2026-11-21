@@ -62,13 +62,13 @@ export class PathRouter {
     return (history.state as { i?: number } | null)?.i ?? 0;
   }
 
-  private go(url: string, replace = false): void {
+  private go(url: string, replace = false, keepScroll = false): void {
     if (url === location.pathname + location.search) return;
     const path = url.split("?")[0]!;
     if (replace) history.replaceState({ i: this.depth() }, "", url);
     else {
       // arriving fresh at a screen starts at its top; only going back restores a position
-      this.scrolls.delete(path);
+      if (!keepScroll) this.scrolls.delete(path);
       history.pushState({ i: this.depth() + 1 }, "", url);
     }
     this.sync();
@@ -81,8 +81,9 @@ export class PathRouter {
 
   readonly getSnapshot = (): Route => this.snapshot;
 
-  home(): void {
-    this.go(`/${location.search}`);
+  /** Always lands on Home. `keepScroll` returns to where the list was left, as Menu-style buttons should. */
+  home(keepScroll = false): void {
+    this.go(`/${location.search}`, false, keepScroll);
   }
 
   chapter(id: string): void {
