@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 016 to 045 are complete. Slots 006 to 015 and everything from 046 on are empty, in curriculum order.
+The five opening games (001 to 005) and slots 016 to 055 are complete. Slots 006 to 015 and everything from 056 on are empty, in curriculum order.
 
 ## Shipped
 
@@ -41,10 +41,20 @@ The five opening games (001 to 005) and slots 016 to 045 are complete. Slots 006
 | 043 | Hotelling's Location Game | `hotelling` | four rounds of placing a shop beside a rival, the leapfrog to the middle, drag the settling place for skewed streets |
 | 044 | Repeated Games | `repeated-games` | eight rounds against someone who breaks forever after one break, drag patience until holding wins, new payoffs |
 | 045 | Dynamic Games | `dynamic-games` | five periods on a shared pond, tomorrow's pond against today's take, drag the steady harvest for new ponds |
+| 046 | Evolutionary Game Theory | `evolutionary-game-theory` | hawks and doves from two starting shares settle at the same mix, drag the share along a hawk minus dove line, find V over C for new payoffs |
+| 047 | Market for Lemons | `lemons-adverse-selection` | sell or keep a car as buyers offer the average, tap through the unravelling rounds, find the final price of a new market |
+| 048 | Auctions | `auctions` | three first price bids against a rival with the best bid shown, drag along the expected profit curve to its peak, shade for more bidders (the closest teachable mechanic for revenue equivalence) |
+| 049 | Matching Markets | `matching` | pair three with three and see the pair that would leave, replay deferred acceptance, build a stable pairing for new rankings |
+| 050 | Cooperative Games | `cooperative-games` | three players join in six orders and take what they add, line up the orders per player, find a fair share for a new game (Shapley value as the closest teachable mechanic) |
+| 051 | Prospect Theory | `prospect-theory` | four fair flips that pay on average, a steeper loss side on a value line, break even gain for a new loss weight |
+| 052 | Allais Paradox | `allais-paradox` | a sure prize against a gamble then two long shots, strip the common part so the pairs match, pick the consistent answer for new numbers |
+| 053 | Loss Aversion and Streaks | `loss-aversion-streaks` | five days of do or skip with the cost of a break shown, the break cost line crosses the flat effort, first streak worth keeping for new values |
+| 054 | Preference Manipulation | `preference-manipulation` | pick between two options then again with a decoy, tap each option to see what beats it, find the decoy among new options (the decoy effect as the closest teachable mechanic) |
+| 055 | Behavioral Game Theory | `behavioral-game-theory` | a two thirds of the average guessing game against a crowd, climb the ladder of levels, a level 2 guess for a new fraction (the beauty contest as the closest teachable mechanic) |
 
 Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
 
-## Suggested next batch (006 to 015 first, then 046 onward)
+## Suggested next batch (006 to 015 first, then 056 onward)
 
 Slots 006 to 015 are still empty and 046 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
 
