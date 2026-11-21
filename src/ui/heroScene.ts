@@ -85,7 +85,24 @@ interface Strand {
   /** The glint: where it is on the triangle's outline (0 to 3, wrapping) and how bright. Both glide. */
   gp: number;
   gi: number;
+  /** Its own will: heading, turn rate, speed, lane, and a personality that never changes. */
+  psi: number;
+  om: number;
+  spd: number;
+  rho: number;
+  sk: number;
+  skim: boolean;
+  idx: number;
+  nextPick: number;
+  rnd: () => number;
+  prof: { v: number; hop: [number, number]; skim: number; wob: number; wf: number; sf: number; turn: number };
 }
+
+const PROFILES: Strand['prof'][] = [
+  { v: 26, hop: [9, 16], skim: 0.5, wob: 0.34, wf: 1.0, sf: 0.7, turn: 2.4 },
+  { v: 34, hop: [6, 11], skim: 0.7, wob: 0.4, wf: 1.3, sf: 1.1, turn: 3.0 },
+  { v: 20, hop: [12, 20], skim: 0.4, wob: 0.28, wf: 0.8, sf: 0.5, turn: 1.9 },
+];
 
 interface Ripple {
   x: number;
@@ -236,6 +253,16 @@ export class HeroScene {
       near: { d: 1e9, x: 0, y: 0, edge: 0, s: 0 },
       gp: 0,
       gi: 0,
+      psi: 0,
+      om: 0,
+      spd: 0,
+      rho: 0,
+      sk: 0,
+      skim: false,
+      idx: [4, 3, 4][k % 3]!,
+      nextPick: 4 + k * 3,
+      rnd: rng(17 + k * 101),
+      prof: PROFILES[k % 3]!,
     };
   }
 
@@ -252,6 +279,12 @@ export class HeroScene {
     s.hy = s.trail[0]!.y;
     s.hvx = s.hvy = 0;
     s.ang = s.phase;
+    s.psi = s.phase + s.dir * (Math.PI / 2);
+    s.om = 0;
+    s.spd = s.prof.v * this.u;
+    s.rho = RING_K[s.idx]! * 150 * this.u;
+    s.sk = 0;
+    s.skim = false;
     for (let i = 0; i < s.n; i++) {
       s.x[i] = s.trail[Math.min(i * 3, 159)]!.x;
       s.y[i] = s.trail[Math.min(i * 3, 159)]!.y;
@@ -402,52 +435,98 @@ export class HeroScene {
 
     const v = this.verts();
     const gap = (7 - 4.8 * A) * u + 0.7 * u * breath;
-    const Rfar = this.Rt * (3.3 + 0.2 * Math.sin(t * 0.31));
+
+    const ringR = RING_K.map((k) => k * 150 * u);
+    const m = smooth(this.pm);
 
     for (const s of this.strands) {
-      // the approach: a slow cycle with long dwells, far then near then far
-      const cyc = 0.5 - 0.5 * Math.cos(TAU * (t / 26 + s.phase * 0.31));
-      const near = smooth((cyc - 0.18) / 0.3);
-      // Close in, the orbit is the triangle's own outline pushed out by a hair: the goal rides
-      // just outside the edge, so the head glides along it instead of pressing into it.
+      const P = s.prof;
+      // ---- will: every so often it chooses a new lane, or goes to skim the triangle
+      if (t > s.nextPick) {
+        const r = s.rnd();
+        if (s.skim) {
+          s.skim = false;
+          s.idx = r < 0.8 ? 0 : 1;
+          s.nextPick = t + P.hop[0] + s.rnd() * (P.hop[1] - P.hop[0]);
+        } else if (r < P.skim && s.idx <= 2) {
+          s.skim = true;
+          s.nextPick = t + 8 + s.rnd() * 6;
+        } else {
+          const step = r < 0.5 ? -1 : 1;
+          s.idx = Math.max(0, Math.min(4, s.idx + (s.idx > 2 ? -1 : step)));
+          s.nextPick = t + P.hop[0] + s.rnd() * (P.hop[1] - P.hop[0]);
+        }
+      }
+      s.rho = follow(s.rho, ringR[s.idx]!, 0.22, dt);
+      s.sk = follow(s.sk, s.skim && m < 0.5 ? 1 : 0, 0.5, dt);
+      const near = s.sk;
+
+      // ---- the orbit it is steering around: the hero's centre, or your fingertip when touched
+      const ocx = lerp(this.cx, this.sx, m);
+      const ocy = lerp(this.cy, this.sy, m);
+      const rx = s.hx - ocx;
+      const ry = s.hy - ocy;
+      const r = Math.max(Math.hypot(rx, ry), 1);
+      const a = Math.atan2(ry, rx);
+      const LA = (16 + 0.25 * s.spd / u) * u;
       const hug = gap * 2.6 + 3 * u;
-      const R = lerp(Rfar * (1 - 0.22 * A) * (1 + 0.28 * Math.sin(t * 0.41 + s.phase * 1.7)), this.outlineRadius(s.ang, v) + hug, near);
-      // Constant speed along the orbit (angular speed = v / R), so the thread always travels
-      // mostly sideways. Radius changes slowly, which makes spirals and arcs, never spokes.
-      s.ang += (dt * s.dir * 24 * u * (1 + 0.35 * Math.sin(t * 0.29 + s.phase))) / Math.max(R, this.Rt * 0.6);
-      const phi = s.ang;
-      const ix = this.cx + Math.cos(phi) * R;
-      const iy = this.cy + Math.sin(phi) * R * lerp(0.86, 1, near);
-      // when touched, circle the fingertip a few pixels off, slowly
-      const rho = lerp(30, 17, A) * u;
-      const psi = s.phase * 2 + t * 1.15 * s.dir;
-      const fx = this.sx + Math.cos(psi) * rho;
-      const fy = this.sy + Math.sin(psi) * rho;
-      const m = smooth(this.pm);
-      const gx = lerp(ix, fx, m);
-      const gy = lerp(iy, fy, m);
-      // head: critically damped spring toward the goal, lazy on purpose
-      const w0 = 2.4 + 1.6 * m;
-      s.hvx += (w0 * w0 * (gx - s.hx) - 2 * w0 * s.hvx) * dt;
-      s.hvy += (w0 * w0 * (gy - s.hy) - 2 * w0 * s.hvy) * dt;
+      const aheadA = a + (s.dir * LA) / r;
+      const skimR = this.outlineRadius(aheadA, v) + hug;
+      const fingerR = lerp(30, 17, A) * u;
+      const wantR = lerp(lerp(s.rho, skimR, near), fingerR, m);
+      // ---- desired heading: along the ring, leaning in or out to reach the wanted radius
+      const beta = clamp(Math.atan2(wantR - r, LA * 1.5), -0.2, 0.2);
+      let hd = a + s.dir * (Math.PI / 2 - beta);
+      hd += P.wob * (1 - 0.7 * m) * Math.sin(t * P.wf + s.phase * 2);
+      // ---- sight: look ahead; if the triangle is in the way, turn along its edge, not into it
+      const px = s.hx + Math.cos(s.psi) * LA * 1.6;
+      const py = s.hy + Math.sin(s.psi) * LA * 1.6;
+      const pq = this.sdf(px, py, v);
+      const margin = gap * 1.4 + 4 * u;
+      if (pq.d < margin) {
+        let nx = pq.d < 0 ? pq.cx - px : px - pq.cx;
+        let ny = pq.d < 0 ? pq.cy - py : py - pq.cy;
+        const nl = Math.hypot(nx, ny) || 1;
+        nx /= nl;
+        ny /= nl;
+        let tx = -ny;
+        let ty = nx;
+        if (tx * Math.cos(s.psi) + ty * Math.sin(s.psi) < 0) {
+          tx = -tx;
+          ty = -ty;
+        }
+        const w = smooth(1 - Math.max(pq.d, 0) / margin);
+        hd += w * wrap(Math.atan2(ty, tx) - hd);
+      }
+      // ---- steering: turning is itself soft (angular velocity eases), and it slows in tight turns
+      const omMax = P.turn * (1 + 0.5 * m);
+      const omWant = clamp(wrap(hd - s.psi) * 2.2, -omMax, omMax);
+      s.om = follow(s.om, omWant, 4.5, dt);
+      s.psi += s.om * dt;
+      const sp = P.v * u * (1 + 0.2 * Math.sin(t * P.sf + s.phase * 3)) * (1 + 0.45 * A) * (1 - 0.3 * Math.min(1, Math.abs(s.om) / omMax));
+      s.spd = follow(s.spd, sp, 1.6, dt);
+      s.hvx = Math.cos(s.psi) * s.spd;
+      s.hvy = Math.sin(s.psi) * s.spd;
       s.hx += s.hvx * dt;
       s.hy += s.hvy * dt;
       let q = this.sdf(s.hx, s.hy, v);
       if (q.d < gap) {
-        const nx = q.d < 0 ? q.cx - s.hx : s.hx - q.cx;
-        const ny = q.d < 0 ? q.cy - s.hy : s.hy - q.cy;
+        // contact: slide out along the normal and ease the heading onto the edge's tangent
+        let nx = q.d < 0 ? q.cx - s.hx : s.hx - q.cx;
+        let ny = q.d < 0 ? q.cy - s.hy : s.hy - q.cy;
         const nl = Math.hypot(nx, ny) || 1;
+        nx /= nl;
+        ny /= nl;
         const push = gap - q.d;
-        s.hx += (nx / nl) * push;
-        s.hy += (ny / nl) * push;
-        // lose only the speed that points into the triangle; keep the slide along it
-        const ox = nx / nl;
-        const oy = ny / nl;
-        const vn = s.hvx * ox + s.hvy * oy;
-        if (vn < 0) {
-          s.hvx -= vn * ox;
-          s.hvy -= vn * oy;
+        s.hx += nx * push * Math.min(1, 14 * dt);
+        s.hy += ny * push * Math.min(1, 14 * dt);
+        let tx = -ny;
+        let ty = nx;
+        if (tx * Math.cos(s.psi) + ty * Math.sin(s.psi) < 0) {
+          tx = -tx;
+          ty = -ty;
         }
+        s.psi += wrap(Math.atan2(ty, tx) - s.psi) * (1 - Math.exp(-9 * dt));
       }
       s.x[0] = s.hx;
       s.y[0] = s.hy;
@@ -459,9 +538,6 @@ export class HeroScene {
       if (Math.hypot(s.hx - last.x, s.hy - last.y) > 0.6 * u) {
         tr.unshift({ x: s.hx, y: s.hy });
         if (tr.length > 260) tr.pop();
-      } else {
-        last.x = s.hx;
-        last.y = s.hy;
       }
       const L = this.Rt * 0.1;
       let ti = 0;
@@ -496,7 +572,7 @@ export class HeroScene {
         const ny = -(s.x[i + 1]! - s.x[i - 1]!);
         const nl = Math.hypot(nx, ny) || 1;
         const f = i / s.n;
-        const a = 7.5 * u * (1 - 0.6 * near) * Math.pow(f, 1.2) * Math.sin(i * 0.21 - t * 1.5 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
+        const a = 5 * u * (1 - 0.6 * s.sk) * Math.pow(f, 1.2) * Math.sin(i * 0.21 - t * 1.5 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
         s.x[i] = s.x[i]! + (nx / nl) * a;
         s.y[i] = s.y[i]! + (ny / nl) * a;
       }
