@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
   <title id="t">The curriculum</title>
-  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Forty-five games are live: the first five and slots 16 to 55. The rest are empty slots.</desc>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Fifty-five games are live: the first five, slots 16 to 55 and slots 66 to 75. The rest are empty slots.</desc>
   <defs>
     <style>
 
@@ -103,17 +103,17 @@
   <circle class="em d" style="--i:62" cx="986.4" cy="214" r="4.6"/>
   <circle class="em d" style="--i:63" cx="1007.2" cy="214" r="4.6"/>
   <circle class="em d" style="--i:64" cx="1028" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:65" cx="1048.8" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:66" cx="1069.6" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:67" cx="1090.4" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:68" cx="1111.2" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:69" cx="1132" cy="214" r="4.6"/>
+  <circle class="lv d" style="--i:65" cx="1048.8" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:66" cx="1069.6" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:67" cx="1090.4" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:68" cx="1111.2" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:69" cx="1132" cy="214" r="5.4"/>
   <text class="rt" x="45" y="304">Advanced</text><text class="rs" x="45" y="324">46 ENTRIES</text>
-  <circle class="em d" style="--i:70" cx="196" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:71" cx="216.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:72" cx="237.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:73" cx="258.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:74" cx="279.2" cy="298" r="4.6"/>
+  <circle class="lv d" style="--i:70" cx="196" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:71" cx="216.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:72" cx="237.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:73" cx="258.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:74" cx="279.2" cy="298" r="5.4"/>
   <circle class="em d" style="--i:75" cx="300" cy="298" r="4.6"/>
   <circle class="em d" style="--i:76" cx="320.8" cy="298" r="4.6"/>
   <circle class="em d" style="--i:77" cx="341.6" cy="298" r="4.6"/>
@@ -160,7 +160,7 @@
   <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="sy d" style="--i:116" cx="196" cy="382" r="3.4"/>
   <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="sy d" style="--i:117" cx="230" cy="382" r="3.4"/>
   <path class="hair" d="M45 436H1155"/>
-  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 005 and 016 to 055</text>
+  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 005, 016 to 055, 066 to 075</text>
   <circle class="em" cx="420" cy="466" r="4.6"/><text class="lg" x="436" y="470">Empty slot: opens the idea and a Gambit link</text>
   <circle class="sy" cx="956" cy="466" r="7.2"/><circle class="sy" cx="956" cy="466" r="3.4"/><text class="lg" x="974" y="470">Synthesis capstone</text>
 </svg>
