@@ -1,6 +1,5 @@
 // Regenerates public/favicon.svg and public/icons/*.png from one SVG mark, "The Approach":
-// a downward triangle inside opened rings, with one thread curling in to the edge of a vertex
-// and stopping a hair short of it. Bone on Void. Needs `sharp`:  npm i -D sharp && node tools/make-icons.mjs
+// a downward triangle inside opened rings. Bone on Void. No sparks, no threads. Needs `sharp`:  npm i -D sharp && node tools/make-icons.mjs
 import sharp from "sharp";
 import { writeFileSync, mkdirSync } from "node:fs";
 
@@ -11,7 +10,7 @@ const f = (n) => n.toFixed(2);
 
 const mark = (k) => {
   const parts = [];
-  // rings, gaps turned toward the thread's entry at the lower left
+  // rings, their gaps drifting a little round
   [[100, 0.5], [140, 0.42], [182, 0.36]].forEach(([r, gap], i) => {
     const gc = 2.5 + i * 0.35;
     const [x0, y0] = pol(r * k, gc + gap / 2);
@@ -25,20 +24,6 @@ const mark = (k) => {
   parts.push(`<path d="M${tri}Z" fill="url(#fill)" stroke="${BONE}" stroke-width="${5.5 * k}" stroke-linejoin="round"/>`);
   const inner = v.map((p) => `${f(C + (p[0] - C) * 0.55)} ${f(C + (p[1] - C) * 0.55)}`).join("L");
   parts.push(`<path d="M${inner}Z" fill="none" stroke="${BONE}" stroke-opacity="0.4" stroke-width="${3.5 * k}" stroke-linejoin="round"/>`);
-  // the thread: a spiral that closes in on the upper right vertex and stops short of it
-  const target = -Math.PI / 6;
-  const pts = [];
-  const N = 70;
-  for (let i = 0; i <= N; i++) {
-    const u = i / N;
-    const a = target + 3.35 * (1 - u);
-    const r = (Rt + 13 * k) + (232 * k - Rt - 13 * k) * Math.pow(1 - u, 1.7);
-    pts.push(pol(r, a));
-  }
-  const path = pts.map((p, i) => `${i ? "L" : "M"}${f(p[0])} ${f(p[1])}`).join("");
-  parts.push(`<path d="${path}" fill="none" stroke="url(#thread)" stroke-width="${5 * k}" stroke-linecap="round" stroke-linejoin="round"/>`);
-  const [hx, hy] = pts[N];
-  parts.push(`<circle cx="${f(hx)}" cy="${f(hy)}" r="${f(15 * k)}" fill="url(#glow)"/><circle cx="${f(hx)}" cy="${f(hy)}" r="${f(6.5 * k)}" fill="${BONE}"/>`);
   return parts.join("");
 };
 
