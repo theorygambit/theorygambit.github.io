@@ -64,6 +64,8 @@ function rng(seed: number): () => number {
   };
 }
 
+type Pt = readonly [number, number];
+
 interface Strand {
   n: number;
   x: Float32Array;
@@ -80,6 +82,9 @@ interface Strand {
   hvy: number;
   /** Nearest approach to the triangle, refreshed each step. */
   near: { d: number; x: number; y: number; edge: number; s: number };
+  /** The glint: where it is on the triangle's outline (0 to 3, wrapping) and how bright. Both glide. */
+  gp: number;
+  gi: number;
 }
 
 interface Ripple {
@@ -229,6 +234,8 @@ export class HeroScene {
       hvx: 0,
       hvy: 0,
       near: { d: 1e9, x: 0, y: 0, edge: 0, s: 0 },
+      gp: 0,
+      gi: 0,
     };
   }
 
@@ -458,11 +465,11 @@ export class HeroScene {
         const ny = -(s.x[i + 1]! - s.x[i - 1]!);
         const nl = Math.hypot(nx, ny) || 1;
         const f = i / s.n;
-        const a = 3.4 * u * Math.pow(f, 1.3) * Math.sin(i * 0.3 - t * 1.9 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
+        const a = 3.4 * u * Math.pow(f, 1.3) * Math.sin(i * 0.21 - t * 1.5 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
         s.x[i] = s.x[i]! + (nx / nl) * a;
         s.y[i] = s.y[i]! + (ny / nl) * a;
       }
-      for (let pass = 0; pass < 3; pass++) {
+      for (let pass = 0; pass < 5; pass++) {
         for (let i = 1; i < s.n; i++) {
           q = this.sdf(s.x[i]!, s.y[i]!, v);
           if (q.d < gap) {
@@ -494,6 +501,20 @@ export class HeroScene {
           bd = r.d;
           s.near = { d: r.d, x: r.cx, y: r.cy, edge: r.edge, s: r.s };
         }
+      }
+      // The glint never jumps. Its brightness rises and falls on its own clock, and while it is
+      // visible it slides along the outline toward the nearest spot; it only relocates unseen.
+      const pt = s.near.edge + s.near.s;
+      const pp = Math.exp(-Math.max(0, s.near.d - gap) / (16 * u));
+      const off = (((pt - s.gp + 1.5) % 3) + 3) % 3 - 1.5;
+      // if the nearest spot has run far from the glint, let it fade where it is instead of chasing
+      const want = pp * pp * smooth(this.t / 3) * (1 - smooth((Math.abs(off) - 0.1) / 0.3));
+      s.gi = follow(s.gi, want, want > s.gi ? 0.9 : 0.8, dt);
+      if (s.gi < 0.03) s.gp = pt;
+      else {
+        // a gentle glide, never faster than about 25 pixels a second
+        const step = clamp(off * (1 - Math.exp(-1.4 * dt)), -0.45 * dt, 0.45 * dt);
+        s.gp = (((s.gp + step) % 3) + 3) % 3;
       }
     }
 
@@ -627,54 +648,67 @@ export class HeroScene {
       ctx.stroke();
     }
 
-    // edge light: the nearer the thread, the brighter the edge it nearly touches
+    // edge light: where the thread nearly touches, the outline warms. It glides, never jumps.
     const v0 = this.verts();
-    const gapNow = (7 - 4.8 * A) * u;
-    const sparks: { x: number; y: number; p: number }[] = [];
+    const onOutline = (ps: number): [number, number] => {
+      const e = Math.floor(ps) % 3;
+      const f = ps - Math.floor(ps);
+      const a = v0[e]!;
+      const b = v0[(e + 1) % 3]!;
+      return [lerp(a[0], b[0], f), lerp(a[1], b[1], f)];
+    };
     for (const s of this.strands) {
-      const p = Math.exp(-Math.max(0, s.near.d - gapNow) / (9 * u));
-      if (p < 0.05) continue;
-      const a = v0[s.near.edge]!;
-      const b = v0[(s.near.edge + 1) % 3]!;
-      const s0 = clamp(s.near.s - 0.2);
-      const s1 = clamp(s.near.s + 0.2);
-      const x0 = lerp(a[0], b[0], s0);
-      const y0 = lerp(a[1], b[1], s0);
-      const x1 = lerp(a[0], b[0], s1);
-      const y1 = lerp(a[1], b[1], s1);
-      const g = ctx.createLinearGradient(x0, y0, x1, y1);
-      g.addColorStop(0, this.c(0));
-      g.addColorStop(clamp((s.near.s - s0) / Math.max(1e-3, s1 - s0)), this.c(p));
-      g.addColorStop(1, this.c(0));
-      ctx.beginPath();
-      ctx.moveTo(x0, y0);
-      ctx.lineTo(x1, y1);
-      ctx.strokeStyle = g;
-      ctx.lineWidth = lw * 2.2;
-      ctx.stroke();
-      sparks.push({ x: s.near.x, y: s.near.y, p });
+      if (s.gi < 0.01) continue;
+      const span = 0.3;
+      const N = 20;
+      for (let k = 0; k < N; k++) {
+        const d0 = -span + (2 * span * k) / N;
+        const d1 = -span + (2 * span * (k + 1)) / N;
+        const fall = Math.pow(Math.cos(((d0 + d1) / 2 / span) * Math.PI * 0.5), 2);
+        const a = onOutline((((s.gp + d0) % 3) + 3) % 3);
+        const b = onOutline((((s.gp + d1) % 3) + 3) % 3);
+        ctx.beginPath();
+        ctx.moveTo(a[0], a[1]);
+        ctx.lineTo(b[0], b[1]);
+        ctx.strokeStyle = this.c(0.9 * s.gi * fall);
+        ctx.lineWidth = lw * 2;
+        ctx.stroke();
+      }
     }
 
     // threads: three strands, bright at the head, fading to nothing at the tail
     const tin = seg(t, 1.1, 1.6);
     this.strands.forEach((s, si) => {
-      const chunks = 8;
-      const per = Math.floor((s.n - 1) / chunks);
-      for (let c = 0; c < chunks; c++) {
-        const i0 = c * per;
-        const i1 = c === chunks - 1 ? s.n - 1 : (c + 1) * per + 1;
-        const f = c / chunks;
-        ctx.beginPath();
-        ctx.moveTo(s.x[i0]!, s.y[i0]!);
-        for (let i = i0 + 1; i < i1; i++) {
-          const mx = (s.x[i]! + s.x[i + 1]!) / 2;
-          const my = (s.y[i]! + s.y[i + 1]!) / 2;
-          ctx.quadraticCurveTo(s.x[i]!, s.y[i]!, mx, my);
+      // smooth the polyline (Catmull-Rom), then draw it in many short pieces that thin and fade
+      const pts: Pt[] = [];
+      for (let k = 0; k < s.n - 1; k++) {
+        const p0 = k ? k - 1 : 0;
+        const p3 = k + 2 < s.n ? k + 2 : s.n - 1;
+        for (let m = 0; m < 3; m++) {
+          const q = m / 3;
+          const q2 = q * q;
+          const q3 = q2 * q;
+          const cr = (a: number, b: number, c: number, d: number) => 0.5 * (2 * b + (-a + c) * q + (2 * a - 5 * b + 4 * c - d) * q2 + (-a + 3 * b - 3 * c + d) * q3);
+          pts.push([cr(s.x[p0]!, s.x[k]!, s.x[k + 1]!, s.x[p3]!), cr(s.y[p0]!, s.y[k]!, s.y[k + 1]!, s.y[p3]!)]);
         }
-        ctx.strokeStyle = this.c((1 - f * 0.85) * (si === 0 ? 0.95 : 0.6 - si * 0.1) * tin);
-        ctx.lineWidth = lw * (si === 0 ? 1.5 : 1.15);
+      }
+      pts.push([s.x[s.n - 1]!, s.y[s.n - 1]!]);
+      const chunks = 30;
+      const per = (pts.length - 1) / chunks;
+      ctx.lineCap = "butt";
+      for (let c = 0; c < chunks; c++) {
+        const i0 = Math.floor(c * per);
+        const i1 = Math.min(pts.length - 1, Math.floor((c + 1) * per) + 1);
+        const f = (c + 0.5) / chunks;
+        ctx.beginPath();
+        ctx.moveTo(pts[i0]![0], pts[i0]![1]);
+        for (let i = i0 + 1; i <= i1; i++) ctx.lineTo(pts[i]![0], pts[i]![1]);
+        const fade = Math.pow(1 - f, 1.6);
+        ctx.strokeStyle = this.c(fade * (si === 0 ? 0.95 : 0.6 - si * 0.1) * tin);
+        ctx.lineWidth = lw * (si === 0 ? 1.6 : 1.2) * (1 - 0.55 * f);
         ctx.stroke();
       }
+      ctx.lineCap = "round";
       // the head: a small bright point
       ctx.beginPath();
       ctx.arc(s.x[0]!, s.y[0]!, (si === 0 ? 1.8 : 1.2) * Math.max(1, u * 0.8), 0, TAU);
@@ -682,23 +716,25 @@ export class HeroScene {
       ctx.fill();
     });
 
-    // the near-touch: a bloom and a four point glint where the gap is smallest
-    for (const sp of sparks) {
-      const R = (7 + 8 * sp.p) * u;
-      const g = ctx.createRadialGradient(sp.x, sp.y, 0, sp.x, sp.y, R);
-      g.addColorStop(0, this.c(0.3 * sp.p));
+    // the near-touch: a soft bloom and a four point glint that swell and fade with the gap
+    for (const st of this.strands) {
+      if (st.gi < 0.01) continue;
+      const [gx, gy] = onOutline(st.gp);
+      const R = (6 + 10 * st.gi) * u;
+      const g = ctx.createRadialGradient(gx, gy, 0, gx, gy, R);
+      g.addColorStop(0, this.c(0.34 * st.gi));
       g.addColorStop(1, this.c(0));
       ctx.fillStyle = g;
-      ctx.fillRect(sp.x - R, sp.y - R, R * 2, R * 2);
-      if (sp.p > 0.7) {
-        const r = (3 + 4 * sp.p) * u;
+      ctx.fillRect(gx - R, gy - R, R * 2, R * 2);
+      const r = (1.5 + 5.5 * st.gi) * u * st.gi;
+      if (r > 0.3) {
         ctx.beginPath();
-        ctx.moveTo(sp.x, sp.y - r);
-        ctx.quadraticCurveTo(sp.x, sp.y, sp.x + r, sp.y);
-        ctx.quadraticCurveTo(sp.x, sp.y, sp.x, sp.y + r);
-        ctx.quadraticCurveTo(sp.x, sp.y, sp.x - r, sp.y);
-        ctx.quadraticCurveTo(sp.x, sp.y, sp.x, sp.y - r);
-        ctx.fillStyle = this.c(0.9 * sp.p);
+        ctx.moveTo(gx, gy - r);
+        ctx.quadraticCurveTo(gx, gy, gx + r, gy);
+        ctx.quadraticCurveTo(gx, gy, gx, gy + r);
+        ctx.quadraticCurveTo(gx, gy, gx - r, gy);
+        ctx.quadraticCurveTo(gx, gy, gx, gy - r);
+        ctx.fillStyle = this.c(0.95 * st.gi);
         ctx.fill();
       }
     }
