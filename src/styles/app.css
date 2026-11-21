@@ -664,7 +664,7 @@ summary:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: calc(max(var(--safe-top), 20px) + 18px) 16px 8px;
+  padding: calc(max(var(--safe-top), 20px) + 30px) 16px 8px;
   background: var(--bg);
 }
 .top-bar-n {
