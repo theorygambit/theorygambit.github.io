@@ -268,6 +268,27 @@ export class HeroScene {
     return out;
   }
 
+  /** How far from the centre the outline lies in direction `a`. */
+  private outlineRadius(a: number, v: [number, number][]): number {
+    const dx = Math.cos(a);
+    const dy = Math.sin(a);
+    let best = 0;
+    for (let e = 0; e < 3; e++) {
+      const p = v[e]!;
+      const q = v[(e + 1) % 3]!;
+      const ex = q[0] - p[0];
+      const ey = q[1] - p[1];
+      const den = dx * ey - dy * ex;
+      if (Math.abs(den) < 1e-9) continue;
+      const ox = p[0] - this.cx;
+      const oy = p[1] - this.cy;
+      const tt = (ox * ey - oy * ex) / den;
+      const ss = (ox * dy - oy * dx) / den;
+      if (tt > 0 && ss >= -1e-6 && ss <= 1 + 1e-6 && tt > best) best = tt;
+    }
+    return best || this.Rt * 0.5;
+  }
+
   /** Signed distance to the triangle (negative inside), with the closest point and its edge. */
   private sdf(px: number, py: number, v: [number, number][]): { d: number; cx: number; cy: number; edge: number; s: number } {
     let best = 1e9;
@@ -382,17 +403,21 @@ export class HeroScene {
     const v = this.verts();
     const gap = (7 - 4.8 * A) * u + 0.7 * u * breath;
     const Rfar = this.Rt * (3.3 + 0.2 * Math.sin(t * 0.31));
-    const Rnear = this.Rt * 0.6;
 
     for (const s of this.strands) {
       // the approach: a slow cycle with long dwells, far then near then far
-      const cyc = 0.5 - 0.5 * Math.cos(TAU * (t / 15 + s.phase * 0.31));
+      const cyc = 0.5 - 0.5 * Math.cos(TAU * (t / 26 + s.phase * 0.31));
       const near = smooth((cyc - 0.18) / 0.3);
-      const R = lerp(Rfar, Rnear, near) * (1 - 0.22 * A);
-      s.ang += dt * s.dir * (0.52 - 0.32 * near);
-      const phi = s.ang + 0.35 * Math.sin(t * 0.17 + s.phase);
+      // Close in, the orbit is the triangle's own outline pushed out by a hair: the goal rides
+      // just outside the edge, so the head glides along it instead of pressing into it.
+      const hug = gap * 2.6 + 3 * u;
+      const R = lerp(Rfar * (1 - 0.22 * A) * (1 + 0.28 * Math.sin(t * 0.41 + s.phase * 1.7)), this.outlineRadius(s.ang, v) + hug, near);
+      // Constant speed along the orbit (angular speed = v / R), so the thread always travels
+      // mostly sideways. Radius changes slowly, which makes spirals and arcs, never spokes.
+      s.ang += (dt * s.dir * 24 * u * (1 + 0.35 * Math.sin(t * 0.29 + s.phase))) / Math.max(R, this.Rt * 0.6);
+      const phi = s.ang;
       const ix = this.cx + Math.cos(phi) * R;
-      const iy = this.cy + Math.sin(phi) * R * 0.86;
+      const iy = this.cy + Math.sin(phi) * R * lerp(0.86, 1, near);
       // when touched, circle the fingertip a few pixels off, slowly
       const rho = lerp(30, 17, A) * u;
       const psi = s.phase * 2 + t * 1.15 * s.dir;
@@ -415,8 +440,14 @@ export class HeroScene {
         const push = gap - q.d;
         s.hx += (nx / nl) * push;
         s.hy += (ny / nl) * push;
-        s.hvx *= 0.7;
-        s.hvy *= 0.7;
+        // lose only the speed that points into the triangle; keep the slide along it
+        const ox = nx / nl;
+        const oy = ny / nl;
+        const vn = s.hvx * ox + s.hvy * oy;
+        if (vn < 0) {
+          s.hvx -= vn * ox;
+          s.hvy -= vn * oy;
+        }
       }
       s.x[0] = s.hx;
       s.y[0] = s.hy;
@@ -465,7 +496,7 @@ export class HeroScene {
         const ny = -(s.x[i + 1]! - s.x[i - 1]!);
         const nl = Math.hypot(nx, ny) || 1;
         const f = i / s.n;
-        const a = 3.4 * u * Math.pow(f, 1.3) * Math.sin(i * 0.21 - t * 1.5 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
+        const a = 7.5 * u * (1 - 0.6 * near) * Math.pow(f, 1.2) * Math.sin(i * 0.21 - t * 1.5 + s.phase) * (0.55 + 0.45 * Math.sin(t * 0.37 + s.phase));
         s.x[i] = s.x[i]! + (nx / nl) * a;
         s.y[i] = s.y[i]! + (ny / nl) * a;
       }
@@ -493,28 +524,17 @@ export class HeroScene {
         }
       }
       void carried;
-      // nearest approach, for the light
-      let bd = 1e9;
-      for (let i = 0; i < s.n; i += 1) {
-        const r = this.sdf(s.x[i]!, s.y[i]!, v);
-        if (r.d < bd) {
-          bd = r.d;
-          s.near = { d: r.d, x: r.cx, y: r.cy, edge: r.edge, s: r.s };
-        }
-      }
-      // The glint never jumps. Its brightness rises and falls on its own clock, and while it is
-      // visible it slides along the outline toward the nearest spot; it only relocates unseen.
-      const pt = s.near.edge + s.near.s;
-      const pp = Math.exp(-Math.max(0, s.near.d - gap) / (16 * u));
-      const off = (((pt - s.gp + 1.5) % 3) + 3) % 3 - 1.5;
-      // if the nearest spot has run far from the glint, let it fade where it is instead of chasing
-      const want = pp * pp * smooth(this.t / 3) * (1 - smooth((Math.abs(off) - 0.1) / 0.3));
-      s.gi = follow(s.gi, want, want > s.gi ? 0.9 : 0.8, dt);
-      if (s.gi < 0.03) s.gp = pt;
+      // The glint belongs to the head. The closest point on the outline moves continuously as
+      // the head moves, so the glint glides; its brightness follows how small the gap is.
+      const hq = this.sdf(s.hx, s.hy, v);
+      const pt = hq.edge + hq.s;
+      const pp = Math.exp(-Math.max(0, hq.d - gap) / (18 * u));
+      const want = pp * pp * smooth(this.t / 3);
+      s.gi = follow(s.gi, want, want > s.gi ? 0.8 : 0.6, dt);
+      if (s.gi < 0.02) s.gp = pt;
       else {
-        // a gentle glide, never faster than about 25 pixels a second
-        const step = clamp(off * (1 - Math.exp(-1.4 * dt)), -0.45 * dt, 0.45 * dt);
-        s.gp = (((s.gp + step) % 3) + 3) % 3;
+        const off = (((pt - s.gp + 1.5) % 3) + 3) % 3 - 1.5;
+        s.gp = (((s.gp + off * (1 - Math.exp(-6 * dt))) % 3) + 3) % 3;
       }
     }
 
