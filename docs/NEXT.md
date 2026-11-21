@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 016 to 055 are complete. Slots 006 to 015 and everything from 056 on are empty, in curriculum order.
+The five opening games (001 to 005) and slots 016 to 055 and 066 to 075 are complete. Slots 006 to 015, 056 to 065 and everything from 076 on are empty, in curriculum order.
 
 ## Shipped
 
@@ -51,12 +51,22 @@ The five opening games (001 to 005) and slots 016 to 055 are complete. Slots 006
 | 053 | Loss Aversion and Streaks | `loss-aversion-streaks` | five days of do or skip with the cost of a break shown, the break cost line crosses the flat effort, first streak worth keeping for new values |
 | 054 | Preference Manipulation | `preference-manipulation` | pick between two options then again with a decoy, tap each option to see what beats it, find the decoy among new options (the decoy effect as the closest teachable mechanic) |
 | 055 | Behavioral Game Theory | `behavioral-game-theory` | a two thirds of the average guessing game against a crowd, climb the ladder of levels, a level 2 guess for a new fraction (the beauty contest as the closest teachable mechanic) |
+| 066 | Elo, Glicko and TrueSkill Ratings | `elo-trueskill` | pick opponents over five matches, drag the rating gap against win chance, compute a new rating |
+| 067 | Dynamic Difficulty Adjustment | `dynamic-difficulty` | choose a level for six rounds, run an eight attempt thermostat, find the level for a target win chance |
+| 068 | Player Lifetime Value Prediction | `ltv-prediction` | pick between two cohorts, drag retention to see value climb steeply, compute value as a / (1 - r) |
+| 069 | Rules Engines and Experimentation Systems | `rules-engines` | guess the offer a rule list gives, move rules to the top, pick the firing offer for a new list |
+| 070 | The Engagement Stack: How the Layers Combine | `engagement-stack` | launch layers that feed each other but strain faster, plot power, strain and net, find the best layer count |
+| 071 | Correlated Equilibrium | `correlated-equilibrium` | obey or ignore a traffic light in Chicken, tap each signal, drag the smallest signal chance that holds |
+| 072 | Subgame Perfect Equilibrium | `subgame-perfect` | enter against a threat to fight, tap the last move then the first on the tree, enter or stay out for new payoffs |
+| 073 | Trembling Hand Perfect Equilibrium | `trembling-hand` | pick Top or Bottom against a partner whose hand may slip, drag the slip chance, tap the cell that survives |
+| 074 | Sequential Equilibrium | `sequential-equilibrium` | pick L or R at five beliefs, probe where the two pay lines cross, drag the belief to the tie for new payoffs |
+| 075 | Perfect Bayesian Equilibrium | `perfect-bayesian` | hire or pass on a signal, tap who sends each signal, drag the share strong for new rates |
 
 Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
 
-## Suggested next batch (006 to 015 first, then 056 onward)
+## Suggested next batch (006 to 015 first, then 056 to 065 and 076 onward)
 
-Slots 006 to 015 are still empty and 046 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
+Slots 006 to 015 are still empty, then 056 to 065 and 076 onward. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
 
 - `MatrixView` for any 2x2 table. `Glyph` for the visual grammar.
 - The reveal pattern: Feel collects evidence with a counterfactual, See is built from the player's own moves and needs a tap or drag, Prove changes the numbers.
