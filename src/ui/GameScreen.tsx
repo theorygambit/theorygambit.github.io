@@ -5,7 +5,7 @@ import { Feedback } from "../core/Feedback";
 import { GameRegistry } from "../core/Registry";
 import { GameRuntime } from "../core/Runtime";
 import { progress } from "../core/Store";
-import { router } from "./Router";
+import { PathRouter, router } from "./Router";
 import { TheorySheet, gambitUrl } from "./TheorySheet";
 
 const LEVEL = { 1: "Intro level", 2: "Core level", 3: "Advanced level" } as const;
@@ -48,7 +48,7 @@ export function GameScreen({ slug }: { slug: string }) {
   if (!mod) {
     return (
       <>
-        <EmptyScreen title={item.name} body={`This slot is empty for now. ${item.idea}`} link={gambitUrl(item)} />
+        <EmptyScreen title={item.name} body={`This slot is empty for now. ${item.idea}`} link={gambitUrl(item)} parent={PathRouter.chapterHref(item.chapter)} />
       </>
     );
   }
@@ -61,7 +61,11 @@ export function GameScreen({ slug }: { slug: string }) {
         <header className="game-head">
           <h1 className="game-title">{item.name}</h1>
           <p className="game-meta">
-            {String(item.order).padStart(3, "0")} of {Curriculum.all().length}, {chapterOf(item.chapter).title}, {LEVEL[item.level]}
+            {String(item.order).padStart(3, "0")} of {Curriculum.all().length},{" "}
+            <a className="meta-link" href={PathRouter.chapterHref(item.chapter)}>
+              {chapterOf(item.chapter).title}
+            </a>
+            , {LEVEL[item.level]}
           </p>
         </header>
 
@@ -73,7 +77,7 @@ export function GameScreen({ slug }: { slug: string }) {
         </p>
 
         <nav className="dock" aria-label="Game controls">
-          <button className="dock-btn" type="button" onClick={() => router.home()}>
+          <button className="dock-btn" type="button" onClick={() => router.back(PathRouter.chapterHref(item.chapter))}>
             Menu
           </button>
           <button className="dock-btn" type="button" onClick={() => { runtime.current?.restart(); setDone(false); }}>
@@ -86,7 +90,7 @@ export function GameScreen({ slug }: { slug: string }) {
             className={`dock-btn${done ? " is-lit" : ""}`}
             type="button"
             disabled={!next && !done}
-            onClick={() => (next ? router.game(next.slug) : router.home())}
+            onClick={() => (next ? router.game(next.slug, true) : router.back(PathRouter.chapterHref(item.chapter)))}
           >
             {next || !done ? "Next" : "Menu"}
           </button>
@@ -98,7 +102,7 @@ export function GameScreen({ slug }: { slug: string }) {
   );
 }
 
-function EmptyScreen({ title, body, link }: { title: string; body: string; link?: string }) {
+function EmptyScreen({ title, body, link, parent = "/" }: { title: string; body: string; link?: string; parent?: string }) {
   return (
     <main className="screen game">
       <div className="game-col">
@@ -113,7 +117,7 @@ function EmptyScreen({ title, body, link }: { title: string; body: string; link?
         </header>
         <div style={{ flex: 1 }} />
         <nav className="dock" aria-label="Game controls" style={{ gridTemplateColumns: "1fr" }}>
-          <button className="dock-btn" type="button" onClick={() => router.home()}>
+          <button className="dock-btn" type="button" onClick={() => router.back(parent)}>
             Menu
           </button>
         </nav>
