@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 016 to 055 and 066 to 075 are complete. Slots 006 to 015, 056 to 065 and everything from 076 on are empty, in curriculum order.
+The five opening games (001 to 005) and slots 006 to 015, 016 to 055 and 066 to 075 are complete. Slots 056 to 065 and everything from 076 on are empty, in curriculum order.
 
 ## Shipped
 
@@ -11,6 +11,16 @@ The five opening games (001 to 005) and slots 016 to 055 and 066 to 075 are comp
 | 003 | Matching Pennies | `matching-pennies` | sixteen rounds against a pattern reader, your own statistics and the tent, flip with chance and run 1000 rounds |
 | 004 | Stag Hunt | `stag-hunt` | five partners with records, the lines crossing at hare over stag, find the switch point for new payoffs |
 | 005 | Ultimatum | `ultimatum` | five responders, probe the acceptance and earnings curves, price two new crowds |
+| 006 | What Is a Game? | `what-is-a-game` | five drives, toggle the two situations, two tables where one row always wins |
+| 007 | Rationality and Common Knowledge | `rationality-common-knowledge` | three crowds who thought for different lengths of time, the ladder: each step of thinking multiplies the crowd's guess by two thirds, and it only stops at 0, new contests and new crowds |
+| 008 | Normal Form vs Extensive Form | `normal-vs-extensive` | three trees where you move first and they reply after watching you, tap to fold the tree into a table, three new games |
+| 009 | Zero-Sum Games | `zero-sum` | four tugs of war over a pie of 10, every round plotted, three sets of outcomes |
+| 010 | Positive-Sum Games | `positive-sum` | three merges, alone is one point, three new deals |
+| 011 | Negative-Sum Games | `negative-sum` | four rounds of fight or walk, the four outcomes against the line where nothing is lost, tap every outcome that leaves both sides worse off than where they started |
+| 012 | Simultaneous vs Sequential Games | `simultaneous-sequential` | the same meeting game three ways: both choose at once, you move first, they move first, your payoff for each order, three new tables |
+| 013 | Single, Two and Multi-Player Games | `players-count` | a shared pot with one, two and five players, the return per invested coin is r over n, new multipliers |
+| 014 | A Taxonomy of Games | `taxonomy` | four situations, the finished map, three new situations to place on the map |
+| 015 | Pareto Efficiency | `pareto-efficiency` | drag an outcome toward better for you, every place it stuck lies on the outer edge of the feasible region, tap every Pareto efficient outcome among six, and check against the ones that are dominated |
 | 016 | Focal Points | `focal-points` | pick the option a stranger will pick, a hundred strangers per row, three new rows with a trap |
 | 017 | Chicken | `chicken` | five drivers with records, mark both best replies to find the two stable cells, commit to dare against new payoffs |
 | 018 | Battle of the Sexes | `battle-of-sexes` | five partners, turn over the four outcomes, tap the stable cells in two new tables |
@@ -64,9 +74,9 @@ The five opening games (001 to 005) and slots 016 to 055 and 066 to 075 are comp
 
 Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
 
-## Suggested next batch (006 to 015 first, then 056 to 065 and 076 onward)
+## Suggested next batch (056 to 065 first, then 076 onward)
 
-Slots 006 to 015 are still empty, then 056 to 065 and 076 onward. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
+Slots 056 to 065 are still empty and 076 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
 
 - `MatrixView` for any 2x2 table. `Glyph` for the visual grammar.
 - The reveal pattern: Feel collects evidence with a counterfactual, See is built from the player's own moves and needs a tap or drag, Prove changes the numbers.
@@ -83,3 +93,10 @@ Follow `docs/ADDING_A_GAME.md`. Keep the model pure and tested, draw inside the 
 - Fonts load from Google Fonts. Self host them if offline use matters.
 - Add a short "how this was understood" streak or recap on the home screen once more games exist.
 - Synthesis capstones (Frames Within Frames, The Whole Board) come last.
+
+## Reusable pieces for new games
+
+- `Game.zonesActive()` and `onZone(i)`: tap zones for choice boxes, table cells, map corners and points. `cells(n, i)` splits the action row, `ticks()` draws progress dots.
+- `PayoffPlane`: the you/they plane used by Zero-Sum, Positive-Sum, Negative-Sum and Pareto. `Track`: a draggable ruler.
+- The base class re-runs `layout()` whenever `actionH` changes, so a beat can swap choice boxes for a button safely.
+- Games 006 to 015 were audited game by game as they were written. Re-run `npm run verify:layout` and `npm run verify:iphone` after pulling.
