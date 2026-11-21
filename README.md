@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with twenty-five games live (001 to 005 and 016 to 035) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with forty-five games live (001 to 005 and 016 to 055) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -75,7 +75,18 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 033 | Public Goods Game | Live |
 | 034 | Centipede Game | Live |
 | 035 | Traveler's Dilemma | Live |
-| 036 onward | The remaining 83 slots | Empty slots, same as above |
+| 036 to 045 | Ten more topics | Live, listed in `docs/NEXT.md` |
+| 046 | Evolutionary Game Theory | Live |
+| 047 | Adverse Selection and the Market for Lemons | Live |
+| 048 | Auctions | Live |
+| 049 | Matching Markets and Stable Matching | Live |
+| 050 | Cooperative and Coalitional Games | Live |
+| 051 | Prospect Theory | Live |
+| 052 | Allais Paradox | Live |
+| 053 | Loss Aversion and Streak Systems | Live |
+| 054 | Preference Manipulation | Live |
+| 055 | Behavioral Game Theory | Live |
+| 056 onward | The remaining 63 slots | Empty slots, same as above |
 | 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
 
 Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.

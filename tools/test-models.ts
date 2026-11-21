@@ -29,6 +29,16 @@ import { saddleTable, FEEL_TABLE } from "../src/games/minimax-theorem/model";
 import { Pile, FEEL_PILE, PROVE_POOL as PILE_POOL } from "../src/games/backward-induction/model";
 import { Pot, FEEL_POT, PROVE_SIZES } from "../src/games/public-goods/model";
 import { Centipede, FEEL_GAME as CENTI_FEEL, generate as centiGenerate, playFeel } from "../src/games/centipede/model";
+import { FEEL_GAME as EVO_FEEL, PROVE_POOL as EVO_POOL } from "../src/games/evolutionary-game-theory/model";
+import { Lemons, FEEL_MARKET, randomMarket as lemonMarket } from "../src/games/lemons-adverse-selection/model";
+import { FirstPrice, PROVE_POOL as AUCTION_POOL } from "../src/games/auctions/model";
+import { blocking, isStable, deferredAcceptance, randomMarket as matchMarket } from "../src/games/matching/model";
+import { FEEL_GAME as COOP_FEEL, PROVE_POOL as COOP_POOL } from "../src/games/cooperative-games/model";
+import { Value, FEEL_FLIPS, PROVE_POOL as PROSPECT_POOL } from "../src/games/prospect-theory/model";
+import { Allais, FEEL_ALLAIS, PROVE_POOL as ALLAIS_POOL } from "../src/games/allais-paradox/model";
+import { Streak, FEEL_STREAK, FEEL_EFFORTS, PROVE_POOL as STREAK_POOL } from "../src/games/loss-aversion-streaks/model";
+import { dominates, decoy, triple, FEEL_PAIR, FEEL_DECOY } from "../src/games/preference-manipulation/model";
+import { Beauty, FEEL_BEAUTY, PROVE_POOL as BEAUTY_POOL } from "../src/games/behavioral-game-theory/model";
 import { Travelers, FEEL_GAME as TRAVEL_FEEL, PROVE_POOL as TRAVEL_POOL } from "../src/games/travelers-dilemma/model";
 import { PayoffTable } from "../src/games/shared/PayoffTable";
 import { Spread, feelRounds as focalFeel, proveSet as focalProve } from "../src/games/focal-points/model";
@@ -1185,6 +1195,172 @@ test("Prove answers are right, the Feel answer fails every case, and a default o
 test("Prove set holds one leader and one follower puzzle", () => {
   const s = leaderProveSet(new Rng(5));
   assert.deepEqual(s.map((p) => p.kind).sort(), ["follow", "lead"]);
+});
+
+console.log("evolutionary game theory");
+test("hawks and doves settle at V over C from any start, and both strategies earn the same there", () => {
+  for (const g of [EVO_FEEL, ...EVO_POOL]) {
+    for (const x0 of [0.1, 0.5, 0.9]) {
+      let x = x0;
+      for (let i = 0; i < 60; i++) x = g.step(x);
+      near(x, g.stable, 0.02);
+    }
+    near(g.hawk(g.stable), g.dove(g.stable), 1e-9);
+    assert.equal(g.drift(g.stable - 0.1), 1);
+    assert.equal(g.drift(g.stable + 0.1), -1);
+  }
+});
+test("Prove tables settle away from one half and from Feel, and fit the track", () => {
+  for (const g of EVO_POOL) assert.ok(Math.abs(g.stable - 0.5) > 0.05 && g.stable > 0.1 && g.stable < 0.9);
+  assert.equal(new Set(EVO_POOL.map((g) => g.stable)).size, EVO_POOL.length);
+});
+
+console.log("lemons");
+test("Feel market unravels to the two worst cars at a price of 3", () => {
+  const r = FEEL_MARKET.rounds();
+  assert.deepEqual(r.map((x) => x.onSale.length), [8, 5, 3, 2]);
+  near(r[0]!.price, 6.6);
+  near(FEEL_MARKET.finalPrice, 3);
+});
+test("every stable market keeps only cars the price covers, and random markets differ from Feel", () => {
+  for (let seed = 1; seed <= 30; seed++) {
+    const g = lemonMarket(new Rng(seed));
+    const last = g.rounds().at(-1)!;
+    assert.ok(last.onSale.every((q) => q <= last.price));
+    assert.ok(g.rounds().length >= 3);
+  }
+  assert.ok(new Lemons([5, 5, 5], 1.2).rounds().length === 1);
+});
+
+console.log("auctions");
+test("the shaded bid is the best reply to shaded rivals", () => {
+  for (const n of [2, 3, 4, 5]) {
+    const g = new FirstPrice(n);
+    for (const v of [0.4, 0.7, 1]) near(g.best(v), v * g.shade, 0.011);
+  }
+});
+test("expected revenue is (n-1)/(n+1) in both formats, by simulation", () => {
+  const rng = new Rng(5);
+  for (const n of [2, 3, 5]) {
+    const g = new FirstPrice(n);
+    let first = 0;
+    let second = 0;
+    const T = 20000;
+    for (let t = 0; t < T; t++) {
+      const vs = Array.from({ length: n }, () => rng.next()).sort((a, b) => b - a);
+      first += g.rivalBid(vs[0]!);
+      second += vs[1]!;
+    }
+    near(first / T, g.expectedRevenue, 0.02);
+    near(second / T, g.expectedRevenue, 0.02);
+  }
+});
+test("Prove cases have an interior best bid that differs from the value and from half", () => {
+  for (const c of AUCTION_POOL) {
+    const b = c.auction.best(c.value);
+    assert.ok(b < c.value && Math.abs(b - c.value / 2) > 0.05);
+  }
+});
+
+console.log("matching");
+test("deferred acceptance gives a stable matching, and a blocking pair appears for an unstable one", () => {
+  for (let seed = 1; seed <= 40; seed++) {
+    const m = matchMarket(new Rng(seed));
+    const da = deferredAcceptance(m);
+    assert.ok(isStable(m, da.match), `seed ${seed}`);
+    assert.equal(new Set(da.match).size, 3);
+    assert.ok(blocking(m, [0, 1, 2]).length >= 1);
+  }
+});
+
+console.log("cooperative games");
+test("Shapley values sum to the grand coalition, and Feel gives 50, 20, 20", () => {
+  const s = COOP_FEEL.shapley();
+  near(s.reduce((a, b) => a + b, 0), COOP_FEEL.grand);
+  near(s[0]!, 50);
+  near(s[1]!, 20);
+  for (const c of COOP_POOL) near(c.game.shapley().reduce((a, b) => a + b, 0), c.game.grand);
+});
+test("Prove answers are whole numbers and differ from Feel's", () => {
+  for (const c of COOP_POOL) {
+    const v = c.game.shapley()[c.player]!;
+    assert.equal(v, Math.round(v));
+  }
+  assert.ok(new Set(COOP_POOL.map((c) => c.game.shapley()[c.player])).size >= 3);
+});
+
+console.log("prospect theory");
+test("a coin flip is accepted only when the gain beats lambda times the loss", () => {
+  const v = new Value(2);
+  assert.ok(!v.accepts(60, 40) && v.accepts(90, 40) && !v.accepts(80, 40));
+  assert.equal(v.breakEven(40), 80);
+  for (const f of FEEL_FLIPS) assert.ok(f.gain > f.loss);
+  assert.ok(FEEL_FLIPS.some((f) => v.accepts(f.gain, f.loss)) && FEEL_FLIPS.some((f) => !v.accepts(f.gain, f.loss)));
+  for (const c of PROSPECT_POOL) {
+    assert.ok(c.value.breakEven(c.loss) <= 200 && c.value.lambda !== 2);
+    near(c.value.gamble(c.value.breakEven(c.loss), c.loss), 0);
+  }
+});
+
+console.log("allais paradox");
+test("the classic numbers: A and D look attractive to people, yet EU ties A with C and B with D", () => {
+  const g = FEEL_ALLAIS;
+  near(g.common, 0.89);
+  assert.ok(Allais.expected(g.B()) > Allais.expected(g.A()) && Allais.expected(g.D()) > Allais.expected(g.C()));
+  assert.equal(g.consistent("A"), "C");
+  assert.equal(g.consistent("B"), "D");
+});
+test("for any utility of money, EU prefers A exactly when it prefers C", () => {
+  const rng = new Rng(11);
+  for (const g of [FEEL_ALLAIS, ...ALLAIS_POOL.map((c) => c.game)]) {
+    for (let i = 0; i < 200; i++) {
+      const uZ = 0;
+      const uS = rng.range(0.1, 1);
+      const uH = rng.range(0.1, 2);
+      assert.equal(g.prefersA(uS, uH, uZ), g.prefersC(uS, uH, uZ));
+    }
+  }
+});
+
+console.log("loss aversion and streaks");
+test("a streak is kept once its loss beats the effort, and the threshold is the first such length", () => {
+  const g = FEEL_STREAK;
+  assert.equal(g.threshold(9), 5);
+  assert.ok(!g.keeps(4, 9) && g.keeps(5, 9));
+  assert.ok(FEEL_EFFORTS.every((e) => e >= 2));
+  for (const c of STREAK_POOL) {
+    const t = c.streak.threshold(c.effort);
+    assert.ok(c.streak.keeps(t, c.effort) && !c.streak.keeps(t - 1, c.effort));
+    assert.ok(t <= 12);
+  }
+  assert.ok(new Set(STREAK_POOL.map((c) => c.streak.threshold(c.effort))).size >= 3);
+  assert.ok(new Streak(1, 2).lossIfBreak(3) === 6);
+});
+
+console.log("preference manipulation");
+test("the decoy is the option that only one other option beats", () => {
+  assert.ok(dominates(FEEL_PAIR[1]!, FEEL_DECOY));
+  assert.ok(!dominates(FEEL_PAIR[0]!, FEEL_DECOY));
+  assert.equal(decoy([...FEEL_PAIR, FEEL_DECOY])?.name, "D");
+  assert.equal(decoy(FEEL_PAIR), null);
+  for (let seed = 1; seed <= 50; seed++) {
+    const t = triple(new Rng(seed));
+    assert.equal(decoy(t)?.name, "D");
+  }
+});
+
+console.log("behavioral game theory");
+test("levels of reasoning shrink by p each step, and the crowd target is below the average", () => {
+  const g = FEEL_BEAUTY;
+  near(g.level(0), 50);
+  near(g.level(1), 33.3333, 1e-3);
+  near(g.target, g.p * g.average);
+  assert.ok(g.target < g.average && g.target > 0);
+  for (const b of BEAUTY_POOL) {
+    near(b.level(2), 50 * b.p * b.p);
+    near(b.level(2), Math.round(b.level(2) * 10) / 10, 1e-9);
+  }
+  assert.ok(new Beauty(0.5).levelsToZero(1) > 4);
 });
 
 console.log(`\n${passed} tests passed`);

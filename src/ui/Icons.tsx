@@ -335,6 +335,91 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle cx="15.5" cy="12" r="2.2" />
         </svg>
       );
+    case "evolutionary-game-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="12" r="3.5" />
+          <circle cx="17" cy="12" r="3.5" />
+          <path d="M3 20h18" />
+        </svg>
+      );
+    case "lemons-adverse-selection":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 4v16M4 12h16" />
+          <circle className="solid" cx="8" cy="8" r="2" />
+        </svg>
+      );
+    case "auctions":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20h16" />
+          <path d="M6 20V10h5v10M13 20V5h5v15" />
+          <circle className="solid" cx="8.5" cy="6.5" r="1.8" />
+        </svg>
+      );
+    case "matching":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="6" r="2.6" />
+          <circle className="solid" cx="6" cy="18" r="2.6" />
+          <circle cx="18" cy="6" r="2.6" />
+          <circle cx="18" cy="18" r="2.6" />
+          <path d="M8.6 6L15.4 6M8.6 18L15.4 18" />
+        </svg>
+      );
+    case "cooperative-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="7" r="3" />
+          <circle cx="6.5" cy="17" r="3" />
+          <circle cx="17.5" cy="17" r="3" />
+        </svg>
+      );
+    case "prospect-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21L12 12L21 3" />
+          <path d="M12 12L3 3" />
+          <circle className="solid" cx="12" cy="12" r="2.2" />
+        </svg>
+      );
+    case "allais-paradox":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.25" y="3.25" width="7.5" height="7.5" />
+          <rect x="13.25" y="3.25" width="7.5" height="7.5" />
+          <circle className="solid" cx="7" cy="17" r="3" />
+          <circle cx="17" cy="17" r="3" />
+        </svg>
+      );
+    case "loss-aversion-streaks":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="4.5" cy="12" r="1.8" />
+          <circle className="solid" cx="9.5" cy="12" r="2.4" />
+          <circle className="solid" cx="15.5" cy="12" r="3.1" />
+          <path d="M20 8v8" />
+        </svg>
+      );
+    case "preference-manipulation":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="6" cy="17" r="2.6" />
+          <circle cx="17" cy="7" r="2.6" />
+          <circle className="solid" cx="18" cy="15" r="2.2" />
+          <path d="M3 21h18M3 3v18" />
+        </svg>
+      );
+    case "behavioral-game-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="12" r="3" />
+          <circle cx="12" cy="12" r="6" />
+          <circle cx="12" cy="12" r="9" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
