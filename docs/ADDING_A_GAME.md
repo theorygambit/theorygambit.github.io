@@ -14,6 +14,13 @@ Example slug: `prisoners-dilemma`. The slug must match a topic in `src/catalog/e
 
 Order in the app comes only from `src/catalog/curriculum.ts`. To move a topic, edit `FIRST`, `FINALE` or the synthesis lists there.
 
+## Helpers to reuse
+
+- Tap targets: override `zonesActive()` to return boxes (choice boxes from `this.cells(n, i)`, table cells, map corners, points) and handle `onZone(i)`. The base class does hit testing and the press highlight (`this.armedZone`).
+- `this.ticks(p, c, count, done, active)` draws progress dots in the tick row.
+- `PayoffPlane` (shared) for you/they outcome plots, `Track` for a draggable ruler, `MatrixView` for 2x2 tables.
+- If a beat changes the action row height (choice boxes vs one button), override the `actionH` getter. The base class re-lays out automatically.
+
 ## Syncing topics from The Gambit
 
 `node tools/sync-catalog.mjs ../hassanireza.github.io` regenerates `src/catalog/entries.ts`. It replaces dashes in copy so the no em dash rule holds.

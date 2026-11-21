@@ -6,7 +6,7 @@ import { Type, type Painter } from "./Painter";
 import type { Rng } from "./Rng";
 import { Damped } from "./Damped";
 import { Feedback } from "./Feedback";
-import type { Box } from "./Geometry";
+import { inside, type Box } from "./Geometry";
 
 /** The three beats every game teaches through. See docs/FOUNDATION.md. */
 export type Beat = "feel" | "see" | "prove";
@@ -69,6 +69,9 @@ export abstract class Game {
   protected readonly note = new Caption(Type.body(14, 300), 21, "fog");
   private readonly beatPos = new Damped(0, 0.35);
   private pressed: CanvasButton | null = null;
+  private lastActionH = -1;
+  /** Index of the tap zone currently held down, for press highlights. */
+  protected armedZone: number | null = null;
 
   constructor(env: GameEnv) {
     this.env = env;
@@ -81,6 +84,12 @@ export abstract class Game {
   protected abstract tick(dt: number): void;
   /** Draw the figure. Stay inside f.top to f.bottom. Prompt, note and buttons are drawn for you. */
   protected abstract render(p: Painter, c: Colors, f: Frame): void;
+  /** Tap zones for the current beat (choice boxes, table cells, points). Return null when there are none. */
+  protected zonesActive(): Box[] | null {
+    return null;
+  }
+  /** Called when a tap zone is pressed and released inside itself. */
+  protected onZone(_i: number): void {}
   protected onDown(_x: number, _y: number): void {}
   protected onMove(_x: number, _y: number): void {}
   protected onUp(_x: number, _y: number): void {}
@@ -113,6 +122,24 @@ export abstract class Game {
   protected get buttonY(): number {
     const f = this.frame;
     return f.actionY + (f.actionH - 44) / 2;
+  }
+
+  /** `n` equal boxes filling the action row, separated by 10px. */
+  protected cells(n: number, i: number): Box {
+    const f = this.frame;
+    const bw = (f.w - 10 * (n - 1)) / n;
+    return { x: f.x + i * (bw + 10), y: f.actionY, w: bw, h: f.actionH };
+  }
+
+  /** Draws the progress ticks in the tick row. */
+  protected ticks(p: Painter, c: Colors, count: number, done: number, active: number): void {
+    const f = this.frame;
+    const x = this.cx - ((count - 1) * 20) / 2;
+    for (let i = 0; i < count; i++) {
+      p.disc(x + i * 20, f.tickY, 3, c.ground);
+      if (i < done) p.disc(x + i * 20, f.tickY, 3, c.ink);
+      else p.ring(x + i * 20, f.tickY, 3, c.ink, 1, i === active ? 1 : 0.35);
+    }
   }
 
   /** Two equal choice boxes filling the action row. */
@@ -169,6 +196,12 @@ export abstract class Game {
   }
 
   step(dt: number): void {
+    // If a beat changes the height of the action row, buttons must move with it.
+    const ah = this.actionH;
+    if (ah !== this.lastActionH) {
+      this.lastActionH = ah;
+      if (this.w > 0) this.layout();
+    }
     this.time += dt;
     this.beatPos.step(dt);
     this.prompt.step(dt);
@@ -200,6 +233,15 @@ export abstract class Game {
         return;
       }
     }
+    const zs = this.zonesActive();
+    if (zs) {
+      for (let i = 0; i < zs.length; i++) {
+        if (inside(zs[i]!, x, y)) {
+          this.armedZone = i;
+          return;
+        }
+      }
+    }
     this.onDown(x, y);
   }
 
@@ -209,6 +251,13 @@ export abstract class Game {
   }
 
   pointerUp(x: number, y: number): void {
+    if (this.armedZone !== null) {
+      const i = this.armedZone;
+      this.armedZone = null;
+      const zs = this.zonesActive();
+      if (zs && zs[i] && inside(zs[i]!, x, y)) this.onZone(i);
+      return;
+    }
     if (this.pressed) {
       const b = this.pressed;
       this.pressed = null;

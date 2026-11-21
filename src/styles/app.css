@@ -620,6 +620,10 @@ summary:focus-visible {
   }
   .game-title {
     font-size: 26px;
+    /* One line only, so a long title never steals height from the game. The full name is in the Theory window. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .game-head {
     padding-bottom: 8px;
