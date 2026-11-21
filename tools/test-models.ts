@@ -28,6 +28,16 @@ import { FEEL_MARKETS as ENTRY_FEEL, SEE_MARKET as ENTRY_SEE, PROVE_CREDIBLE as 
 import { FEEL as TREM_FEEL, FEEL_SAFE as TREM_SAFE, PROVE_TABLES as TREM_TABLES, proveSet as tremProveSet, feelSlips as tremFeelSlips } from "../src/games/trembling-hand/model";
 import { Belief as SeqBelief, FEEL as SEQ_FEEL, FEEL_BELIEFS as SEQ_BELIEFS, PROVE_POOL as SEQ_POOL, feelBeliefs as seqFeel, proveSet as seqProveSet } from "../src/games/sequential-equilibrium/model";
 import { Market as PbMarket, FEEL as PB_FEEL, HIRE as PB_HIRE, PASS as PB_PASS, hireValue as pbHire, bestMove as pbBest, PROVE_POOL as PB_POOL, proveSet as pbProveSet, isRight as pbRight, feelSignals as pbSignals } from "../src/games/perfect-bayesian/model";
+import { LANES, ALONE, flipPuzzles } from "../src/games/what-is-a-game/model";
+import { Contest, PUZZLES as CONTEST_PUZZLES, bestFor, TOLERANCE as CONTEST_TOL } from "../src/games/rationality-common-knowledge/model";
+import { randomTree, bestReply, outcome as outcome_t6, columnOf, mapPuzzles } from "../src/games/normal-vs-extensive/model";
+import { isConstantSum, afterTug, puzzleSet as sumPuzzles } from "../src/games/zero-sum/model";
+import { surplus, acceptable, range as dealRange, FEEL_DEALS, PROVE_DEALS } from "../src/games/positive-sum/model";
+import { payoff as fightPayoff, destroyed, worseForBoth, selectPuzzle } from "../src/games/negative-sum/model";
+import { BATTLE, newGame as newOrderGame } from "../src/games/simultaneous-sequential/model";
+import { PublicGood, FEEL_R, PROVE_R } from "../src/games/players-count/model";
+import { quadrantOf, FEEL_SCENES as TAX_FEEL, proveScenes as proveScenes_t6 } from "../src/games/taxonomy/model";
+import { dominates as dominates_t6, isEfficient, efficientSet, slide, onFrontier, inRegion, STARTS, puzzle as paretoPuzzle } from "../src/games/pareto-efficiency/model";
 import { Curriculum, FIRST } from "../src/catalog/curriculum";
 import { Bimatrix } from "../src/games/shared/Bimatrix";
 import { feelRounds, proveScenes, outcome, ringSide, decidable, SCENES } from "../src/games/information-types/model";
@@ -1711,6 +1721,166 @@ test("Prove cases come in whole people out of 100, differ from Feel, and the ans
   assert.equal(s.length, 2);
   assert.notEqual(s[0], s[1]);
   assert.equal(pbSignals(new Rng(1)).filter(Boolean).length, 2);
+});
+
+// frag:slots-6-15
+console.log("what is a game");
+test("an empty road is not a game, two lanes are", () => {
+  assert.ok(!ALONE.isInterdependent());
+  assert.ok(LANES.isInterdependent());
+  assert.equal(LANES.bestRow(0), 1);
+  assert.equal(LANES.bestRow(1), 0);
+});
+test("flip puzzles start as decisions and become games exactly when the cell passes the other row", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    for (const z of flipPuzzles(new Rng(seed))) {
+      assert.ok(!z.table.isInterdependent());
+      const [r, c] = z.cell;
+      assert.ok(!z.table.with(r, c, z.needs - 1).isInterdependent(), "a tie is not enough");
+      assert.ok(z.table.with(r, c, z.needs).isInterdependent());
+    }
+  }
+});
+
+console.log("rationality and common knowledge");
+test("the ladder shrinks by p each step toward zero", () => {
+  const c = new Contest(2 / 3);
+  const l = c.ladder(50, 6);
+  near(l[1]!, 33.3333, 1e-3);
+  assert.ok(l[6]! < 5);
+  for (let i = 1; i < l.length; i++) assert.ok(l[i]! < l[i - 1]!);
+});
+test("best guess aims p times what the crowd will say, one step beyond them", () => {
+  const c = new Contest(1 / 2);
+  near(c.best(c.crowd(60, 1)), 15);
+  for (const z of CONTEST_PUZZLES) near(bestFor(z), new Contest(z.p).crowd(z.start, z.k + 1));
+  assert.ok(Math.abs(bestFor(CONTEST_PUZZLES[0]!) - 40 * 0.5) > CONTEST_TOL, "naive half of 40 must not pass");
+});
+
+console.log("normal vs extensive");
+test("trees have strict best replies and the outcome_t6 follows backward induction", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const g = randomTree(new Rng(seed));
+    for (const i of [0, 1]) {
+      assert.notEqual(g.pay[i]![0]![1], g.pay[i]![1]![1]);
+      const j = bestReply(g, i);
+      assert.ok(g.pay[i]![j]![1] > g.pay[i]![1 - j]![1]);
+      assert.equal(outcome_t6(g, i).pay, g.pay[i]![j]);
+    }
+  }
+});
+test("a swapped table moves the leaf to the other column", () => {
+  assert.equal(columnOf(0, false), 0);
+  assert.equal(columnOf(0, true), 1);
+  const set = mapPuzzles(new Rng(4));
+  assert.equal(set.length, 3);
+  assert.equal(new Set(set.map((s) => s.game.first[0])).size, 3);
+});
+
+console.log("zero sum");
+test("constant sum is detected, and one outlier breaks it", () => {
+  assert.ok(isConstantSum([[1, 9], [4, 6], [7, 3]]));
+  assert.ok(!isConstantSum([[1, 9], [4, 6], [7, 5]]));
+  for (let seed = 1; seed <= 100; seed++) for (const z of sumPuzzles(new Rng(seed))) assert.equal(isConstantSum(z.points), z.constant);
+});
+test("a tug never changes the total", () => {
+  for (let y = 1; y <= 3; y++) for (let t = 1; t <= 3; t++) {
+    const mine = afterTug(5, y, t);
+    assert.ok(mine >= 0 && mine <= 10);
+  }
+  assert.equal(afterTug(9, 3, 1), 10);
+});
+
+console.log("positive sum");
+test("a deal exists only when the whole is worth more than the parts, and splits must clear both baselines", () => {
+  for (const d of FEEL_DEALS) assert.ok(surplus(d) > 0);
+  assert.ok(PROVE_DEALS.some((d) => surplus(d) <= 0));
+  const d = FEEL_DEALS[0]!;
+  const [lo, hi] = dealRange(d)!;
+  assert.ok(acceptable(d, lo) && acceptable(d, hi));
+  assert.ok(!acceptable(d, lo - 1) && !acceptable(d, hi + 1));
+  assert.equal(dealRange({ a: 6, b: 5, merged: 9 }), null);
+});
+
+console.log("negative sum");
+test("walking keeps the pie, every fight destroys some of it", () => {
+  assert.equal(destroyed(fightPayoff("walk", "walk")), 0);
+  assert.ok(destroyed(fightPayoff("fight", "walk")) > 0);
+  assert.ok(destroyed(fightPayoff("fight", "fight")) > destroyed(fightPayoff("fight", "walk")));
+  assert.ok(fightPayoff("fight", "fight")[0] > fightPayoff("walk", "fight")[0], "fighting is the best reply to a fighter");
+});
+test("select puzzles always have between one and three outcomes worse for both", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const z = selectPuzzle(new Rng(seed));
+    const n = z.points.filter((p) => worseForBoth(p, z.status)).length;
+    assert.ok(n >= 1 && n <= 3, `seed ${seed} had ${n}`);
+  }
+});
+
+console.log("simultaneous vs sequential");
+test("battle of the sexes: who moves first wins their favourite", () => {
+  assert.deepEqual(BATTLE.youFirst().pay, [3, 2]);
+  assert.deepEqual(BATTLE.theyFirst().pay, [2, 3]);
+});
+test("generated games have strict replies and the move order changes the outcome_t6", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const g = newOrderGame(new Rng(seed));
+    const a = g.youFirst();
+    const b = g.theyFirst();
+    assert.ok(a.row !== b.row || a.col !== b.col, `seed ${seed}`);
+  }
+});
+
+console.log("players count");
+test("investing pays exactly while the group is smaller than the multiplier", () => {
+  const g = new PublicGood(FEEL_R);
+  assert.ok(g.investPays(1));
+  assert.ok(!g.investPays(2));
+  for (const r of PROVE_R) {
+    const pg = new PublicGood(r);
+    const m = pg.maxPlayers();
+    assert.ok(pg.investPays(m) && !pg.investPays(m + 1), `r ${r}`);
+  }
+  assert.equal(new PublicGood(3).maxPlayers(), 2);
+  assert.equal(new PublicGood(4.5).maxPlayers(), 4);
+});
+test("free riding beats investing for each player, yet everyone investing beats no one investing", () => {
+  const g = new PublicGood(1.6);
+  assert.ok(g.payoff(5, false, 2) > g.payoff(5, true, 2));
+  assert.ok(g.payoff(5, true, 4) > g.payoff(5, false, 0));
+});
+
+console.log("taxonomy");
+test("every quadrant is covered and prove scenes span at least three of them", () => {
+  assert.equal(new Set(TAX_FEEL.map(quadrantOf)).size, 4);
+  for (let seed = 1; seed <= 100; seed++) assert.ok(new Set(proveScenes_t6(new Rng(seed)).map(quadrantOf)).size >= 3);
+  for (const s of TAX_FEEL) assert.ok(s.why.length <= 70, s.name);
+});
+
+console.log("pareto efficiency");
+test("dominance and efficiency", () => {
+  assert.ok(dominates_t6([5, 5], [4, 5]));
+  assert.ok(!dominates_t6([5, 5], [5, 5]));
+  assert.ok(!dominates_t6([6, 2], [2, 6]));
+  const set: [number, number][] = [[2, 8], [4, 6], [3, 3], [7, 5], [9, 2], [5, 2]];
+  assert.deepEqual(efficientSet(set), [[2, 8], [4, 6], [7, 5], [9, 2]]);
+  assert.ok(!isEfficient(set[2]!, set));
+});
+test("sliding improves a point until it sticks on the frontier, and then it cannot move", () => {
+  for (const s of STARTS) {
+    let p: [number, number] = [s[0], s[1]];
+    for (let i = 0; i < 2000; i++) p = slide(p, [10, 10], 0.1);
+    assert.ok(onFrontier(p), `stuck at ${p}`);
+    assert.ok(p[0] >= s[0] && p[1] >= s[1], "nobody got worse off");
+    assert.deepEqual(slide(p, [10, 10], 0.1), p);
+    assert.ok(inRegion(p));
+  }
+});
+test("pareto puzzles have two to four efficient outcomes", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const n = efficientSet(paretoPuzzle(new Rng(seed))).length;
+    assert.ok(n >= 2 && n <= 4);
+  }
 });
 
 console.log(`\n${passed} tests passed`);
