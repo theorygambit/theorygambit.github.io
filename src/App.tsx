@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import { BackgroundCanvas } from "./ui/BackgroundCanvas";
+import { ChapterScreen } from "./ui/ChapterScreen";
 import { DebugOverlay } from "./ui/DebugOverlay";
 import { GameScreen } from "./ui/GameScreen";
 import { Home } from "./ui/Home";
@@ -11,7 +12,7 @@ export default function App() {
   return (
     <>
       <BackgroundCanvas active={route.name === "home"} />
-      {route.name === "home" ? <Home /> : <GameScreen key={route.slug} slug={route.slug} />}
+      {route.name === "home" ? <Home /> : route.name === "chapter" ? <ChapterScreen key={route.id} id={route.id} /> : <GameScreen key={route.slug} slug={route.slug} />}
       {debug && <DebugOverlay />}
     </>
   );

@@ -336,7 +336,11 @@ summary:focus-visible {
 .game {
   display: flex;
   justify-content: center;
-  padding-top: calc(max(var(--safe-top), 20px) + 12px);
+  /*
+    Below the zone iOS softens under the status bar (about 80pt on a notched phone). The old
+    12px put the game name inside it, where it showed as a blurred ghost.
+  */
+  padding-top: calc(max(var(--safe-top), 20px) + 24px);
   padding-bottom: calc(var(--safe-bottom) + 8px);
   background: var(--bg);
 }
@@ -638,4 +642,210 @@ summary:focus-visible {
   .dock-btn {
     transition-duration: 0.01ms;
   }
+}
+
+/* ------------------------------------------------------------ navigation */
+
+.chapter {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  background: var(--bg);
+  padding-bottom: calc(var(--safe-bottom) + 24px);
+}
+
+/* Sticky, opaque, and clear of the status bar zone, so nothing scrolls under the blur. */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(max(var(--safe-top), 20px) + 18px) 16px 8px;
+  background: var(--bg);
+}
+.top-bar-n {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-3);
+}
+.chapter-head {
+  padding: 14px 20px 18px;
+}
+.chapter-head .progress {
+  margin-top: 14px;
+}
+.meta-link {
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.resume {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  column-gap: 16px;
+  margin: 0 20px;
+  padding: 16px;
+  min-height: 96px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  transition: background-color 0.3s var(--ease);
+}
+.resume:active {
+  background: var(--bg-3);
+}
+.resume-meta {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+.resume-go {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.progress {
+  position: relative;
+  height: 1px;
+  margin: 18px 20px 0;
+  background: var(--line-strong);
+}
+.progress-thin {
+  display: block;
+  margin: 10px 0 0;
+}
+.progress-bar {
+  position: absolute;
+  top: -0.5px;
+  left: 0;
+  height: 2px;
+  background: var(--text);
+  transition: width 0.6s var(--ease-liturgy);
+}
+.progress-note {
+  padding: 8px 20px 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.search {
+  padding: 22px 20px 4px;
+}
+.search input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 16px; /* 16px stops iOS zooming the page on focus */
+  font-weight: 300;
+  color: var(--text);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+.search input::placeholder {
+  color: var(--text-3);
+}
+.search input:focus {
+  border-color: var(--line-strong);
+}
+.empty-note {
+  padding: 8px 20px 20px;
+  font-size: 14px;
+  color: var(--text-2);
+}
+
+.chapters {
+  list-style: none;
+}
+.chap {
+  display: grid;
+  grid-template-columns: 44px 1fr 24px;
+  align-items: center;
+  column-gap: 14px;
+  min-height: 76px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  transition: background-color 0.3s var(--ease);
+}
+.chap:active {
+  background: var(--bg-2);
+}
+.chap-n {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 26px;
+  color: var(--text-3);
+}
+.chap-name {
+  display: block;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--text);
+}
+.chap-meta {
+  display: block;
+  margin-top: 3px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.chap-go svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--text-3);
+  stroke-width: 1;
+}
+.slot-chapter {
+  display: block;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.slot-name {
+  text-align: left;
+}
+
+.chapter-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-top: 0;
+  background: var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.chapter-nav .dock-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  min-height: 64px;
+  text-align: center;
+  line-height: 1.3;
+}
+.chapter-nav .is-off {
+  pointer-events: none;
 }
