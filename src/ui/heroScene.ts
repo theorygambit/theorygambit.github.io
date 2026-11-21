@@ -98,11 +98,6 @@ interface Strand {
   prof: { v: number; hop: [number, number]; skim: number; wob: number; wf: number; sf: number; turn: number };
 }
 
-const PROFILES: Strand['prof'][] = [
-  { v: 26, hop: [9, 16], skim: 0.5, wob: 0.34, wf: 1.0, sf: 0.7, turn: 2.4 },
-  { v: 34, hop: [6, 11], skim: 0.7, wob: 0.4, wf: 1.3, sf: 1.1, turn: 3.0 },
-  { v: 20, hop: [12, 20], skim: 0.4, wob: 0.28, wf: 0.8, sf: 0.5, turn: 1.9 },
-];
 
 interface Ripple {
   x: number;
@@ -148,6 +143,8 @@ export class HeroScene {
   private theta = 0;
   private omega = 0;
   private thetaTarget = 0;
+  /** Idle rotation: the triangle turns slowly all the time, so no side is ever fixed. */
+  private spin = 0;
   private scale = 1;
   private scaleV = 0;
   private readonly echo = [0, 0, 0, 0, 0];
@@ -178,7 +175,7 @@ export class HeroScene {
     this.opaque = !!o.opaque;
     this.caption = o.caption;
     this.showText = o.text !== false;
-    for (let k = 0; k < 3; k++) this.strands.push(this.makeStrand(k));
+    // no threads: the triangle and its rings are alone
     const r = rng(5);
     for (let i = 0; i < 30; i++) this.motes.push({ x: r(), y: r(), vx: 0, vy: 0, ph: r() * TAU, sz: 0.5 + r() * 0.9 });
   }
@@ -235,36 +232,6 @@ export class HeroScene {
   }
 
   // ---- Simulation ------------------------------------------------------------------------
-
-  private makeStrand(k: number): Strand {
-    const n = 44;
-    return {
-      n,
-      x: new Float32Array(n),
-      y: new Float32Array(n),
-      trail: [],
-      phase: k * 2.1 + 0.4,
-      dir: k % 2 ? -1 : 1,
-      ang: k * 2.1 + 0.4,
-      hx: 0,
-      hy: 0,
-      hvx: 0,
-      hvy: 0,
-      near: { d: 1e9, x: 0, y: 0, edge: 0, s: 0 },
-      gp: 0,
-      gi: 0,
-      psi: 0,
-      om: 0,
-      spd: 0,
-      rho: 0,
-      sk: 0,
-      skim: false,
-      idx: [4, 3, 4][k % 3]!,
-      nextPick: 4 + k * 3,
-      rnd: rng(17 + k * 101),
-      prof: PROFILES[k % 3]!,
-    };
-  }
 
   /** Lay a strand out along a far arc so it sweeps in on arrival. */
   private reseed(s: Strand): void {
@@ -400,6 +367,7 @@ export class HeroScene {
     while (this.ripples.length && t - this.ripples[0]!.t0 > 4.5) this.ripples.shift();
 
     // triangle: turn so the nearest vertex faces the pointer, otherwise drift very slowly
+    this.spin = wrap(this.spin + dt * (0.2 + 0.06 * Math.sin(t * 0.23)));
     if (this.pm > 0.02) {
       const ang = Math.atan2(this.sy - this.cy, this.sx - this.cx);
       let bd = 9;
@@ -410,8 +378,8 @@ export class HeroScene {
         }
       }
       const faced = this.theta + bd;
-      this.thetaTarget = lerp(0.1 * Math.sin(t * 0.21), faced, this.pm);
-    } else this.thetaTarget = 0.1 * Math.sin(t * 0.21) + 0.04 * Math.sin(t * 0.47);
+      this.thetaTarget = lerp(this.spin, faced, this.pm);
+    } else this.thetaTarget = this.spin;
     const kap = 7;
     this.omega += (kap * wrap(this.thetaTarget - this.theta) - 2 * Math.sqrt(kap) * this.omega + clamp(this.torque, -1, 1) * 60) * dt;
     this.theta += this.omega * dt;
@@ -619,8 +587,8 @@ export class HeroScene {
     for (const m of this.motes) {
       const mx = m.x * this.w;
       const my = m.y * this.h;
-      const ax = (this.pm > 0.1 ? this.sx : this.strands[0]!.hx) - mx;
-      const ay = (this.pm > 0.1 ? this.sy : this.strands[0]!.hy) - my;
+      const ax = (this.pm > 0.1 ? this.sx : this.cx) - mx;
+      const ay = (this.pm > 0.1 ? this.sy : this.cy) - my;
       const dl = Math.hypot(ax, ay) || 1;
       const pull = (0.4 + 3 * A) * u * Math.min(1, 90 / dl);
       m.vx = m.vx * 0.985 + ((r() - 0.5) * 0.9 + (ax / dl) * pull * 0.05) * dt * 20;
