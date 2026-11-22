@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 006 to 015, 016 to 055 and 066 to 075 are complete. Slots 056 to 065 and everything from 076 on are empty, in curriculum order.
+The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 066 to 075 and 086 to 095 are complete. Slots 056 to 065, 076 to 085 and everything from 096 on are empty, in curriculum order.
 
 ## Shipped
 
@@ -73,10 +73,20 @@ The five opening games (001 to 005) and slots 006 to 015, 016 to 055 and 066 to 
 | 075 | Perfect Bayesian Equilibrium | `perfect-bayesian` | hire or pass on a signal, tap who sends each signal, drag the share strong for new rates |
 
 Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
+| 086 | Cheap Talk | `cheap-talk` | believe or ignore a message, drag the bias to see where talk stops, find the cutoff for new biases |
+| 087 | Bayesian Persuasion | `bayesian-persuasion` | reveal the truth or less, plot conviction against the signal, find the best signal rate |
+| 088 | Mechanism Design | `mechanism-design` | cut a cake two ways, switch who picks first, say which cut each rule makes even |
+| 089 | The Revelation Principle | `revelation-principle` | bid your value or half, drag a value to see honesty to a machine match shading, find the machine bid |
+| 090 | VCG Mechanism | `vcg` | report the truth or a lie, drag the report to see no lie beats truth, find what the winner pays |
+| 091 | The Core | `core` | pick a split three can accept, drag splits on a triangle, say if a split is blocked and by whom |
+| 092 | Shapley Value | `shapley-value` | join first or last, tap the six join orders, find the average contribution |
+| 093 | Banzhaf and Shapley-Shubik Power Indices | `banzhaf-index` | pick a council seat, tap the groups you tip, count swings on new councils |
+| 094 | The Nucleolus | `nucleolus` | pick the calmest split, drag a split to shrink the worst complaint, find the smallest worst gap |
+| 095 | Nash Bargaining | `nash-bargaining` | split evenly or split the gain, drag a share to the product peak, find the Nash share |
 
-## Suggested next batch (056 to 065 first, then 076 onward)
+## Suggested next batch (056 to 065 first, then 076 to 085 and 096 onward)
 
-Slots 056 to 065 are still empty and 076 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
+Slots 056 to 065 and 076 to 085 are still empty and 096 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
 
 - `MatrixView` for any 2x2 table. `Glyph` for the visual grammar.
 - The reveal pattern: Feel collects evidence with a counterfactual, See is built from the player's own moves and needs a tap or drag, Prove changes the numbers.

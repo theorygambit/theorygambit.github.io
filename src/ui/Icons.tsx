@@ -566,6 +566,88 @@ export function GameGlyph({ slug }: { slug: string }) {
           <path d="M4 3.5V20H20.5" /><path d="M4 6.5A14.5 14.5 0 0 1 18 20" /><circle className="solid" cx="12.2" cy="11.2" r="2.4" />
         </svg>
       );
+    case "cheap-talk":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 5h12v8H9l-4 3v-3H3z" />
+          <circle className="solid" cx="18" cy="17" r="2.6" />
+        </svg>
+      );
+    case "bayesian-persuasion":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 17L12 7l9 10" />
+          <circle className="solid" cx="12" cy="7" r="2.4" />
+          <circle cx="12" cy="17" r="2.4" />
+        </svg>
+      );
+    case "mechanism-design":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 3.5V20.5" />
+          <circle className="solid" cx="8" cy="12" r="2" />
+        </svg>
+      );
+    case "revelation-principle":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5" cy="12" r="2.4" />
+          <path d="M8 12h4" />
+          <rect x="12" y="8" width="5" height="8" />
+          <path d="M17 12h3" />
+          <circle cx="21" cy="12" r="1.6" />
+        </svg>
+      );
+    case "vcg":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="10" r="3.2" />
+          <circle cx="16" cy="9" r="2.4" />
+          <circle cx="16" cy="16" r="1.6" />
+          <path d="M3 20h18" />
+        </svg>
+      );
+    case "core":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3L3 20h18z" />
+          <path className="solid" d="M12 10l-3.6 6.5h7.2z" />
+        </svg>
+      );
+    case "shapley-value":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="16" r="2.4" />
+          <circle cx="12" cy="9" r="2.4" />
+          <circle cx="18" cy="16" r="2.4" />
+          <path d="M8 14l2.5-3.5M13.5 10.5L16 14M8.5 16h7" />
+        </svg>
+      );
+    case "banzhaf-index":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="7" r="3.2" />
+          <circle cx="6" cy="17" r="2" />
+          <circle cx="12" cy="17" r="2" />
+          <circle cx="18" cy="17" r="2" />
+        </svg>
+      );
+    case "nucleolus":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3L3 20h18z" />
+          <circle className="solid" cx="12" cy="14" r="2.6" />
+        </svg>
+      );
+    case "nash-bargaining":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20h18M3 20V4" />
+          <path d="M5 19C9 3 15 3 19 19" />
+          <circle className="solid" cx="12" cy="7.5" r="2" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">

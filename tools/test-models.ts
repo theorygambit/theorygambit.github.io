@@ -38,6 +38,16 @@ import { BATTLE, newGame as newOrderGame } from "../src/games/simultaneous-seque
 import { PublicGood, FEEL_R, PROVE_R } from "../src/games/players-count/model";
 import { quadrantOf, FEEL_SCENES as TAX_FEEL, proveScenes as proveScenes_t6 } from "../src/games/taxonomy/model";
 import { dominates as dominates_t6, isEfficient, efficientSet, slide, onFrontier, inRegion, STARTS, puzzle as paretoPuzzle } from "../src/games/pareto-efficiency/model";
+import { Talk as CtTalk, literal as ctLiteral, pay as ctPay, FEEL_ROUNDS as CT_ROUNDS, PROVE_POOL as CT_POOL, proveSet as ctProveSet, isRight as ctRight } from "../src/games/cheap-talk/model";
+import { Persuasion as BpPersuasion, FEEL_PRIORS as BP_PRIORS, SEE_PRIOR as BP_SEE, PROVE_POOL as BP_POOL, proveSet as bpProveSet, isRight as bpRight } from "../src/games/bayesian-persuasion/model";
+import { Cake as MdCake, FEEL_N as MD_N, FEEL_ROUNDS as MD_ROUNDS, PROVE_N as MD_PROVE_N, proveSet as mdProveSet, answer as mdAnswer } from "../src/games/mechanism-design/model";
+import { Bidder as RpBidder, HALF as RP_HALF, FEEL_ROUNDS as RP_ROUNDS, PROVE_POOL as RP_POOL, proveSet as rpProveSet, machineBid as rpBid, isRight as rpRight } from "../src/games/revelation-principle/model";
+import { Sale as VcgSale, FEEL_ROUNDS as VCG_ROUNDS, SEE as VCG_SEE, PROVE_POOL as VCG_POOL, proveSet as vcgProveSet, owed as vcgOwed, isRight as vcgRight } from "../src/games/vcg/model";
+import { Trio as CoreTrio, FEEL_ROUNDS as CORE_ROUNDS, SEE as CORE_SEE, PROVE_POOL as CORE_POOL, proveSet as coreProveSet } from "../src/games/core/model";
+import { FEEL_ROUNDS as SH_ROUNDS, SEE as SH_SEE, PROVE_POOL as SH_POOL, proveSet as shProveSet, isRight as shRight } from "../src/games/shapley-value/model";
+import { Council as BzCouncil, FEEL_ROUNDS as BZ_ROUNDS, SEE as BZ_SEE, PROVE_POOL as BZ_POOL, proveSet as bzProveSet, answer as bzAnswer, isRight as bzRight } from "../src/games/banzhaf-index/model";
+import { Bloc as NuBloc, FEEL_ROUNDS as NU_ROUNDS, SEE as NU_SEE, PROVE_POOL as NU_POOL, calm as nuCalm, proveSet as nuProveSet, isRight as nuRight } from "../src/games/nucleolus/model";
+import { FEEL_ROUNDS as NB_ROUNDS, SEE as NB_SEE, PROVE_POOL as NB_POOL, proveSet as nbProveSet, isRight as nbRight } from "../src/games/nash-bargaining/model";
 import { Curriculum, FIRST } from "../src/catalog/curriculum";
 import { Bimatrix } from "../src/games/shared/Bimatrix";
 import { feelRounds, proveScenes, outcome, ringSide, decidable, SCENES } from "../src/games/information-types/model";
@@ -1881,6 +1891,258 @@ test("pareto puzzles have two to four efficient outcomes", () => {
     const n = efficientSet(paretoPuzzle(new Rng(seed))).length;
     assert.ok(n >= 2 && n <= 4);
   }
+});
+
+// frag:cheap-talk
+console.log("cheap talk");
+test("a small bias leaves a cutoff, and a bias of a quarter or more leaves nothing to learn", () => {
+  assert.ok(Math.abs(new CtTalk(0.05).cutoff() - 0.4) < 1e-9);
+  assert.ok(Math.abs(new CtTalk(0.1).cutoff() - 0.3) < 1e-9);
+  assert.equal(new CtTalk(0.25).cutoff(), 0);
+  assert.equal(new CtTalk(0.4).cutoff(), 0);
+  assert.equal(new CtTalk(0.3).informative(), false);
+  assert.equal(new CtTalk(0.4).gain(), 0);
+  assert.ok(new CtTalk(0.05).gain() > new CtTalk(0.2).gain());
+  assert.ok(new CtTalk(0).gain() > 0.74);
+});
+test("believing a message pays only when the bias is small", () => {
+  for (const r of CT_ROUNDS) {
+    const believe = ctPay(ctLiteral(r.msg), r.state);
+    const ignore = ctPay(0.5, r.state);
+    assert.equal(believe > ignore, new CtTalk(r.b).informative());
+  }
+  assert.equal(ctPay(0.5, 0.5), 4);
+  assert.equal(ctPay(0, 0.5), 0);
+});
+test("Prove gives two biases, at least one that leaves a cutoff, and the window is three points", () => {
+  for (const b of [1, 2, 3, 4, 5]) assert.ok(ctProveSet(new Rng(b)).some((t) => t.informative()));
+  assert.equal(ctProveSet(new Rng(1)).length, 2);
+  assert.equal(CT_POOL.includes(0.05), true);
+  assert.equal(ctRight(new CtTalk(0.1), 0.32), true);
+  assert.equal(ctRight(new CtTalk(0.1), 0.4), false);
+  assert.equal(ctRight(new CtTalk(0.35), 0), true);
+});
+
+// frag:bayesian-persuasion
+console.log("bayesian persuasion");
+test("saying guilty for some innocents raises convictions until the judge's belief falls to one half", () => {
+  const m = new BpPersuasion(0.3);
+  assert.ok(Math.abs(m.truth() - 0.3) < 1e-9);
+  assert.ok(Math.abs(m.bestQ() - 0.3 / 0.7) < 1e-9);
+  assert.ok(Math.abs(m.posterior(m.bestQ()) - 0.5) < 1e-9);
+  assert.ok(Math.abs(m.best() - 0.6) < 1e-9);
+  assert.equal(m.convict(0.5), 0);
+  assert.ok(m.convict(0.2) > m.convict(0.1));
+});
+test("the best policy convicts with chance twice the prior, up to one", () => {
+  for (const p of [0.1, 0.2, 0.25, 0.4, 0.45]) assert.ok(Math.abs(new BpPersuasion(p).best() - 2 * p) < 1e-9);
+  assert.equal(new BpPersuasion(0.6).best(), 1);
+  assert.equal(new BpPersuasion(0.6).truth(), 0.6);
+  for (const p of BP_PRIORS) assert.ok(new BpPersuasion(p).best() >= new BpPersuasion(p).truth());
+});
+test("Prove uses priors other than the See prior, and the window is four points", () => {
+  assert.ok(!BP_POOL.includes(BP_SEE));
+  const s = bpProveSet(new Rng(3));
+  assert.equal(s.length, 2);
+  assert.notEqual(s[0]!.p, s[1]!.p);
+  assert.equal(bpRight(new BpPersuasion(0.25), 0.35), true);
+  assert.equal(bpRight(new BpPersuasion(0.25), 0.5), false);
+});
+
+// frag:mechanism-design
+console.log("mechanism design");
+test("when the other player picks first, the divider's best cut is even, and when the divider picks first it is lopsided", () => {
+  const c = new MdCake(10, "chooser");
+  assert.equal(c.share(5), 5);
+  assert.equal(c.share(2), 2);
+  assert.equal(c.share(0), 0);
+  assert.equal(c.bestCut(), 5);
+  const d = new MdCake(10, "divider");
+  assert.equal(d.share(5), 5);
+  assert.equal(d.share(2), 8);
+  assert.equal(d.share(0), 10);
+  assert.equal(d.bestCut(), 0);
+  for (let a = 0; a <= 10; a++) assert.ok(c.share(a) <= c.share(5) && d.share(a) <= d.share(0));
+});
+test("each Feel round has one better cut under the chooser rule", () => {
+  const c = new MdCake(MD_N, "chooser");
+  for (const r of MD_ROUNDS) assert.notEqual(c.share(r.a), c.share(r.b));
+});
+test("Prove gives one chooser and one divider rule with different pies, and the answer index follows the rule", () => {
+  for (const seed of [1, 2, 3, 4]) {
+    const s = mdProveSet(new Rng(seed));
+    assert.deepEqual(s.map((p) => p.cake.rule).sort(), ["chooser", "divider"]);
+    assert.notEqual(s[0]!.cake.n, s[1]!.cake.n);
+    for (const p of s) assert.equal(mdAnswer(p), p.cake.rule === "chooser" ? p.evenAt : 1 - p.evenAt);
+  }
+  assert.ok(MD_PROVE_N.every((n) => n !== MD_N));
+});
+
+// frag:revelation-principle
+console.log("revelation principle");
+test("telling the value to a mechanism that applies the strategy gives the same pay as playing the strategy", () => {
+  for (const k of [0.5, 2 / 3, 0.8]) for (const v of [2, 5, 9]) for (const r of [1, 3, 6]) {
+    const b = new RpBidder(k);
+    assert.equal(b.direct(v, r), b.pay(v, b.bid(v), r));
+  }
+  assert.equal(RP_HALF.bid(8), 4);
+  assert.equal(RP_HALF.pay(8, 4, 3), 4);
+  assert.equal(RP_HALF.pay(8, 4, 4), 0);
+});
+test("in Feel, bidding your value never pays more than bidding half", () => {
+  for (const r of RP_ROUNDS) {
+    assert.equal(RP_HALF.pay(r.value, r.value, r.rival), 0);
+    assert.ok(RP_HALF.pay(r.value, RP_HALF.bid(r.value), r.rival) >= 0);
+  }
+  assert.ok(RP_ROUNDS.some((r) => RP_HALF.pay(r.value, RP_HALF.bid(r.value), r.rival) > 0));
+  assert.ok(RP_ROUNDS.some((r) => RP_HALF.pay(r.value, RP_HALF.bid(r.value), r.rival) === 0));
+});
+test("Prove machine bids are whole numbers and differ from the Feel half rule", () => {
+  for (const c of RP_POOL) assert.ok(Math.abs(rpBid(c) - Math.round(rpBid(c))) < 1e-9);
+  assert.equal(rpProveSet(new Rng(2)).length, 2);
+  assert.equal(rpRight(RP_POOL[0]!, 6.1), true);
+  assert.equal(rpRight(RP_POOL[0]!, 7), false);
+});
+
+// frag:vcg
+console.log("vcg");
+test("the winner pays the best rival value, and truth is never beaten by another report", () => {
+  const s = new VcgSale(8, [5]);
+  assert.equal(s.price(8), 5);
+  assert.equal(s.price(4), 0);
+  assert.equal(s.pay(8), 3);
+  assert.equal(s.pay(4), 0);
+  assert.equal(s.pay(10), 3);
+  for (const x of [...VCG_POOL, VCG_SEE, new VcgSale(3, [3, 1]), new VcgSale(10, [2])]) assert.ok(x.truthIsBest());
+});
+test("lying only loses: shading below the best rival forfeits a win, inflating wins at a loss", () => {
+  const r = VCG_ROUNDS;
+  assert.equal(new VcgSale(r[0]!.value, [r[0]!.other]).pay(r[0]!.lie), 0);
+  assert.ok(new VcgSale(r[0]!.value, [r[0]!.other]).pay(r[0]!.value) > 0);
+  const inflate = new VcgSale(r[1]!.value, [r[1]!.other]);
+  assert.ok(inflate.pay(r[1]!.lie) === inflate.value - inflate.best());
+  assert.ok(inflate.value - inflate.best() < 0);
+  assert.equal(inflate.pay(inflate.value), 0);
+});
+test("Prove gives one win and one loss, and the payment window is half a unit", () => {
+  for (const seed of [1, 2, 3]) {
+    const s = vcgProveSet(new Rng(seed));
+    assert.equal(s.length, 2);
+    assert.deepEqual(s.map((x) => x.value > x.best()).sort(), [false, true]);
+  }
+  assert.equal(vcgOwed(new VcgSale(9, [4, 7])), 7);
+  assert.equal(vcgOwed(new VcgSale(6, [9, 2])), 0);
+  assert.equal(vcgRight(new VcgSale(9, [4, 7]), 7.4), true);
+  assert.equal(vcgRight(new VcgSale(9, [4, 7]), 4), false);
+});
+
+// frag:core
+console.log("core");
+test("a split is blocked when a pair gets less than it earns alone", () => {
+  const g = new CoreTrio(8);
+  assert.ok(g.stable([4, 4, 4]));
+  assert.deepEqual(g.blocker([6, 3, 3]), [1, 2]);
+  assert.deepEqual(g.blocker([3, 4, 5]), [0, 1]);
+  assert.equal(g.mine([6, 3, 3]), 0);
+  assert.equal(g.mine([4, 4, 4]), 4);
+  assert.ok(CORE_SEE.stable([4, 4, 4]));
+  assert.ok(!CORE_SEE.stable([11, 0.5, 0.5]));
+});
+test("Feel rounds always teach something and Prove gives one in and one out", () => {
+  for (const r of CORE_ROUNDS) {
+    const g = new CoreTrio(r.pair);
+    assert.ok(g.mine(r.a) !== g.mine(r.b));
+  }
+  for (const seed of [1, 2, 3, 4]) {
+    const s = coreProveSet(new Rng(seed));
+    assert.deepEqual(s.map((c) => c.game.stable(c.x)).sort(), [false, true]);
+  }
+  for (const c of CORE_POOL) assert.equal(c.x[0] + c.x[1] + c.x[2], 12);
+});
+
+// frag:shapley-value
+console.log("shapley value");
+test("A's Shapley value is the average of six marginal contributions", () => {
+  assert.equal(SH_SEE.shapley(), 3);
+  assert.deepEqual(SH_SEE.orders().map((o) => o.add), [0, 0, 4, 6, 4, 4]);
+  assert.equal(SH_POOL[0]!.shapley(), 3);
+  assert.equal(SH_POOL[1]!.shapley(), 4);
+  assert.equal(SH_POOL[2]!.shapley(), 3.5);
+  assert.equal(SH_POOL[3]!.shapley(), 3.5);
+});
+test("Feel rounds make joining first and last differ and Prove answers are half steps", () => {
+  for (const g of SH_ROUNDS) assert.ok(g.solo !== g.last());
+  for (const g of SH_POOL) assert.equal((g.shapley() * 2) % 1, 0);
+  assert.equal(shProveSet(new Rng(3)).length, 2);
+  assert.equal(shRight(SH_POOL[0]!, 3), true);
+  assert.equal(shRight(SH_POOL[0]!, 4), false);
+});
+
+// frag:banzhaf-index
+console.log("banzhaf index");
+test("swings are groups just short of the quota that the seat completes", () => {
+  assert.equal(BZ_SEE.count(0), 2);
+  assert.equal(BZ_SEE.count(1), 2);
+  const c = new BzCouncil([4, 2, 1], 4);
+  assert.equal(c.count(0), 4);
+  assert.equal(c.count(1), 0);
+  assert.equal(c.count(2), 0);
+  assert.equal(new BzCouncil([3, 2, 1], 4).count(0), 3);
+  assert.equal(new BzCouncil([3, 2, 1], 4).count(1), 1);
+});
+test("Feel rounds separate the two seats and Prove counts are small whole numbers", () => {
+  for (const r of BZ_ROUNDS) {
+    const c = new BzCouncil(r.w, r.q);
+    assert.ok(Math.max(c.count(r.a), c.count(r.b)) <= 6);
+  }
+  assert.deepEqual(BZ_POOL.map(bzAnswer), [3, 2, 3, 2, 0]);
+  assert.equal(bzProveSet(new Rng(5)).length, 2);
+  assert.equal(bzRight(BZ_POOL[0]!, 3), true);
+  assert.equal(bzRight(BZ_POOL[0]!, 1), false);
+});
+
+// frag:nucleolus
+console.log("nucleolus");
+test("the nucleolus equalises the pair excesses at the smallest worst value", () => {
+  assert.equal(NU_SEE.best(), -2);
+  assert.deepEqual(NU_SEE.split(), [6, 4, 2]);
+  assert.equal(NU_SEE.worst([6, 4, 2]), -2);
+  assert.equal(NU_SEE.worst([4, 4, 4]), 0);
+  assert.deepEqual(NU_POOL.map((g) => g.best()), [-2, 0, -1, 1, 2]);
+  for (const g of NU_POOL) {
+    const s = g.split();
+    assert.equal(s[0] + s[1] + s[2], 12);
+    assert.ok(s.every((x) => x >= 0));
+    assert.ok(Math.abs(g.worst(s) - g.best()) < 1e-9);
+  }
+});
+test("no split beats the nucleolus, and Feel pay rewards the calmer split", () => {
+  for (const g of NU_POOL) for (let a = 0; a <= 12; a++) for (let b = 0; a + b <= 12; b++) assert.ok(g.worst([a, b, 12 - a - b]) >= g.best() - 1e-9);
+  for (const r of NU_ROUNDS) assert.ok(nuCalm(r.game, r.a) !== nuCalm(r.game, r.b));
+  assert.equal(nuProveSet(new Rng(2)).length, 2);
+  assert.equal(nuRight(NU_POOL[0]!, -2), true);
+  assert.equal(nuRight(NU_POOL[0]!, 0), false);
+});
+test("unused import guard", () => { assert.ok(new NuBloc(1, 1, 1).total === 12); });
+
+// frag:nash-bargaining
+console.log("nash bargaining");
+test("the product of gains peaks at the Nash share and the fallback adds to it", () => {
+  assert.equal(NB_SEE.nash(), 7);
+  assert.equal(NB_SEE.product(7), 16);
+  assert.equal(NB_SEE.product(3), 0);
+  for (const g of [NB_SEE, ...NB_POOL]) for (let x = 0; x <= g.total; x += 0.5) assert.ok(g.product(x) <= g.product(g.nash()) + 1e-9);
+  assert.deepEqual(NB_POOL.map((g) => g.nash()), [7, 5, 10, 5, 4]);
+});
+test("Feel: splitting evenly is refused exactly when your fallback is below theirs", () => {
+  for (const g of NB_ROUNDS) {
+    assert.equal(g.accepts(g.nash()), true);
+    assert.equal(g.accepts(g.total / 2), g.d1 >= g.d2);
+    assert.ok(g.pay(g.nash()) !== g.pay(g.total / 2));
+  }
+  assert.equal(nbProveSet(new Rng(4)).length, 2);
+  assert.equal(nbRight(NB_POOL[0]!, 7), true);
+  assert.equal(nbRight(NB_POOL[0]!, 6), false);
 });
 
 console.log(`\n${passed} tests passed`);
