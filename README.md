@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with seventy-five games live (001 to 095 except 056 to 065 and 076 to 085) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with one hundred and eight games live (001 to 118 except 076 to 085) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -95,7 +95,16 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 053 | Loss Aversion and Streak Systems | Live |
 | 054 | Preference Manipulation | Live |
 | 055 | Behavioral Game Theory | Live |
-| 056 to 065 | The next 10 slots | Empty slots, same as above |
+| 056 | Reciprocity and Social Norms | Live |
+| 057 | Hyperbolic Discounting | Live |
+| 058 | Near-Miss Effect | Live |
+| 059 | Sunk Cost and the Endowment Effect | Live |
+| 060 | Breaking Frames: Changing the Game | Live |
+| 061 | Finite and Infinite Games | Live |
+| 062 | Choosing Your Game: Game Selection | Live |
+| 063 | Commitment and Credible Threats | Live |
+| 064 | Multipolar Traps and Coordination Failures | Live |
+| 065 | Minimax Search and Alpha-Beta Pruning | Live |
 | 066 | Elo, Glicko and TrueSkill Ratings | Live |
 | 067 | Dynamic Difficulty Adjustment | Live |
 | 068 | Player Lifetime Value Prediction | Live |
@@ -117,8 +126,29 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 093 | Banzhaf and Shapley-Shubik Power Indices | Live |
 | 094 | The Nucleolus | Live |
 | 095 | Nash Bargaining | Live |
-| 096 onward | The remaining 33 slots | Empty slots, same as above |
-| 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
+| 096 | Rubinstein Alternating-Offers Bargaining | Live |
+| 097 | Ellsberg Paradox and Ambiguity Aversion | Live |
+| 098 | Level-k and Cognitive Hierarchy | Live |
+| 099 | Quantal Response Equilibrium | Live |
+| 100 | Inequity Aversion (Fehr-Schmidt) | Live |
+| 101 | Spiteful Preferences | Live |
+| 102 | Zermelo's Theorem and Combinatorial Games (Nim) | Live |
+| 103 | Monte Carlo Tree Search | Live |
+| 104 | Regret Matching and Counterfactual Regret Minimization | Live |
+| 105 | Fictitious Play | Live |
+| 106 | Computing Nash Equilibria: Lemke-Howson and PPAD | Live |
+| 107 | Linear Programming for Zero-Sum Games | Live |
+| 108 | Multiplicative Weights and Hedge | Live |
+| 109 | Multi-Agent Reinforcement Learning and Self-Play | Live |
+| 110 | Contextual Bandits | Live |
+| 111 | Personalized and Dynamic Pricing | Live |
+| 112 | Context-Aware and On-Device Recommendation | Live |
+| 113 | Desirability Scoring (RSRR) | Live |
+| 114 | Hypergame Theory | Live |
+| 115 | The Levels of Hypergames | Live |
+| 116 | Metagames and the Metagame Theory | Live |
+| 117 | Frames Within Frames | Live |
+| 118 | The Whole Board | Live |
 
 Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.
 
@@ -266,4 +296,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and where to go next (056 to 065, 076 to 085, then 096 on) |
+| `NEXT` | What is live, and where to go next (076 to 085) |
