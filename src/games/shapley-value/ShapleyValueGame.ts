@@ -25,7 +25,7 @@ export class ShapleyValueGame extends Lesson<Gain> {
 
   protected feelIntro(r: number): [string, string] {
     const g = FEEL_ROUNDS[r]!;
-    return ["You are paid what you add on joining.", `Alone ${g.solo}. The other two ${g.bc}. All three ${g.abc}.`];
+    return ["You are paid what you add.", `Alone ${g.solo}. The other two ${g.bc}. All three ${g.abc}.`];
   }
 
   protected feelPlay(r: number, i: 0 | 1): FeelOutcome {
