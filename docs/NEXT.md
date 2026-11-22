@@ -1,4 +1,4 @@
-# Next
+# What shipped
 
 All 118 slots are live: the five opening games (001 to 005) and slots 006 to 118. Nothing is left empty.
 

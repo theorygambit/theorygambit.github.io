@@ -84,7 +84,16 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 033 | Public Goods Game | Live |
 | 034 | Centipede Game | Live |
 | 035 | Traveler's Dilemma | Live |
-| 036 to 045 | Ten more topics | Live, listed in `docs/NEXT.md` |
+| 036 | Volunteer's Dilemma | Live |
+| 037 | Keynesian Beauty Contest | Live |
+| 038 | Dollar Auction | Live |
+| 039 | Colonel Blotto | Live |
+| 040 | Cournot Competition | Live |
+| 041 | Bertrand Competition | Live |
+| 042 | Stackelberg Game | Live |
+| 043 | Hotelling's Location Game | Live |
+| 044 | Repeated Games | Live |
+| 045 | Dynamic Games | Live |
 | 046 | Evolutionary Game Theory | Live |
 | 047 | Adverse Selection and the Market for Lemons | Live |
 | 048 | Auctions | Live |
@@ -305,4 +314,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and notes for any new game |
+| `NEXT` | What shipped, and notes for adding a game |
