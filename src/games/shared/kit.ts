@@ -111,3 +111,9 @@ export function drawMatrixLabels(p: Painter, c: Colors, mv: MatrixView, bm: Payo
     p.text(n, mv.colX(col), mv.y0 - 16, { font: Type.body(14, 400), color: c.ink, align: "center", base: "middle", alpha });
   });
 }
+
+/** Three equal choice boxes filling the action row. */
+export function trio(f: Frame, i: number): Box {
+  const bw = (f.w - 24) / 3;
+  return { x: f.x + i * (bw + 12), y: f.actionY, w: bw, h: f.actionH };
+}
