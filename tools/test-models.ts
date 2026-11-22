@@ -48,6 +48,29 @@ import { FEEL_ROUNDS as SH_ROUNDS, SEE as SH_SEE, PROVE_POOL as SH_POOL, proveSe
 import { Council as BzCouncil, FEEL_ROUNDS as BZ_ROUNDS, SEE as BZ_SEE, PROVE_POOL as BZ_POOL, proveSet as bzProveSet, answer as bzAnswer, isRight as bzRight } from "../src/games/banzhaf-index/model";
 import { Bloc as NuBloc, FEEL_ROUNDS as NU_ROUNDS, SEE as NU_SEE, PROVE_POOL as NU_POOL, calm as nuCalm, proveSet as nuProveSet, isRight as nuRight } from "../src/games/nucleolus/model";
 import { FEEL_ROUNDS as NB_ROUNDS, SEE as NB_SEE, PROVE_POOL as NB_POOL, proveSet as nbProveSet, isRight as nbRight } from "../src/games/nash-bargaining/model";
+import { Offers as RbOffers, FEEL_ROUNDS as RB_ROUNDS, FEEL_POT as RB_POT, SEE as RB_SEE, PROVE_POOL as RB_POOL, proveSet as rbProveSet, isRight as rbRight } from "../src/games/rubinstein-bargaining/model";
+import { Urn as ElUrn, FEEL_CHANCE as EL_CHANCE, KNOWN as EL_KNOWN, PROVE_POOL as EL_POOL, answer as elAnswer, proveSet as elProveSet } from "../src/games/ellsberg-ambiguity/model";
+import { guess as lkGuess, target as lkTarget, closeness as lkClose, FEEL_ROUNDS as LK_ROUNDS, PROVE_POOL as LK_POOL, answer as lkAnswer, proveSet as lkProveSet, isRight as lkRight } from "../src/games/level-k/model";
+import { chance as qrChance, FEEL_GAPS as QR_GAPS, SAFE as QR_SAFE, BET as QR_BET, PROVE_POOL as QR_POOL, percent as qrPercent, proveSet as qrProveSet, isRight as qrRight } from "../src/games/quantal-response/model";
+import { Fair as IaFair, FEEL_ROUNDS as IA_ROUNDS, felt as iaFelt, seeUtility as iaSee, PROVE_POOL as IA_POOL, value as iaValue, proveSet as iaProveSet, isRight as iaRight } from "../src/games/inequity-aversion/model";
+import { utility as spUtility, FEEL_ROUNDS as SP_ROUNDS, burn as spBurn, keep as spKeep, PROVE_POOL as SP_POOL, threshold as spThreshold, proveSet as spProveSet, isRight as spRight } from "../src/games/spiteful-preferences/model";
+import { xor as nimXor, after as nimAfter, moverWins as nimWins, winningMove as nimMove, FEEL_ROUNDS as NIM_ROUNDS, holds as nimHolds, SEE_PILES as NIM_SEE, PROVE_POOL as NIM_POOL, proveSet as nimProveSet } from "../src/games/zermelo-sprague-grundy/model";
+import { ucb as mcUcb, FEEL_ROUNDS as MC_ROUNDS, PROVE_POOL as MC_POOL, next as mcNext, proveSet as mcProveSet } from "../src/games/mcts/model";
+import { value as rmValue, ev as rmEv, regrets as rmRegrets, matching as rmMatching, EVEN as RM_EVEN, FEEL_ROUNDS as RM_ROUNDS, pay as rmPay, SEE_OPP as RM_OPP, SEE_MIX as RM_MIX, PROVE_POOL as RM_POOL, percent as rmPercent, proveSet as rmProveSet, isRight as rmRight } from "../src/games/regret-matching-cfr/model";
+import { matcherNext as fpMatch, mismatcherNext as fpMis, simulate as fpSim, FEEL_ROUNDS as FP_ROUNDS, answerOf as fpAnswer, beats as fpBeats, PROVE_POOL as FP_POOL, proveSet as fpProveSet, SEE_ROUNDS as FP_N } from "../src/games/fictitious-play/model";
+import { brute as lhBrute, path as lhPath, pay as lhPay, FEEL_ROUNDS as LH_ROUNDS, PROVE_POOL as LH_POOL, answer as lhAnswer, decoy as lhDecoy, proveSet as lhProveSet } from "../src/games/lemke-howson/model";
+import { Matrix as LpMatrix, FEEL_ROUNDS as LP_ROUNDS, SEE as LP_SEE, PROVE_POOL as LP_POOL, proveSet as lpProveSet, isRight as lpRight } from "../src/games/linear-programming-zero-sum/model";
+import { update as mwUpdate, normalise as mwNorm, FEEL_ROUNDS as MW_ROUNDS, pick as mwPick, spread as mwSpread, seeShares as mwShares, SEE_LOSSES as MW_LOSSES, PROVE_POOL as MW_POOL, answer as mwAnswer, proveSet as mwProveSet, isRight as mwRight } from "../src/games/multiplicative-weights/model";
+import { gain as spGain, FEEL_ROUNDS as SPL_ROUNDS, PROVE_POOL as SPL_POOL, answer as splAnswer, proveSet as splProveSet, isRight as splRight } from "../src/games/marl-self-play/model";
+import { better as cbBetter, FEEL_ROUNDS as CB_ROUNDS, reward as cbReward, PROVE_POOL as CB_POOL, proveSet as cbProveSet } from "../src/games/contextual-bandits/model";
+import { profit as ppProfit, FEEL_ROUNDS as PP_ROUNDS, crowdProfit as ppCrowd, BEST_PRICE as PP_BEST, PROVE_POOL as PP_POOL, answer as ppAnswer, proveSet as ppProveSet, isRight as ppRight } from "../src/games/personalized-pricing/model";
+import { fit as carFit, FEEL_ROUNDS as CAR_ROUNDS, phonePay as carPhone, serverPay as carServer, PROVE_POOL as CAR_POOL, answer as carAnswer, proveSet as carProveSet } from "../src/games/context-aware-recsys/model";
+import { accept as drAccept, value as drValue, FEEL_ROUNDS as DR_ROUNDS, PROVE_POOL as DR_POOL, percent as drPercent, proveSet as drProveSet, isRight as drRight, SEE_YOU as DR_YOU } from "../src/games/desirability-rsrr/model";
+import { pay as htPay, COUNTER as HT_COUNTER, FEEL_ROUNDS as HT_ROUNDS, SEE_MOVES as HT_SEE, PROVE_POOL as HT_POOL, answer as htAnswer, proveSet as htProveSet, isRight as htRight } from "../src/games/hypergame-theory/model";
+import { LEVELS as HL_LEVELS, SAFE as HL_SAFE, FEEL_ORDER as HL_ORDER, PROVE_POOL as HL_POOL, answerSlot as hlSlot, proveSet as hlProveSet } from "../src/games/hypergame-levels/model";
+import { POLICIES as MH_POL, payoff as mhPay, bestMove as mhBest, FEEL_ORDER as MH_FEEL, PROVE_POOL as MH_POOL, proveSet as mhProveSet } from "../src/games/metagame-howard/model";
+import { posterior as sfPost, SELLERS as SF_SELLERS, FEEL_ROUNDS as SF_ROUNDS, buyValue as sfBuy, PASS as SF_PASS, PROVE_POOL as SF_POOL, percent as sfPercent, proveSet as sfProveSet, isRight as sfRight } from "../src/games/synthesis-frames/model";
+import { IDEAS as SB_IDEAS, FEEL_ROUNDS as SB_ROUNDS, PROVE_POOL as SB_POOL, answerSlot as sbSlot, proveSet as sbProveSet } from "../src/games/synthesis-board/model";
 import { Curriculum, FIRST } from "../src/catalog/curriculum";
 import { Bimatrix } from "../src/games/shared/Bimatrix";
 import { feelRounds, proveScenes, outcome, ringSide, decidable, SCENES } from "../src/games/information-types/model";
@@ -81,6 +104,16 @@ import { FIELD, TIT_FOR_TAT, ALWAYS_BREAK, ALWAYS_HOLD, play, tournament, headTo
 import { Flow, LEVELS, BAND, PROVE_SKILLS } from "../src/games/flow-theory/model";
 import { Design, FEEL_DESIGN, BUILDS, PROVE_DESIGNS } from "../src/games/design-ethics/model";
 import { Lottery, utility, FEEL_GAMBLE, FEEL_SURES, PROVE_GAMBLES } from "../src/games/expected-utility/model";
+import * as rf from "../src/games/reciprocity-fairness/model";
+import * as hd from "../src/games/hyperbolic-discounting/model";
+import * as nm from "../src/games/near-miss-effect/model";
+import * as sc from "../src/games/sunk-cost-endowment/model";
+import * as bf from "../src/games/breaking-frames/model";
+import * as fi from "../src/games/finite-infinite-games/model";
+import * as gs from "../src/games/game-selection/model";
+import * as cc from "../src/games/commitment-credibility/model";
+import * as mt from "../src/games/multipolar-traps/model";
+import * as ab from "../src/games/minimax-alpha-beta/model";
 
 let passed = 0;
 function test(name: string, fn: () => void): void {
@@ -2144,5 +2177,623 @@ test("Feel: splitting evenly is refused exactly when your fallback is below thei
   assert.equal(nbRight(NB_POOL[0]!, 7), true);
   assert.equal(nbRight(NB_POOL[0]!, 6), false);
 });
+
+// frag:rubinstein-bargaining
+console.log("rubinstein bargaining");
+test("the responder accepts at the value of waiting and the proposer keeps the rest", () => {
+  assert.equal(RB_SEE.wait(), 6);
+  assert.equal(RB_SEE.best(), 6);
+  assert.equal(RB_SEE.accepts(6), true);
+  assert.equal(RB_SEE.accepts(5.9), false);
+  assert.equal(RB_SEE.keep(4), 0);
+  assert.equal(RB_SEE.keep(6), 6);
+  assert.deepEqual(RB_POOL.map((g) => g.best()), [12, 3, 12, 4]);
+});
+test("Feel offers always differ in pay and Prove answers are whole", () => {
+  for (const r of RB_ROUNDS) { const g = new RbOffers(RB_POT, r.delta); assert.ok(g.keep(r.a) !== g.keep(r.b)); }
+  for (const g of RB_POOL) assert.equal(g.best() % 1, 0);
+  assert.equal(rbProveSet(new Rng(1)).length, 2);
+  assert.equal(rbRight(RB_POOL[0]!, 12), true);
+  assert.equal(rbRight(RB_POOL[0]!, 8), false);
+});
+
+// frag:ellsberg-ambiguity
+console.log("ellsberg ambiguity");
+test("red beats black exactly when red or yellow beats black or yellow", () => {
+  for (let k = 0; k <= 60; k += 5) {
+    if (k === 30) continue;
+    const u = new ElUrn(k);
+    assert.equal(u.better("A", "B") === "A", u.better("C", "D") === "C");
+  }
+  assert.equal(new ElUrn(20).better("A", "B"), "A");
+  assert.equal(new ElUrn(50).better("C", "D"), "D");
+  assert.equal(new ElUrn(30).chance("A"), new ElUrn(30).chance("B"));
+});
+test("Feel shows both an unknown urn that beats and one that loses to the known urn, and Prove has no ties", () => {
+  assert.ok(EL_CHANCE.some((c) => c > EL_KNOWN) && EL_CHANCE.some((c) => c < EL_KNOWN));
+  assert.deepEqual(EL_POOL.map(elAnswer), [0, 1, 0, 1]);
+  for (const seed of [1, 2, 3]) assert.deepEqual(elProveSet(new Rng(seed)).map((c) => c.pair).sort(), ["AB", "CD"]);
+});
+
+// frag:level-k
+console.log("level k");
+test("each level guesses two thirds of the level below", () => {
+  assert.equal(lkGuess(54, 2), 24);
+  assert.equal(lkGuess(81, 3), 24);
+  assert.equal(lkTarget(60), 40);
+  assert.deepEqual(LK_POOL.map(lkAnswer), [24, 24, 30, 40]);
+  assert.equal(lkRight(LK_POOL[0]!, 25), true);
+  assert.equal(lkRight(LK_POOL[0]!, 30), false);
+});
+test("Feel rounds reward the guess nearest two thirds of the mean", () => {
+  for (const r of LK_ROUNDS) assert.ok(lkClose(r.a, r.mean) !== lkClose(r.b, r.mean));
+  assert.equal(lkProveSet(new Rng(1)).length, 2);
+});
+
+// frag:quantal-response
+console.log("quantal response");
+test("the chance of the better move rises smoothly and never reaches one", () => {
+  assert.equal(qrChance(1, 0), 0.5);
+  assert.ok(qrChance(1, 1) < qrChance(1, 2) && qrChance(1, 2) < qrChance(1, 5));
+  assert.ok(qrChance(1, 6) < 1);
+  assert.ok(qrChance(2, 1) > qrChance(1, 1));
+  assert.deepEqual(QR_POOL.map(qrPercent), [73, 88, 73, 95, 50]);
+});
+test("Feel mixes bets that beat the safe prize and bets that do not, and Prove tolerates two points", () => {
+  const wins = QR_GAPS.map((g) => QR_BET * qrChance(1, g) > QR_SAFE);
+  assert.ok(wins.includes(true) && wins.includes(false));
+  assert.equal(qrProveSet(new Rng(1)).length, 2);
+  assert.equal(qrRight(QR_POOL[0]!, 75), true);
+  assert.equal(qrRight(QR_POOL[0]!, 80), false);
+});
+
+// frag:inequity-aversion
+console.log("inequity aversion");
+test("being behind and being ahead both cost, and sharing wins once guilt passes one half", () => {
+  const f = new IaFair(0.8, 0.4);
+  assert.equal(f.utility(5, 5), 5);
+  assert.ok(Math.abs(f.utility(8, 2) - 5.6) < 1e-9);
+  assert.ok(Math.abs(f.utility(2, 8) - -2.8) < 1e-9);
+  assert.ok(iaSee(10, 0.2) > iaSee(5, 0.2));
+  assert.ok(iaSee(5, 0.7) > iaSee(10, 0.7));
+  assert.deepEqual(IA_POOL.map(iaValue), [5, -1, 5, -1]);
+});
+test("Feel rounds have a clear winner and Prove answers are in the slider range", () => {
+  for (const r of IA_ROUNDS) assert.ok(Math.max(0, iaFelt(...r.a)) !== Math.max(0, iaFelt(...r.b)));
+  for (const c of IA_POOL) assert.ok(iaValue(c) >= -6 && iaValue(c) <= 8);
+  assert.equal(iaProveSet(new Rng(2)).length, 2);
+  assert.equal(iaRight(IA_POOL[0]!, 5), true);
+  assert.equal(iaRight(IA_POOL[0]!, 8), false);
+});
+
+// frag:spiteful-preferences
+console.log("spiteful preferences");
+test("burning pays exactly when spite times harm exceeds the cost", () => {
+  assert.equal(spUtility(6, 6, 0.5), 3);
+  for (const r of SP_ROUNDS) assert.equal(spBurn(r) > spKeep(), 0.5 * r.harm > r.cost);
+  assert.deepEqual(SP_POOL.map(spThreshold), [25, 50, 25, 75, 40]);
+});
+test("Feel has rounds on both sides and Prove thresholds can be answered within four points", () => {
+  const b = SP_ROUNDS.map((r) => spBurn(r) > spKeep());
+  assert.ok(b.includes(true) && b.includes(false));
+  assert.equal(spProveSet(new Rng(3)).length, 2);
+  assert.equal(spRight(SP_POOL[0]!, 27), true);
+  assert.equal(spRight(SP_POOL[0]!, 40), false);
+});
+
+// frag:zermelo-sprague-grundy
+console.log("zermelo sprague grundy");
+test("the mover wins from every position whose xor is not zero, by leaving zero", () => {
+  assert.equal(nimXor([3, 4, 5]), 2);
+  assert.deepEqual(nimMove([3, 4, 5]), [0, 2]);
+  assert.equal(nimMove([1, 4, 5]), null);
+  for (const p of [...NIM_POOL, NIM_SEE]) {
+    const m = nimMove(p);
+    if (nimWins(p)) assert.equal(nimXor(nimAfter(p, m![0], m![1])), 0);
+    else assert.equal(m, null);
+  }
+});
+test("brute force agrees on small positions and Feel has one winning move in each round", () => {
+  const memo = new Map<string, boolean>();
+  const win = (p: number[]): boolean => {
+    const k = [...p].sort().join(",");
+    if (memo.has(k)) return memo.get(k)!;
+    let w = false;
+    for (let i = 0; i < p.length && !w; i++) for (let t = 1; t <= p[i]!; t++) if (!win(nimAfter(p, i, t))) { w = true; break; }
+    if (p.every((x) => x === 0)) w = false;
+    memo.set(k, w);
+    return w;
+  };
+  for (const a of [0, 1, 2, 3]) for (const b of [0, 1, 2, 3]) for (const c of [0, 1, 2, 3]) assert.equal(win([a, b, c]), nimWins([a, b, c]));
+  for (const r of NIM_ROUNDS) assert.ok(nimHolds(r, r.a) !== nimHolds(r, r.b));
+  assert.deepEqual(nimProveSet(new Rng(1)).map(nimWins).sort(), [false, true]);
+});
+
+// frag:mcts
+console.log("mcts");
+test("fewer games earn a bigger bonus and the bonus shrinks as games grow", () => {
+  assert.ok(mcUcb(1, 2, 100) > mcUcb(50, 100, 100));
+  assert.ok(mcUcb(5, 10, 100) > 0.5);
+  assert.ok(mcUcb(5, 10, 100) - 0.5 > mcUcb(50, 100, 100) - 0.5);
+  assert.deepEqual(MC_POOL.map(mcNext), [0, 1, 0, 1]);
+});
+test("Feel rounds include a misleading small sample and Prove gives two cases", () => {
+  for (const r of MC_ROUNDS) assert.ok(r.a.truth !== r.b.truth);
+  assert.ok(MC_ROUNDS.some((r) => r.a.wins / r.a.tries > r.b.wins / r.b.tries && r.a.truth < r.b.truth));
+  assert.equal(mcProveSet(new Rng(2)).length, 2);
+});
+
+// frag:regret-matching-cfr
+console.log("regret matching");
+test("regrets compare each action with what you played, and matching uses only the positive ones", () => {
+  const r = rmRegrets(RM_MIX, RM_OPP);
+  assert.ok(Math.abs(r[0]! - 0.2) < 1e-9 && Math.abs(r[1]!) < 1e-9 && Math.abs(r[2]! - 0.1) < 1e-9);
+  const m = rmMatching(r);
+  assert.ok(Math.abs(m[0]! - 2 / 3) < 1e-9 && Math.abs(m[2]! - 1 / 3) < 1e-9);
+  assert.deepEqual(rmMatching([-1, -2, 0]), [1 / 3, 1 / 3, 1 / 3]);
+  assert.deepEqual(RM_POOL.map(rmPercent), [67, 25, 50, 75]);
+  assert.ok(Math.abs(rmEv(RM_EVEN, RM_OPP)) < 1e-9 && rmValue([1, 0, 0])[1] === 1);
+});
+test("in Feel, playing by regret never pays less than playing evenly", () => {
+  for (const x of RM_ROUNDS) assert.ok(rmPay(rmMatching(rmRegrets(RM_EVEN, x.opp)), x.opp) > rmPay(RM_EVEN, x.opp));
+  assert.equal(rmProveSet(new Rng(4)).length, 2);
+  assert.equal(rmRight(RM_POOL[0]!, 66), true);
+  assert.equal(rmRight(RM_POOL[0]!, 50), false);
+});
+
+// frag:fictitious-play
+console.log("fictitious play");
+test("the matcher copies the majority of your history and the mismatcher opposes it", () => {
+  assert.equal(fpMatch(3, 4), "H");
+  assert.equal(fpMatch(1, 4), "T");
+  assert.equal(fpMis(3, 4), "T");
+  assert.equal(fpMis(1, 4), "H");
+  assert.deepEqual(FP_ROUNDS.map(fpAnswer), ["H", "T", "H", "T"]);
+  assert.deepEqual(FP_ROUNDS.map(fpBeats), ["T", "H", "T", "H"]);
+});
+test("long run frequencies of both sides settle near one half, and Prove gives one of each", () => {
+  const s = fpSim(FP_N);
+  assert.ok(Math.abs(s.matcher[FP_N - 1]! - 0.5) < 0.15);
+  assert.ok(Math.abs(s.mismatcher[FP_N - 1]! - 0.5) < 0.15);
+  assert.deepEqual(FP_POOL.map(fpAnswer), ["H", "T", "H", "T"]);
+  assert.deepEqual(fpProveSet(new Rng(3)).map(fpAnswer).sort(), ["H", "T"]);
+});
+
+// frag:lemke-howson
+console.log("lemke howson");
+test("brute force checks (2^n - 1)^2 pairs of supports", () => {
+  assert.equal(lhBrute(2), 9);
+  assert.equal(lhBrute(3), 49);
+  assert.equal(lhBrute(4), 225);
+  assert.ok(lhBrute(10) > 1e6);
+  assert.deepEqual(LH_POOL.map(lhAnswer), [9, 49, 225]);
+});
+test("the path beats brute force on every Feel size and the decoy never equals the answer", () => {
+  for (const r of LH_ROUNDS) assert.ok(lhPay(lhPath(r.n)) > lhPay(lhBrute(r.n)));
+  for (const c of LH_POOL) assert.ok(lhDecoy(c) !== lhAnswer(c));
+  assert.equal(lhProveSet(new Rng(2)).length, 2);
+});
+
+// frag:linear-programming-zero-sum
+console.log("linear programming zero sum");
+test("the value is where both columns pay the same, and no mix guarantees more", () => {
+  assert.ok(Math.abs(LP_SEE.best() - 0.2) < 1e-9);
+  assert.ok(Math.abs(LP_SEE.value() - 2.6) < 1e-9);
+  for (const m of [...LP_ROUNDS, ...LP_POOL, LP_SEE]) {
+    for (let p = 0; p <= 1.0001; p += 0.01) assert.ok(m.floor(p) <= m.value() + 1e-9);
+    const [x, y] = m.lines(m.best());
+    assert.ok(Math.abs(x - y) < 1e-9);
+  }
+  assert.deepEqual(LP_POOL.map((m) => m.value()), [2.5, 3, 2, 3]);
+});
+test("Feel's safe mix always beats even play, and Prove values are half steps", () => {
+  for (const m of LP_ROUNDS) assert.ok(m.value() > m.floor(0.5));
+  for (const m of LP_POOL) assert.equal((m.value() * 2) % 1, 0);
+  assert.equal(lpProveSet(new Rng(1)).length, 2);
+  assert.equal(lpRight(LP_POOL[0]!, 2.5), true);
+  assert.equal(lpRight(new LpMatrix(4, 1, 2, 3), 3), false);
+});
+
+// frag:multiplicative-weights
+console.log("multiplicative weights");
+test("a loss shrinks a weight by one minus the rate times the loss, and shares always sum to one", () => {
+  assert.equal(mwUpdate(80, 0.5, 1), 40);
+  assert.deepEqual(MW_POOL.map(mwAnswer), [40, 45, 70, 45]);
+  for (let k = 0; k <= MW_LOSSES.length; k++) {
+    const s = mwShares(k);
+    assert.ok(Math.abs(s.reduce((a, b) => a + b, 0) - 1) < 1e-9);
+    assert.ok(s.every((x) => x > 0));
+  }
+  assert.ok(Math.abs(mwNorm([1, 1])[0]! - 0.5) < 1e-9);
+});
+test("Feel has rounds where backing the heaviest wins and rounds where spreading wins", () => {
+  const d = MW_ROUNDS.map((r) => mwPick(r) > mwSpread(r));
+  assert.ok(d.includes(true) && d.includes(false));
+  assert.equal(mwProveSet(new Rng(2)).length, 2);
+  assert.equal(mwRight(MW_POOL[0]!, 41), true);
+  assert.equal(mwRight(MW_POOL[0]!, 50), false);
+});
+
+// frag:marl-self-play
+console.log("marl self play");
+test("learning peaks against an equal and falls with the gap", () => {
+  assert.equal(spGain(50, 50), 6);
+  assert.equal(spGain(50, 90), 0);
+  assert.ok(spGain(50, 60) > spGain(50, 80));
+  assert.deepEqual(SPL_POOL.map(splAnswer), [3, 4.5, 3, 6, 1.5]);
+});
+test("Feel rounds have one better bot each, and Prove tolerances are tight", () => {
+  for (const r of SPL_ROUNDS) assert.ok(spGain(r.you, r.a) !== spGain(r.you, r.b));
+  assert.equal(splProveSet(new Rng(5)).length, 2);
+  assert.equal(splRight(SPL_POOL[0]!, 3), true);
+  assert.equal(splRight(SPL_POOL[0]!, 4), false);
+});
+
+// frag:contextual-bandits
+console.log("contextual bandits");
+test("a little exploring beats none and beats always, and the best option depends on the person", () => {
+  assert.ok(cbReward(0.25) > cbReward(0));
+  assert.ok(cbReward(0.25) > cbReward(1));
+  let best = 0;
+  for (let e = 0; e <= 1.0001; e += 0.01) if (cbReward(e) > cbReward(best)) best = e;
+  assert.ok(best > 0.1 && best < 0.5);
+  assert.deepEqual(CB_ROUNDS.map(cbBetter), [1, 0, 1, 0]);
+});
+test("Prove includes a person whose best option is not the overall favourite", () => {
+  assert.ok(CB_POOL.some((c) => (cbBetter(c) === 1) === (c.overallA > c.overallB)));
+  assert.ok(CB_POOL.some((c) => (cbBetter(c) === 0) !== (c.overallA > c.overallB)));
+  assert.equal(cbProveSet(new Rng(1)).length, 2);
+});
+
+// frag:personalized-pricing
+console.log("personalized pricing");
+test("a sale needs the price within willingness to pay, and one price peaks at six", () => {
+  assert.equal(ppProfit(4, 5), 2);
+  assert.equal(ppProfit(7, 5), 0);
+  let best = 2;
+  for (let p = 2; p <= 10; p += 0.5) if (ppCrowd(p) > ppCrowd(best)) best = p;
+  assert.equal(best, PP_BEST);
+  assert.deepEqual(PP_POOL.map(ppAnswer), [8, 6, 10, 9, 14]);
+});
+test("Feel has rounds where the high price wins and rounds where the low one does", () => {
+  const w = PP_ROUNDS.map((r) => ppProfit(r.b, r.wtp) > ppProfit(r.a, r.wtp));
+  assert.ok(w.includes(true) && w.includes(false));
+  assert.equal(ppProveSet(new Rng(2)).length, 2);
+  assert.equal(ppRight(PP_POOL[0]!, 8), true);
+  assert.equal(ppRight(PP_POOL[0]!, 6), false);
+});
+
+// frag:context-aware-recsys
+console.log("context aware recsys");
+test("each item fits best at its own hour", () => {
+  assert.equal(carFit(0, 8), 1);
+  assert.ok(carFit(0, 8) > carFit(1, 8) && carFit(1, 13) > carFit(0, 13) && carFit(2, 21) > carFit(1, 21));
+  assert.deepEqual(CAR_POOL.map(carAnswer), [0, 1, 1, 1, 0]);
+});
+test("Feel has rounds where the phone wins and rounds where the server does", () => {
+  const w = CAR_ROUNDS.map((r) => carPhone(r) > carServer(r));
+  assert.ok(w.includes(true) && w.includes(false));
+  assert.equal(carProveSet(new Rng(3)).length, 2);
+});
+
+// frag:desirability-rsrr
+console.log("desirability rsrr");
+test("asking above your level lowers the chance, and the payoff peaks at your own level", () => {
+  assert.equal(drAccept(50, 40), 1);
+  assert.equal(drAccept(50, 80), 0);
+  assert.ok(Math.abs(drAccept(50, 65) - 0.5) < 1e-9);
+  let best = 0;
+  for (let t = 0; t <= 100; t += 5) if (drValue(DR_YOU, t) > drValue(DR_YOU, best)) best = t;
+  assert.equal(best, DR_YOU);
+  assert.deepEqual(DR_POOL.map(drPercent), [50, 0, 70, 50, 100]);
+});
+test("Feel rounds have a clear winner and Prove answers are in range", () => {
+  for (const r of DR_ROUNDS) assert.ok(drValue(r.you, r.a) !== drValue(r.you, r.b));
+  assert.equal(drProveSet(new Rng(2)).length, 2);
+  assert.equal(drRight(DR_POOL[0]!, 52), true);
+  assert.equal(drRight(DR_POOL[0]!, 70), false);
+});
+
+// frag:hypergame-theory
+console.log("hypergame theory");
+test("a seen move is countered and an unseen move keeps its worth", () => {
+  assert.equal(htPay(8, true), 4);
+  assert.equal(htPay(8, false), 8);
+  assert.equal(htPay(3, true), 0);
+  assert.equal(HT_COUNTER, 4);
+  assert.deepEqual(HT_POOL.map(htAnswer), [4, 6, 4, 4, 0]);
+  assert.equal(HT_SEE.filter((m) => !m.seen).length, 1);
+});
+test("Feel has rounds where the known move wins and where the hidden one does", () => {
+  const w = HT_ROUNDS.map((r) => htPay(r.seen, true) > htPay(r.hidden, false));
+  assert.ok(w.includes(true) && w.includes(false));
+  assert.ok(HT_ROUNDS.every((r) => htPay(r.seen, true) !== htPay(r.hidden, false)));
+  assert.equal(htProveSet(new Rng(1)).length, 2);
+  assert.equal(htRight(HT_POOL[0]!, 4), true);
+  assert.equal(htRight(HT_POOL[0]!, 9), false);
+});
+
+// frag:hypergame-levels
+console.log("hypergame levels");
+test("exploiting pays most only while the other side is unaware", () => {
+  const best = HL_LEVELS.reduce((a, b) => (b.exploit > a.exploit ? b : a));
+  assert.equal(best.level, 1);
+  assert.ok(HL_LEVELS[2]!.exploit < HL_SAFE && HL_LEVELS[0]!.exploit < HL_SAFE);
+  assert.ok(HL_LEVELS.every((l, i) => l.level === i));
+});
+test("Feel mixes rounds where exploiting wins and where safe wins, and Prove labels are unambiguous", () => {
+  const w = HL_ORDER.map((i) => HL_LEVELS[i]!.exploit > HL_SAFE);
+  assert.ok(w.includes(true) && w.includes(false));
+  for (const c of HL_POOL) assert.ok(c.level !== c.other);
+  assert.deepEqual(HL_POOL.map(hlSlot), [1, 0, 1, 1, 0]);
+  assert.equal(hlProveSet(new Rng(2)).length, 2);
+});
+
+// frag:metagame-howard
+console.log("metagame howard");
+test("defect is best against any fixed move but cooperate is best against a copier", () => {
+  assert.equal(mhBest(MH_POL.copy!), "C");
+  assert.equal(mhBest(MH_POL.grim!), "C");
+  assert.equal(mhBest(MH_POL.alwaysD!), "D");
+  assert.equal(mhBest(MH_POL.alwaysC!), "D");
+  assert.equal(mhBest(MH_POL.opposite!), "D");
+  assert.equal(mhPay(MH_POL.copy!, "C"), 3);
+  assert.equal(mhPay(MH_POL.copy!, "D"), 1);
+  assert.equal(mhPay(MH_POL.opposite!, "D"), 5);
+});
+test("Feel and Prove each include both best moves", () => {
+  const f = MH_FEEL.map((k) => mhBest(MH_POL[k]!));
+  assert.ok(f.includes("C") && f.includes("D"));
+  assert.deepEqual(mhProveSet(new Rng(1)).map((k) => mhBest(MH_POL[k]!)).sort(), ["C", "D"]);
+  assert.ok(MH_POOL.every((k) => MH_POL[k]));
+});
+
+// frag:synthesis-frames
+console.log("synthesis frames");
+test("a Premium message is empty from a naive seller, conclusive from an honest one, and between for a bluffer", () => {
+  assert.equal(sfPost(0.3, SF_SELLERS.naive!.bluff), 0.3);
+  assert.equal(sfPost(0.3, SF_SELLERS.honest!.bluff), 1);
+  assert.ok(Math.abs(sfPost(0.5, 0.5) - 2 / 3) < 1e-9);
+  assert.deepEqual(SF_POOL.map(sfPercent), [57, 67, 100, 50, 86]);
+});
+test("Feel has rounds where buying wins and rounds where passing does, and Prove tolerates three points", () => {
+  const w = SF_ROUNDS.map((r) => sfBuy(r) > SF_PASS);
+  assert.ok(w.includes(true) && w.includes(false));
+  assert.equal(sfProveSet(new Rng(2)).length, 2);
+  assert.equal(sfRight(SF_POOL[0]!, 59), true);
+  assert.equal(sfRight(SF_POOL[0]!, 70), false);
+});
+
+// frag:synthesis-board
+console.log("synthesis board");
+test("the board holds five distinct ideas, each with a clue", () => {
+  assert.equal(SB_IDEAS.length, 5);
+  assert.equal(new Set(SB_IDEAS.map((i) => i.key)).size, 5);
+  for (const i of SB_IDEAS) assert.ok(i.rule.length > 10 && i.clue.length > 10);
+  for (const c of SB_POOL) assert.ok(c.idea !== c.other);
+  assert.deepEqual(SB_POOL.map(sbSlot), [0, 1, 1, 0, 1]);
+});
+test("Feel rounds each have a clear better choice and Prove gives two cases", () => {
+  for (const r of SB_ROUNDS) assert.ok(r.pay[0] !== r.pay[1]);
+  assert.equal(SB_ROUNDS.length, 4);
+  assert.equal(sbProveSet(new Rng(1)).length, 2);
+});
+
+console.log("reciprocity and norms");
+test("kindness is what was given beyond what was available, so a big gift can be unkind", () => {
+  const [kind, forced, unkind, small] = rf.FEEL_GIFTS as unknown as [rf.Gift, rf.Gift, rf.Gift, rf.Gift];
+  assert.equal(kind.verdict, "reward");
+  assert.equal(forced.verdict, "neutral");
+  assert.equal(unkind.verdict, "punish");
+  assert.equal(small.verdict, "reward");
+  assert.ok(unkind.given > 0 && unkind.verdict === "punish");
+  assert.equal(kind.typical, 2);
+  assert.equal(unkind.typical, -2);
+});
+test("prove gifts always include a big unkind gift and a small kind one", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const g = rf.proveGifts(new Rng(seed));
+    assert.equal(g.length, 3);
+    assert.ok(g.every((x) => x.kindness !== 0));
+    assert.ok(g.some((x) => x.verdict === "punish" && x.given >= 4));
+    assert.ok(g.some((x) => x.verdict === "reward" && x.given <= 2));
+  }
+  assert.equal(rf.followedIntention(rf.FEEL_GIFTS, [2, 0, -2, 1]), 4);
+  assert.equal(rf.followedIntention(rf.FEEL_GIFTS, [2, 2, 2, 2]), 2);
+});
+
+console.log("hyperbolic discounting");
+test("a hyperbolic discounter takes the later reward far away and flips to the sooner one near", () => {
+  const o = hd.SEE_OFFER;
+  assert.equal(o.prefersSooner(0), true);
+  assert.equal(o.prefersSooner(12), false);
+  near(o.flip, (5 * 4) / 3 - 2);
+  assert.ok(o.prefersSooner(o.flip - 0.1) && !o.prefersSooner(o.flip + 0.1));
+  assert.ok(Math.abs(o.sooner(o.flip) - o.later(o.flip)) < 1e-9);
+});
+test("an exponential discounter never flips", () => {
+  for (const p of hd.FEEL_PAIRS) assert.equal(p.offer.expPrefersSooner(0), p.offer.expPrefersSooner(12));
+});
+test("every feel pair flips between near and far, and prove offers flip at different delays inside the slider", () => {
+  for (const p of hd.FEEL_PAIRS) assert.ok(p.offer.flip > 0 && p.offer.flip < hd.MAX_WEEKS);
+  const f = hd.PROVE_OFFERS.map((o) => o.flip);
+  assert.ok(f.every((x) => x > 1 && x < hd.MAX_WEEKS - 1));
+  assert.ok(Math.abs(f[0]! - f[1]!) > 2 * hd.PROVE_TOLERANCE);
+  assert.ok(f.every((x) => Math.abs(x - hd.SEE_OFFER.flip) > hd.PROVE_TOLERANCE));
+});
+
+console.log("near miss");
+test("the chance of a win never depends on the last spin", () => {
+  const m = nm.FEEL_MACHINE;
+  for (const s of ["win", "near", "loss"] as const) near(m.nextWin(s), m.p);
+  near(m.ev, -0.4);
+  const rng = new Rng(3);
+  let wins = 0;
+  const after: Record<string, [number, number]> = { near: [0, 0], loss: [0, 0] };
+  let prev = "loss";
+  for (let i = 0; i < 40000; i++) {
+    const s = m.draw(rng);
+    if (prev in after) { after[prev]![1]++; if (s === "win") after[prev]![0]++; }
+    if (s === "win") wins++;
+    prev = s;
+  }
+  near(wins / 40000, 0.1, 0.01);
+  near(after.near![0] / after.near![1], after.loss![0] / after.loss![1], 0.015);
+});
+test("reels match the spin, and the machines for prove differ in worth", () => {
+  const rng = new Rng(5);
+  const m = nm.FEEL_MACHINE;
+  assert.deepEqual(m.reels("win", rng), [true, true, true]);
+  for (let i = 0; i < 50; i++) {
+    assert.equal(m.reels("near", rng).filter(Boolean).length, 2);
+    assert.ok(m.reels("loss", rng).filter(Boolean).length <= 1);
+  }
+  assert.ok(nm.PROVE_MACHINES[0]!.ev < 0 && nm.PROVE_MACHINES[1]!.ev > 0);
+  const c = nm.continuation([{ after: "near", again: true }, { after: "near", again: true }, { after: "loss", again: false }, { after: "win", again: true }]);
+  assert.deepEqual(c.near, { again: 2, of: 2 });
+  assert.deepEqual(c.loss, { again: 0, of: 1 });
+});
+
+console.log("sunk cost");
+test("the best choice ignores the sunk amount", () => {
+  for (const v of sc.FEEL_VENTURES) assert.equal(v.best, "quit");
+  const [a, b, c] = sc.FEEL_VENTURES as unknown as [sc.Venture, sc.Venture, sc.Venture];
+  assert.ok(a.sunk < b.sunk && b.sunk < c.sunk);
+  near(c.finishTotal - c.quitTotal, a.finishTotal - a.quitTotal);
+  near(c.finishTotal - c.quitTotal, c.ahead);
+});
+test("prove ventures hold one quit, one fresh start and one stay with a big sunk amount", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const v = sc.proveVentures(new Rng(seed));
+    assert.deepEqual(v.map((x) => x.best).sort(), ["continue", "continue", "quit"]);
+    assert.ok(v.some((x) => x.best === "continue" && x.sunk >= 8));
+    assert.ok(v.some((x) => x.best === "quit" && x.sunk >= 8));
+  }
+});
+
+console.log("breaking frames");
+test("in the feel standoff the rival holds the edge, and a fine is the lever that works", () => {
+  const s = bf.FEEL_STANDOFF;
+  assert.ok(s.unique);
+  assert.deepEqual(s.equilibrium, [0, 1]);
+  assert.equal(s.base, 1);
+  assert.equal(s.first, 1);
+  assert.equal(s.fine, 4);
+  assert.equal(s.exit, 2);
+  assert.equal(s.best, "fine");
+  assert.deepEqual(s.fined().stable(), [[1, 0]]);
+  assert.deepEqual(s.firstCell, [0, 1]);
+  assert.equal(s.rival("first"), 5);
+  assert.equal(s.rival("fine"), 0);
+  assert.equal(s.rival("exit"), 0);
+  assert.deepEqual(s.fineCell, [1, 0]);
+});
+test("prove standoffs each have a different best lever", () => {
+  assert.deepEqual(bf.PROVE_STANDOFFS.map((s) => s.best), ["first", "exit", "fine"]);
+  for (const s of bf.PROVE_STANDOFFS) assert.ok(s.unique);
+});
+
+console.log("finite and infinite games");
+test("always playing safe loses a race to a rival who wins ties, and bold is the way to win", () => {
+  const r = fi.FEEL_RACE;
+  assert.equal(r.always("safe"), 0);
+  assert.ok(r.always("bold") > 0 && r.always("bold") < r.win(0, 0) + 1e-9);
+  assert.ok(r.win(0, 0) > 0.5 && r.win(0, 0) < 0.8);
+  assert.equal(r.best(2, 3), "bold");
+  assert.equal(r.best(3, 2), "safe");
+});
+test("a rally lasts longest when you stay safe", () => {
+  const y = fi.FEEL_RALLY;
+  assert.ok(y.boldLength < y.rounds && y.boldLength > 1);
+  near(y.boldLength, (1 - 0.6 ** 6) / 0.4);
+});
+test("prove cases always hold one bold race, one safe race and one rally", () => {
+  for (let seed = 1; seed <= 200; seed++) {
+    const c = fi.proveCases(new Rng(seed));
+    assert.equal(c.length, 3);
+    assert.equal(c.filter((x) => x.kind === "rally").length, 1);
+    assert.deepEqual(c.filter((x) => x.kind === "race").map((x) => x.answer).sort(), ["bold", "safe"]);
+  }
+});
+
+console.log("choosing your game");
+test("the best arena is never the biggest prize or the best odds", () => {
+  for (const set of [...gs.FEEL_SETS, ...gs.PROVE_SETS]) {
+    const best = gs.bestArena(set);
+    const sorted = [...set].map((a) => a.ev).sort((a, b) => b - a);
+    assert.ok(sorted[0]! - sorted[1]! >= 0.25, "clear winner");
+    assert.notEqual(set[best]!.prize, Math.max(...set.map((a) => a.prize)));
+    assert.notEqual(set[best]!.win, Math.max(...set.map((a) => a.win)));
+  }
+  near(gs.FEEL_SETS[0]![1]!.ev, 1.4);
+});
+
+console.log("commitment");
+test("a threat the incumbent would not carry out does not deter, and a commitment makes it believable", () => {
+  const d = cc.FEEL_CASES[0]!;
+  assert.equal(d.credible, false);
+  assert.equal(d.outcome(false).enters, true);
+  assert.equal(d.outcome(false).incumbent, 3);
+  assert.equal(d.outcome(true).enters, false);
+  assert.equal(d.outcome(true).incumbent, 5);
+  assert.equal(d.commitPays, true);
+});
+test("committing is wasted when the threat is already believable, and not worth it when it costs too much", () => {
+  assert.deepEqual(cc.FEEL_CASES.map((c) => c.commitPays), [true, true, false]);
+  assert.equal(cc.FEEL_CASES[2]!.credible, true);
+  assert.deepEqual(cc.PROVE_CASES.map((c) => c.commitPays), [true, false, false]);
+  assert.equal(cc.PROVE_CASES[1]!.credible, true);
+  assert.equal(cc.PROVE_CASES[2]!.credible, false);
+});
+
+console.log("multipolar traps");
+test("raising alone pays until the cost passes pie (n - 1) / (n (n + 1))", () => {
+  const c = mt.FEEL_CONTEST;
+  near(c.fair, 2);
+  near(c.alone, (10 * 2) / 6 - 1);
+  near(c.breakEven, 10 * 4 / 30);
+  assert.ok(c.trap);
+  const at = new mt.Contest(5, 10, c.breakEven);
+  near(at.alone, at.fair);
+  assert.ok(!new mt.Contest(5, 10, 2).trap);
+});
+test("when all raise, shares return to fair and the cost is pure waste", () => {
+  const c = mt.FEEL_CONTEST;
+  const lv = [3, 3, 3, 3, 3];
+  near(c.share(lv, 0), c.fair);
+  near(c.net(lv, 0, true), c.fair - 1);
+  for (const x of mt.PROVE_CONTESTS) assert.ok(x.breakEven > 0.5 && x.breakEven < mt.MAX_COST - 0.5);
+  assert.ok(Math.abs(mt.PROVE_CONTESTS[0]!.breakEven - mt.PROVE_CONTESTS[1]!.breakEven) > 2 * mt.PROVE_TOLERANCE);
+  assert.ok(mt.PROVE_CONTESTS.every((x) => Math.abs(x.breakEven - mt.FEEL_CONTEST.breakEven) > mt.PROVE_TOLERANCE));
+});
+
+console.log("minimax and alpha-beta");
+test("minimax backs values up through max, min, max", () => {
+  const t = new ab.Tree([3, 5, 6, 9, 1, 2, 0, 1]);
+  assert.deepEqual(t.maxNodes, [5, 9, 2, 1]);
+  assert.deepEqual(t.minNodes, [5, 1]);
+  assert.equal(t.value, 5);
+  assert.equal(t.bestBranch, 0);
+});
+test("alpha-beta returns the minimax value and skips leaves that cannot matter", () => {
+  const t = new ab.Tree([3, 5, 6, 9, 1, 2, 0, 1]);
+  const r = t.alphaBeta();
+  assert.equal(r.value, 5);
+  assert.deepEqual(t.skipped, [3, 6, 7]);
+  const rng = new Rng(9);
+  for (let i = 0; i < 400; i++) {
+    const x = new ab.Tree(Array.from({ length: 8 }, () => rng.int(1, 9)));
+    assert.equal(x.alphaBeta().value, x.value);
+  }
+});
+test("feel and prove trees are well formed", () => {
+  for (let seed = 1; seed <= 100; seed++) {
+    for (const t of ab.feelTrees(new Rng(seed))) assert.notEqual(Math.floor(t.leaves.indexOf(Math.max(...t.leaves)) / 4), t.bestBranch);
+    const p = ab.proveTrees(new Rng(seed));
+    assert.equal(p.length, 2);
+    for (const t of p) assert.ok(t.skipped.length >= 1 && t.skipped.length <= 4);
+  }
+});
+
 
 console.log(`\n${passed} tests passed`);
