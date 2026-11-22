@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
   <title id="t">The curriculum</title>
-  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Seventy-five games are live: slots 1 to 55, 66 to 75 and 86 to 95. The rest are empty slots.</desc>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. One hundred and eight games are live: every slot except 76 to 85. The rest are empty slots.</desc>
   <defs>
     <style>
 
@@ -93,16 +93,16 @@
   <circle class="lv d" style="--i:52" cx="778.4" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:53" cx="799.2" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:54" cx="820" cy="214" r="5.4"/>
-  <circle class="em d" style="--i:55" cx="840.8" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:56" cx="861.6" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:57" cx="882.4" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:58" cx="903.2" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:59" cx="924" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:60" cx="944.8" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:61" cx="965.6" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:62" cx="986.4" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:63" cx="1007.2" cy="214" r="4.6"/>
-  <circle class="em d" style="--i:64" cx="1028" cy="214" r="4.6"/>
+  <circle class="lv d" style="--i:55" cx="840.8" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:56" cx="861.6" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:57" cx="882.4" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:58" cx="903.2" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:59" cx="924" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:60" cx="944.8" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:61" cx="965.6" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:62" cx="986.4" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:63" cx="1007.2" cy="214" r="5.4"/>
+  <circle class="lv d" style="--i:64" cx="1028" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:65" cx="1048.8" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:66" cx="1069.6" cy="214" r="5.4"/>
   <circle class="lv d" style="--i:67" cx="1090.4" cy="214" r="5.4"/>
@@ -134,33 +134,33 @@
   <circle class="lv d" style="--i:92" cx="653.6" cy="298" r="5.4"/>
   <circle class="lv d" style="--i:93" cx="674.4" cy="298" r="5.4"/>
   <circle class="lv d" style="--i:94" cx="695.2" cy="298" r="5.4"/>
-  <circle class="em d" style="--i:95" cx="716" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:96" cx="736.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:97" cx="757.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:98" cx="778.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:99" cx="799.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:100" cx="820" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:101" cx="840.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:102" cx="861.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:103" cx="882.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:104" cx="903.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:105" cx="924" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:106" cx="944.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:107" cx="965.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:108" cx="986.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:109" cx="1007.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:110" cx="1028" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:111" cx="1048.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:112" cx="1069.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:113" cx="1090.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:114" cx="1111.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:115" cx="1132" cy="298" r="4.6"/>
+  <circle class="lv d" style="--i:95" cx="716" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:96" cx="736.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:97" cx="757.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:98" cx="778.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:99" cx="799.2" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:100" cx="820" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:101" cx="840.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:102" cx="861.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:103" cx="882.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:104" cx="903.2" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:105" cx="924" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:106" cx="944.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:107" cx="965.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:108" cx="986.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:109" cx="1007.2" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:110" cx="1028" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:111" cx="1048.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:112" cx="1069.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:113" cx="1090.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:114" cx="1111.2" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:115" cx="1132" cy="298" r="5.4"/>
   <path class="br" d="M1083.4 318H1139M1083.4 318V313M1139 318V313"/><text class="rs" x="1139" y="334" text-anchor="end">FINALE: HYPERGAMES AND METAGAMES</text>
   <text class="rt" x="45" y="388">Synthesis</text><text class="rs" x="45" y="408">2 CAPSTONES</text>
-  <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="sy d" style="--i:116" cx="196" cy="382" r="3.4"/>
-  <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="sy d" style="--i:117" cx="230" cy="382" r="3.4"/>
+  <circle class="sy d" style="--i:116" cx="196" cy="382" r="7.2"/><circle class="lv d" style="--i:116" cx="196" cy="382" r="3.4"/>
+  <circle class="sy d" style="--i:117" cx="230" cy="382" r="7.2"/><circle class="lv d" style="--i:117" cx="230" cy="382" r="3.4"/>
   <path class="hair" d="M45 436H1155"/>
-  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 055, 066 to 075</text>
+  <circle class="lv" cx="60" cy="466" r="5.4"/><text class="lg" x="76" y="470">Live: 001 to 075, 086 to 118</text>
   <circle class="em" cx="420" cy="466" r="4.6"/><text class="lg" x="436" y="470">Empty slot: opens the idea and a Gambit link</text>
   <circle class="sy" cx="956" cy="466" r="7.2"/><circle class="sy" cx="956" cy="466" r="3.4"/><text class="lg" x="974" y="470">Synthesis capstone</text>
 </svg>

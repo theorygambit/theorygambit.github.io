@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 066 to 075 and 086 to 095 are complete. Slots 056 to 065, 076 to 085 and everything from 096 on are empty, in curriculum order.
+The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 056 to 065, 066 to 075 and 086 to 118 are complete. Only slots 076 to 085 are empty, in curriculum order.
 
 ## Shipped
 
@@ -61,6 +61,16 @@ The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 066 to 075
 | 053 | Loss Aversion and Streaks | `loss-aversion-streaks` | five days of do or skip with the cost of a break shown, the break cost line crosses the flat effort, first streak worth keeping for new values |
 | 054 | Preference Manipulation | `preference-manipulation` | pick between two options then again with a decoy, tap each option to see what beats it, find the decoy among new options (the decoy effect as the closest teachable mechanic) |
 | 055 | Behavioral Game Theory | `behavioral-game-theory` | a two thirds of the average guessing game against a crowd, climb the ladder of levels, a level 2 guess for a new fraction (the beauty contest as the closest teachable mechanic) |
+| 056 | Reciprocity and Norms | `reciprocity-fairness` | reward or punish four gifts, replies plotted by what was given against what could have been, judge three new gifts |
+| 057 | Hyperbolic Discounting | `hyperbolic-discounting` | sooner or later, near and far, drag the delay to watch the choice flip, find the flip for new offers |
+| 058 | Near-Miss Effect | `near-miss-effect` | a three reel machine, your choices after near misses against plain losses, judge new machines by the average |
+| 059 | Sunk Cost and Endowment | `sunk-cost-endowment` | three projects with more and more spent, the spent amount drops out, decide on three new ventures |
+| 060 | Breaking Frames | `breaking-frames` | stuck in a standoff, move first or add a fine or walk away, pick the lever that works in three new tables |
+| 061 | Finite and Infinite Games | `finite-infinite-games` | a race that someone wins, a rally that only has a length, safe or bold in three new situations |
+| 062 | Game Selection | `game-selection` | three arenas, prizes shrink to averages, pick the best of two new sets |
+| 063 | Commitment and Credibility | `commitment-credibility` | a game tree where your threat is empty, commit to make it believed, decide when to commit in three new cases |
+| 064 | Multipolar Traps | `multipolar-traps` | five rivals raise and copy, your net each round and the waste, find the cost that stops raising in new contests |
+| 065 | Minimax and Alpha-Beta | `minimax-alpha-beta` | pick a branch against a rival who picks the worst, back up the values, tap the leaves alpha-beta can skip |
 | 066 | Elo, Glicko and TrueSkill Ratings | `elo-trueskill` | pick opponents over five matches, drag the rating gap against win chance, compute a new rating |
 | 067 | Dynamic Difficulty Adjustment | `dynamic-difficulty` | choose a level for six rounds, run an eight attempt thermostat, find the level for a target win chance |
 | 068 | Player Lifetime Value Prediction | `ltv-prediction` | pick between two cohorts, drag retention to see value climb steeply, compute value as a / (1 - r) |
@@ -83,10 +93,33 @@ Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff tabl
 | 093 | Banzhaf and Shapley-Shubik Power Indices | `banzhaf-index` | pick a council seat, tap the groups you tip, count swings on new councils |
 | 094 | The Nucleolus | `nucleolus` | pick the calmest split, drag a split to shrink the worst complaint, find the smallest worst gap |
 | 095 | Nash Bargaining | `nash-bargaining` | split evenly or split the gain, drag a share to the product peak, find the Nash share |
+| 096 | Rubinstein Alternating-Offers Bargaining | `rubinstein-bargaining` | offer first as the pot shrinks, drag the shrink rate, find what the first proposer keeps |
+| 097 | Ellsberg Paradox and Ambiguity Aversion | `ellsberg-ambiguity` | bet on a known or unknown urn, drag the black count to flip two bets, say which bet wins more often |
+| 098 | Level-k and Cognitive Hierarchy | `level-k` | guess two thirds of the average, tap down the level ladder, find what level k guesses |
+| 099 | Quantal Response Equilibrium | `quantal-response` | bet on a noisy rival, drag the payoff gap, find the chance of the better move |
+| 100 | Inequity Aversion (Fehr-Schmidt) | `inequity-aversion` | pick the split you prefer, drag guilt to move the best share, compute the felt value |
+| 101 | Spiteful Preferences | `spiteful-preferences` | pay to cut their payoff or keep both, drag spite, find the spite at which harm pays |
+| 102 | Zermelo's Theorem and Combinatorial Games (Nim) | `zermelo-sprague-grundy` | play Nim against a perfect player, tap tokens to leave xor zero, say who wins |
+| 103 | Monte Carlo Tree Search | `mcts` | pick a move from random-game records, drag the game count against the bonus, say which move is tried next |
+| 104 | Regret Matching and Counterfactual Regret Minimization | `regret-matching-cfr` | rock paper scissors evenly or by regret, tap each regret, find the next play chance |
+| 105 | Fictitious Play | `fictitious-play` | differ from a matcher that follows your history, tap to play on, name the matcher's next move |
+| 106 | Computing Nash Equilibria: Lemke-Howson and PPAD | `lemke-howson` | check every support or follow a path, drag the action count, count support pairs |
+| 107 | Linear Programming for Zero-Sum Games | `linear-programming-zero-sum` | play evenly or the safe mix, drag the mix to the crossing, find the value |
+| 108 | Multiplicative Weights and Hedge | `multiplicative-weights` | back the heaviest or spread by weight, tap rounds to shrink losers, compute a new weight |
+| 109 | Multi-Agent Reinforcement Learning and Self-Play | `marl-self-play` | train against a weaker or stronger bot, drag the opponent level, compute the learning gain |
+| 110 | Contextual Bandits | `contextual-bandits` | show A or B to each person, drag the exploration rate, pick by the person not the average |
+| 111 | Personalized and Dynamic Pricing | `personalized-pricing` | set a price for what each customer would pay, drag one price for all, sum the profit |
+| 112 | Context-Aware and On-Device Recommendation | `context-aware-recsys` | rank on the phone or ask the server, drag the hour, pick the item that fits |
+| 113 | Desirability Scoring (RSRR) | `desirability-rsrr` | ask someone near or far above you, drag their score, find the chance they accept |
+| 114 | Hypergame Theory | `hypergame-theory` | use a known move or a hidden one, tap each move for their reply, compute what a move pays |
+| 115 | The Levels of Hypergames | `hypergame-levels` | exploit their picture or play safe, tap up the ladder, name the level |
+| 116 | Metagames and the Metagame Theory | `metagame-howard` | cooperate or defect against a policy, tap each policy, find the best reply |
+| 117 | Frames Within Frames | `synthesis-frames` | buy or pass on a Premium message, tap each seller level, find the chance a seller is strong |
+| 118 | The Whole Board | `synthesis-board` | four situations from dominance to fairness, tap the five ideas, name the idea that fits |
 
-## Suggested next batch (056 to 065 first, then 076 to 085 and 096 onward)
+## Suggested next batch (076 to 085)
 
-Slots 056 to 065 and 076 to 085 are still empty and 096 onward follows. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
+Only slots 076 to 085 are empty. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
 
 - `MatrixView` for any 2x2 table. `Glyph` for the visual grammar.
 - The reveal pattern: Feel collects evidence with a counterfactual, See is built from the player's own moves and needs a tap or drag, Prove changes the numbers.
