@@ -92,6 +92,16 @@ import { Allais, FEEL_ALLAIS, PROVE_POOL as ALLAIS_POOL } from "../src/games/all
 import { Streak, FEEL_STREAK, FEEL_EFFORTS, PROVE_POOL as STREAK_POOL } from "../src/games/loss-aversion-streaks/model";
 import { dominates, decoy, triple, FEEL_PAIR, FEEL_DECOY } from "../src/games/preference-manipulation/model";
 import { Beauty, FEEL_BEAUTY, PROVE_POOL as BEAUTY_POOL } from "../src/games/behavioral-game-theory/model";
+import { FEEL_NETWORK, PROVE_POOL as POA_POOL } from "../src/games/price-of-anarchy/model";
+import { Attrition, FEEL_ATTRITION, PROVE_POOL as WAR_POOL } from "../src/games/war-of-attrition/model";
+import { FEEL_GAME as FOLK_FEEL, proveQuestions } from "../src/games/folk-theorem/model";
+import { FEEL_MARKOV, share as chainShare, PROVE_POOL as CHAIN_POOL } from "../src/games/markov-games/model";
+import { FEEL_GRID, randomPotential } from "../src/games/potential-games/model";
+import { FEEL_GAME as ESS_FEEL, randomSym } from "../src/games/ess/model";
+import { Coordination, FEEL_GAME as COORD_FEEL, PROVE_POOL as COORD_POOL } from "../src/games/replicator-dynamics/model";
+import { FEEL_ENTRY, PROVE_POOL as ENTRY_POOL } from "../src/games/bayesian-games/model";
+import { FEEL_SIGNAL, FEEL_BAR, PROVE_POOL as SIGNAL_POOL } from "../src/games/signaling/model";
+import { FEEL_CONTRACT, PROVE_POOL as CONTRACT_POOL } from "../src/games/screening-principal-agent/model";
 import { Travelers, FEEL_GAME as TRAVEL_FEEL, PROVE_POOL as TRAVEL_POOL } from "../src/games/travelers-dilemma/model";
 import { PayoffTable } from "../src/games/shared/PayoffTable";
 import { Spread, feelRounds as focalFeel, proveSet as focalProve } from "../src/games/focal-points/model";
@@ -2795,5 +2805,147 @@ test("feel and prove trees are well formed", () => {
   }
 });
 
+
+console.log("price of anarchy");
+test("Pigou: selfish play costs 1, the best split costs 0.75, so anarchy is 4 over 3", () => {
+  const g = FEEL_NETWORK;
+  near(g.selfish, 1);
+  near(g.optimum, 0.5);
+  near(g.average(g.selfish), 1);
+  near(g.average(g.optimum), 0.75);
+  near(g.anarchy, 4 / 3);
+  let x = 0.3;
+  for (let i = 0; i < 40; i++) x = g.drift(x);
+  near(x, 1, 0.02);
+});
+test("Prove networks settle inside the range, with an optimum at c over 2a, and the cost ratio above 1", () => {
+  for (const g of POA_POOL) {
+    assert.ok(g.selfish > 0.3 && g.selfish < 0.9);
+    near(g.optimum, g.c / (2 * g.a));
+    assert.ok(g.anarchy > 1 && g.anarchy <= 4 / 3 + 1e-9);
+    let best = Infinity;
+    for (let x = 0; x <= 1.0001; x += 0.001) best = Math.min(best, g.average(x));
+    near(g.average(g.optimum), best, 1e-4);
+  }
+  assert.equal(new Set(POA_POOL.map((g) => Math.round(g.optimum * 1000))).size, POA_POOL.length);
+});
+
+console.log("war of attrition");
+test("holding is worth nothing at the indifference chance, and more above it", () => {
+  const g = FEEL_ATTRITION;
+  near(g.indifference, 0.1);
+  near(g.holdValue(g.indifference), 0);
+  assert.ok(g.holdValue(0.2) > 0 && g.holdValue(0.05) < 0);
+  for (const a of WAR_POOL) {
+    near(a.holdValue(a.indifference), 0);
+    assert.ok(Math.abs(a.indifference - 0.1) > 0.04 && a.indifference < 0.5);
+  }
+  assert.ok(new Attrition(10, 1).expectedTicks(0.1) > 5);
+});
+
+console.log("folk theorem");
+test("feasible payoffs fill the hull, and only those above punishment for both are sustainable", () => {
+  const g = FOLK_FEEL;
+  assert.ok(g.sustainable(3, 3) && g.sustainable(2, 2.5));
+  assert.equal(g.reason(4, 4), "outside");
+  assert.equal(g.reason(0.8, 3), "punish");
+  assert.equal(g.reason(1, 1), "punish");
+  assert.equal(g.reason(3, 3), null);
+  assert.ok(g.feasible(0, 5) && g.feasible(5, 0) && g.feasible(3, 3));
+});
+test("Prove questions hold one sustainable point and two that are not, away from every boundary", () => {
+  for (let seed = 1; seed <= 40; seed++) {
+    const q = proveQuestions(new Rng(seed));
+    assert.equal(q.length, 3);
+    assert.equal(q.filter((x) => x.game.sustainable(x.x, x.y)).length, 1);
+  }
+});
+
+console.log("markov games");
+test("the long run share in the Good state follows from the chain", () => {
+  const m = FEEL_MARKOV;
+  near(m.stationary(0), 1 / 3);
+  near(m.stationary(1), 6 / 7);
+  assert.ok(m.average(1) > m.average(0));
+  assert.equal(m.next("good", "invest"), 0.9);
+  near(chainShare({ p: 0.2, q: 0.6 }), 0.75);
+  for (const c of CHAIN_POOL) assert.ok(chainShare(c) > 0.1 && chainShare(c) < 0.95);
+  assert.equal(new Set(CHAIN_POOL.map((c) => Math.round(chainShare(c) * 100))).size >= 3, true);
+});
+
+console.log("potential games");
+test("uphill walks end at an equilibrium and the shared score rises at every step", () => {
+  assert.equal(FEEL_GRID.equilibria().length, 2);
+  const w = FEEL_GRID.walk(0, 0);
+  assert.deepEqual(w.at(-1), [1, 2]);
+  for (let i = 1; i < w.length; i++) assert.ok(FEEL_GRID.phi[w[i]![0]]![w[i]![1]]! > FEEL_GRID.phi[w[i - 1]![0]]![w[i - 1]![1]]!);
+  for (let seed = 1; seed <= 30; seed++) for (const want of [1, 2]) {
+    const g = randomPotential(new Rng(seed), want);
+    assert.equal(g.equilibria().length, want);
+    for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+      const end = g.walk(r, c).at(-1)!;
+      assert.ok(g.game.isEquilibrium(end[0], end[1]));
+    }
+  }
+});
+
+console.log("evolutionarily stable strategy");
+test("hawk and dove have no pure ESS, and the edge of a mutant shows why", () => {
+  assert.deepEqual(ESS_FEEL.ess, []);
+  assert.ok(ESS_FEEL.edge(0, 1) > 0 && ESS_FEEL.edge(1, 0) > 0);
+  for (const want of [0, 1, 2]) for (let seed = 1; seed <= 10; seed++) assert.equal(randomSym(new Rng(seed), want).ess.length, want);
+});
+
+console.log("replicator dynamics");
+test("a coordination game tips at b over a plus b, above it A wins and below it B wins", () => {
+  const g = COORD_FEEL;
+  near(g.tipping, 1 / 3);
+  for (const [x0, end] of [[0.2, 0], [0.5, 1]] as const) {
+    let x: number = x0;
+    for (let i = 0; i < 80; i++) x = g.step(x);
+    assert.ok(Math.abs(x - end) < 0.03, `${x0} ${x}`);
+  }
+  assert.equal(g.drift(0.2), -1);
+  assert.equal(g.drift(0.5), 1);
+  for (const c of COORD_POOL) assert.ok(Math.abs(c.tipping - 1 / 3) > 0.05 && c.tipping > 0.1 && c.tipping < 0.9);
+  assert.equal(new Set(COORD_POOL.map((c) => c.tipping)).size, COORD_POOL.length);
+  assert.ok(new Coordination(1, 1).tipping === 0.5);
+});
+
+console.log("bayesian games");
+test("enter when the belief in a Tough incumbent is below G over G plus L", () => {
+  const g = FEEL_ENTRY;
+  near(g.threshold, 0.6);
+  assert.ok(g.shouldEnter(0.5) && !g.shouldEnter(0.7));
+  near(g.enter(g.threshold), 0);
+  for (const e of ENTRY_POOL) {
+    near(e.enter(e.threshold), 0);
+    assert.ok(Math.abs(e.threshold - 0.6) > 0.05 && e.threshold > 0.1 && e.threshold < 0.9);
+  }
+});
+
+console.log("signaling");
+test("the bar separates the types only between W over cWeak and W over cStrong", () => {
+  const g = FEEL_SIGNAL;
+  near(g.low, 3);
+  near(g.high, 6);
+  assert.ok(g.separates(FEEL_BAR) && g.separates(6) && !g.separates(3) && !g.separates(2) && !g.separates(7));
+  for (const s of SIGNAL_POOL) {
+    assert.ok(s.low < s.high);
+    const mid = (s.low + s.high) / 2;
+    assert.ok(s.separates(mid));
+  }
+});
+
+console.log("screening and principal agent");
+test("the agent works from a bonus of effort over the lift in success chance", () => {
+  const c = FEEL_CONTRACT;
+  near(c.minimum, 5);
+  assert.ok(c.agentWorks(5) && !c.agentWorks(4.9) && c.agentWorks(8));
+  for (const k of CONTRACT_POOL) {
+    assert.ok(k.agentWorks(k.minimum + 1e-9) && !k.agentWorks(k.minimum - 0.01));
+    assert.ok(Math.abs(k.minimum - 5) > 0.6 && k.minimum <= 12);
+  }
+});
 
 console.log(`\n${passed} tests passed`);

@@ -5,6 +5,7 @@ import { axelrodTitForTat } from "./axelrod-tit-for-tat";
 import { backwardInduction } from "./backward-induction";
 import { banzhafIndex } from "./banzhaf-index";
 import { battleOfSexes } from "./battle-of-sexes";
+import { bayesianGames } from "./bayesian-games";
 import { bayesianPersuasion } from "./bayesian-persuasion";
 import { beautyContest } from "./beauty-contest";
 import { behavioralGameTheory } from "./behavioral-game-theory";
@@ -31,12 +32,14 @@ import { dynamicGames } from "./dynamic-games";
 import { ellsbergAmbiguity } from "./ellsberg-ambiguity";
 import { eloTrueSkill } from "./elo-trueskill";
 import { engagementStack } from "./engagement-stack";
+import { ess } from "./ess";
 import { evolutionaryGameTheory } from "./evolutionary-game-theory";
 import { expectedUtility } from "./expected-utility";
 import { fictitiousPlay } from "./fictitious-play";
 import { finiteInfiniteGames } from "./finite-infinite-games";
 import { flowTheory } from "./flow-theory";
 import { focalPoints } from "./focal-points";
+import { folkTheorem } from "./folk-theorem";
 import { gameSelection } from "./game-selection";
 import { hotelling } from "./hotelling";
 import { hyperbolicDiscounting } from "./hyperbolic-discounting";
@@ -51,6 +54,7 @@ import { levelK } from "./level-k";
 import { linearProgrammingZeroSum } from "./linear-programming-zero-sum";
 import { lossAversionStreaks } from "./loss-aversion-streaks";
 import { ltvPrediction } from "./ltv-prediction";
+import { markovGames } from "./markov-games";
 import { marlSelfPlay } from "./marl-self-play";
 import { matching } from "./matching";
 import { matchingPennies } from "./matching-pennies";
@@ -73,7 +77,9 @@ import { perfectBayesian } from "./perfect-bayesian";
 import { personalizedPricing } from "./personalized-pricing";
 import { playersCount } from "./players-count";
 import { positiveSum } from "./positive-sum";
+import { potentialGames } from "./potential-games";
 import { preferenceManipulation } from "./preference-manipulation";
+import { priceOfAnarchy } from "./price-of-anarchy";
 import { prisonersDilemma } from "./prisoners-dilemma";
 import { prospectTheory } from "./prospect-theory";
 import { publicGoods } from "./public-goods";
@@ -82,12 +88,15 @@ import { rationalityCommonKnowledge } from "./rationality-common-knowledge";
 import { reciprocityFairness } from "./reciprocity-fairness";
 import { regretMatchingCfr } from "./regret-matching-cfr";
 import { repeatedGames } from "./repeated-games";
+import { replicatorDynamics } from "./replicator-dynamics";
 import { revelationPrinciple } from "./revelation-principle";
 import { rubinsteinBargaining } from "./rubinstein-bargaining";
 import { rulesEngines } from "./rules-engines";
+import { screeningPrincipalAgent } from "./screening-principal-agent";
 import { sequentialEquilibrium } from "./sequential-equilibrium";
 import { shapleyValue } from "./shapley-value";
 import { shortLongGames } from "./short-long-games";
+import { signaling } from "./signaling";
 import { simultaneousSequential } from "./simultaneous-sequential";
 import { spitefulPreferences } from "./spiteful-preferences";
 import { stackelberg } from "./stackelberg";
@@ -104,6 +113,7 @@ import { trustGame } from "./trust-game";
 import { ultimatum } from "./ultimatum";
 import { vcg } from "./vcg";
 import { volunteersDilemma } from "./volunteers-dilemma";
+import { warOfAttrition } from "./war-of-attrition";
 import { whatIsAGame } from "./what-is-a-game";
 import { zermeloSpragueGrundy } from "./zermelo-sprague-grundy";
 import { zeroSum } from "./zero-sum";
@@ -116,6 +126,7 @@ const MODULES = [
   backwardInduction,
   banzhafIndex,
   battleOfSexes,
+  bayesianGames,
   bayesianPersuasion,
   beautyContest,
   behavioralGameTheory,
@@ -142,12 +153,14 @@ const MODULES = [
   ellsbergAmbiguity,
   eloTrueSkill,
   engagementStack,
+  ess,
   evolutionaryGameTheory,
   expectedUtility,
   fictitiousPlay,
   finiteInfiniteGames,
   flowTheory,
   focalPoints,
+  folkTheorem,
   gameSelection,
   hotelling,
   hyperbolicDiscounting,
@@ -162,6 +175,7 @@ const MODULES = [
   linearProgrammingZeroSum,
   lossAversionStreaks,
   ltvPrediction,
+  markovGames,
   marlSelfPlay,
   matching,
   matchingPennies,
@@ -184,7 +198,9 @@ const MODULES = [
   personalizedPricing,
   playersCount,
   positiveSum,
+  potentialGames,
   preferenceManipulation,
+  priceOfAnarchy,
   prisonersDilemma,
   prospectTheory,
   publicGoods,
@@ -193,12 +209,15 @@ const MODULES = [
   reciprocityFairness,
   regretMatchingCfr,
   repeatedGames,
+  replicatorDynamics,
   revelationPrinciple,
   rubinsteinBargaining,
   rulesEngines,
+  screeningPrincipalAgent,
   sequentialEquilibrium,
   shapleyValue,
   shortLongGames,
+  signaling,
   simultaneousSequential,
   spitefulPreferences,
   stackelberg,
@@ -215,6 +234,7 @@ const MODULES = [
   ultimatum,
   vcg,
   volunteersDilemma,
+  warOfAttrition,
   whatIsAGame,
   zermeloSpragueGrundy,
   zeroSum,

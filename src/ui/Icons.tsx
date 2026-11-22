@@ -842,6 +842,63 @@ export function GameGlyph({ slug }: { slug: string }) {
         </svg>
       );
     case "reciprocity-fairness":
+    case "price-of-anarchy":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8h18M3 16h18" />
+          <circle className="solid" cx="8" cy="8" r="2.2" />
+          <circle cx="16" cy="16" r="2.2" />
+        </svg>
+      );
+    case "war-of-attrition":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="12" r="3.5" />
+          <circle cx="17" cy="12" r="3.5" />
+          <path d="M11 12h2" />
+        </svg>
+      );
+    case "folk-theorem":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21V4M3 21h18" />
+          <path d="M5 6L12 12L19 18L9 17Z" />
+          <circle className="solid" cx="12" cy="12" r="1.8" />
+        </svg>
+      );
+    case "markov-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="12" r="3" />
+          <circle cx="18" cy="12" r="3" />
+          <path d="M9 9C11 5 13 5 15 9M15 15C13 19 11 19 9 15" />
+        </svg>
+      );
+    case "potential-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20L9 11L13 16L21 5" />
+          <circle className="solid" cx="21" cy="5" r="2" />
+          <circle cx="9" cy="11" r="2" />
+        </svg>
+      );
+    case "ess":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" />
+          <circle className="solid" cx="12" cy="12" r="4" />
+          <circle cx="19" cy="5" r="1.6" />
+        </svg>
+      );
+    case "replicator-dynamics":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20h18" />
+          <path d="M5 20C5 12 9 8 12 12C15 16 19 12 19 4" />
+          <circle className="solid" cx="12" cy="12" r="2" />
+        </svg>
+      );
+    case "bayesian-games":
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle className="solid" cx="7" cy="12" r="3.5" />
@@ -918,6 +975,22 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="12" cy="4.5" r="1.8" />
           <path d="M12 6.5L6.5 12M12 6.5L17.5 12M6.5 12L4 19M6.5 12L9 19M17.5 12L15 19" />
           <path d="M19.5 14.5l-4 5" strokeDasharray="1.5 1.5" />
+          <path d="M10.5 12h3" strokeDasharray="1.5 1.5" />
+        </svg>
+      );
+    case "signaling":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20L9 20L9 13L15 13L15 6L21 6" />
+          <circle className="solid" cx="18" cy="6" r="2" />
+        </svg>
+      );
+    case "screening-principal-agent":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="7" cy="7" r="3" />
+          <circle className="solid" cx="17" cy="17" r="3" />
+          <path d="M9.5 9.5L14.5 14.5" />
         </svg>
       );
     default:
