@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with one hundred and eight games live (001 to 118 except 076 to 085) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with all 118 games live" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -115,7 +115,16 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 073 | Trembling Hand Perfect Equilibrium | Live |
 | 074 | Sequential Equilibrium | Live |
 | 075 | Perfect Bayesian Equilibrium | Live |
-| 076 to 085 | The next 10 slots | Empty slots, same as above |
+| 076 | Price of Anarchy | Live |
+| 077 | War of Attrition | Live |
+| 078 | Folk Theorem | Live |
+| 079 | Markov (Stochastic) Games | Live |
+| 080 | Potential Games | Live |
+| 081 | Evolutionarily Stable Strategy | Live |
+| 082 | Replicator Dynamics | Live |
+| 083 | Bayesian Games | Live |
+| 084 | Signaling Games | Live |
+| 085 | Screening and Principal-Agent Problems | Live |
 | 086 | Cheap Talk | Live |
 | 087 | Bayesian Persuasion | Live |
 | 088 | Mechanism Design | Live |
@@ -296,4 +305,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and where to go next (076 to 085) |
+| `NEXT` | What is live, and notes for any new game |
