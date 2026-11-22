@@ -1,6 +1,6 @@
 # Next
 
-The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 056 to 065, 066 to 075 and 086 to 118 are complete. Only slots 076 to 085 are empty, in curriculum order.
+All 118 slots are live: the five opening games (001 to 005) and slots 006 to 118. Nothing is left empty.
 
 ## Shipped
 
@@ -81,8 +81,17 @@ The five opening games (001 to 005) and slots 006 to 015, 016 to 055, 056 to 065
 | 073 | Trembling Hand Perfect Equilibrium | `trembling-hand` | pick Top or Bottom against a partner whose hand may slip, drag the slip chance, tap the cell that survives |
 | 074 | Sequential Equilibrium | `sequential-equilibrium` | pick L or R at five beliefs, probe where the two pay lines cross, drag the belief to the tie for new payoffs |
 | 075 | Perfect Bayesian Equilibrium | `perfect-bayesian` | hire or pass on a signal, tap who sends each signal, drag the share strong for new rates |
+| 076 | Price of Anarchy | `price-of-anarchy` | five days choosing between a fixed route and one that slows as it fills, average cost against the share on the variable route, the best split for a new network |
+| 077 | War of Attrition | `war-of-attrition` | hold or quit tick by tick, the value of holding crosses zero at one quit chance, break even for a new prize and cost |
+| 078 | Folk Theorem | `folk-theorem` | drag a payoff pair and test it, build the reachable shape and the threat lines, answer yes or no for new points (sustainable payoffs of a repeated dilemma as the closest teachable mechanic) |
+| 079 | Markov Games | `markov-games` | invest or coast in a Good or Bad state, long-run share of Good against how often you invest, long-run share for a new chain |
+| 080 | Potential Games | `potential-games` | choose a start and let selfish moves climb a shared score, mark improving moves, tap every stable cell of new grids |
+| 081 | Evolutionarily Stable Strategy | `ess` | drop a rare mutant into hawk and dove crowds, compare resident and mutant per column, tap the strategies that resist in new tables |
+| 082 | Replicator Dynamics | `replicator-dynamics` | a coordination game tips one way or the other from two starts, drag along a line of A minus B, the tipping share for new payoffs |
+| 083 | Bayesian Games | `bayesian-games` | enter or stay out against a Tough or Weak incumbent with a stated belief, average payoff against belief, the indifference belief for new payoffs |
+| 084 | Signaling Games | `signaling` | study to clear a bar as a strong or weak type, net gain lines by years of study, a separating bar for new costs |
+| 085 | Screening and Principal-Agent | `screening-principal-agent` | work or shirk at three bonuses, expected pay lines cross at one bonus, the smallest working bonus for a new contract |
 
-Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
 | 086 | Cheap Talk | `cheap-talk` | believe or ignore a message, drag the bias to see where talk stops, find the cutoff for new biases |
 | 087 | Bayesian Persuasion | `bayesian-persuasion` | reveal the truth or less, plot conviction against the signal, find the best signal rate |
 | 088 | Mechanism Design | `mechanism-design` | cut a cake two ways, switch who picks first, say which cut each rule makes even |
@@ -117,9 +126,11 @@ Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff tabl
 | 117 | Frames Within Frames | `synthesis-frames` | buy or pass on a Premium message, tap each seller level, find the chance a seller is strong |
 | 118 | The Whole Board | `synthesis-board` | four situations from dominance to fairness, tap the five ideas, name the idea that fits |
 
-## Suggested next batch (076 to 085)
+Shared helpers added with the 026 to 035 games: `Bimatrix` (any size payoff table with best replies, dominance and saddle), `GridView` (N by M table in the frame) and `Slider` (drag track), all in `src/games/shared`. The 016 to 025 games added `PayoffTable` (a two by two table of [you, them] cells with stable cells) and `kit.ts` (`Slider`, `drawChoice`, `drawTicks`, `drawPayoffCell`, `drawMatrixLabels`).
 
-Only slots 076 to 085 are empty. Follow `curriculum.ts`. The next Intro level topics are, in order: What Is a Game, Rationality and Common Knowledge, Normal vs Extensive Form, Zero Sum, Positive Sum, Negative Sum, Simultaneous vs Sequential, and so on. Reuse what exists:
+## Writing new games or a second pass
+
+Every slot is live. Follow `curriculum.ts` for the order, and reuse what exists:
 
 - `MatrixView` for any 2x2 table. `Glyph` for the visual grammar.
 - The reveal pattern: Feel collects evidence with a counterfactual, See is built from the player's own moves and needs a tap or drag, Prove changes the numbers.
