@@ -34,7 +34,7 @@ export class FiniteInfiniteGamesGame extends Game {
   private readonly bV = new Damped(0, 0.4);
 
   private shown = 0;
-  private readonly cells: Damped[] = [0, 1, 2, 3].map(() => new Damped(0, 0.5));
+  private readonly fills: Damped[] = [0, 1, 2, 3].map(() => new Damped(0, 0.5));
 
   private cases: Case[] = [];
   private pi = 0;
@@ -60,7 +60,7 @@ export class FiniteInfiniteGamesGame extends Game {
     this.aV.snap(0);
     this.bV.snap(0);
     this.shown = 0;
-    this.cells.forEach((d) => d.snap(0));
+    this.fills.forEach((d) => d.snap(0));
     this.solved = 0;
     this.setBeat("feel");
     this.prompt.set("A race to 6. They gain 1 a round. A tie goes to them.");
@@ -186,7 +186,7 @@ export class FiniteInfiniteGamesGame extends Game {
   private enterSee(): void {
     this.setBeat("see");
     this.shown = 0;
-    this.cells.forEach((d) => d.snap(0));
+    this.fills.forEach((d) => d.snap(0));
     this.prompt.set("Same two policies, two games. Tap to run each.");
     this.note.set(`In the race you ${this.won ? "won" : "lost"}. The rally lasted ${this.length}.`);
     this.sync();
@@ -194,7 +194,7 @@ export class FiniteInfiniteGamesGame extends Game {
 
   private advance(): void {
     if (this.shown >= 4) return;
-    this.cells[this.shown]!.set(1);
+    this.fills[this.shown]!.set(1);
     this.shown++;
     if (this.shown === 1) this.prompt.set("Always safe in the race: it never wins.");
     else if (this.shown === 2) this.prompt.set("Always bold in the race: it wins half the time.");
@@ -259,7 +259,7 @@ export class FiniteInfiniteGamesGame extends Game {
   protected tick(dt: number): void {
     this.aV.step(dt);
     this.bV.step(dt);
-    for (const d of this.cells) d.step(dt);
+    for (const d of this.fills) d.step(dt);
     if (this.beat === "feel" && this.waiting) {
       this.since += dt;
       if (this.since > 1.2) this.settle();
@@ -361,7 +361,7 @@ export class FiniteInfiniteGamesGame extends Game {
       const i = n % 2;
       const x = f.x + 70 + (j + 0.5) * colW;
       const y = top + (i + 0.5) * rowH;
-      const a = this.cells[n]!.value;
+      const a = this.fills[n]!.value;
       if (a < 0.01) {
         p.ring(x, y, 4, c.ink, 1, 0.3 + 0.2 * Math.sin(this.time * 4 + n));
         return;
