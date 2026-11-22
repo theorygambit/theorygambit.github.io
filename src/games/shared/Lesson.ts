@@ -344,7 +344,7 @@ export abstract class Lesson<Q> extends Game {
   private drawFeel(p: Painter, c: Colors, f: Frame): void {
     const open = this.stage === "choose";
     ([0, 1] as const).forEach((i) => {
-      drawChoice(p, c, this.pair(i), { label: this.choices[i], sub: "", r: 0, armed: this.armed === i, chosen: this.picked === i, alpha: open ? 1 : 0 });
+      drawChoice(p, c, this.pair(i), { label: this.choices[i], sub: "", r: 6, armed: this.armed === i, chosen: this.picked === i, alpha: open ? 1 : 0 });
     });
     const R = clamp(Math.min((f.w - 24) / 6.6, (f.h - 90) / 2.6), 14, 46);
     const cy = f.top + R + 8;
@@ -371,7 +371,7 @@ export abstract class Lesson<Q> extends Game {
     if (this.spec.mode === "pick") {
       const open = !this.locked;
       ([0, 1] as const).forEach((i) => {
-        drawChoice(p, c, this.pair(i), { label: this.spec.labels[i], sub: "", r: 0, armed: this.armed === i, chosen: this.picked === i && this.locked, alpha: open ? 1 : 0.3 });
+        drawChoice(p, c, this.pair(i), { label: this.spec.labels[i], sub: "", r: 6, armed: this.armed === i, chosen: this.picked === i && this.locked, alpha: open ? 1 : 0.3 });
       });
     } else {
       this.sl.draw(p, c);
