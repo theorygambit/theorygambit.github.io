@@ -648,6 +648,278 @@ export function GameGlyph({ slug }: { slug: string }) {
           <circle className="solid" cx="12" cy="7.5" r="2" />
         </svg>
       );
+    case "rubinstein-bargaining":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="12" r="3.4" />
+          <circle cx="13" cy="12" r="2.6" />
+          <circle cx="19" cy="12" r="1.8" />
+        </svg>
+      );
+    case "ellsberg-ambiguity":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 5h12l-2 15H8z" />
+          <circle className="solid" cx="10" cy="14" r="1.6" />
+          <circle cx="14" cy="14" r="1.6" />
+          <path d="M11 9.5h2" />
+        </svg>
+      );
+    case "level-k":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="19" cy="6" r="2.4" />
+          <circle cx="14" cy="11" r="2" />
+          <circle cx="10" cy="15" r="1.6" />
+          <circle cx="6.5" cy="18.5" r="1.2" />
+        </svg>
+      );
+    case "quantal-response":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20h18M3 20V4" />
+          <path d="M4 18C10 18 11 6 20 6" />
+          <circle className="solid" cx="12" cy="12" r="2" />
+        </svg>
+      );
+    case "inequity-aversion":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16M12 7v12M8 19h8" />
+          <circle className="solid" cx="6" cy="13" r="3" />
+          <circle cx="18" cy="11" r="2" />
+        </svg>
+      );
+    case "spiteful-preferences":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="12" r="3.4" />
+          <circle cx="17" cy="12" r="3.4" />
+          <path d="M13.5 8.5l-3 7M10.5 8.5l3 7" />
+        </svg>
+      );
+    case "zermelo-sprague-grundy":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="6" r="1.8" />
+          <circle className="solid" cx="11" cy="6" r="1.8" />
+          <circle className="solid" cx="6" cy="12" r="1.8" />
+          <circle className="solid" cx="11" cy="12" r="1.8" />
+          <circle className="solid" cx="16" cy="12" r="1.8" />
+          <circle cx="6" cy="18" r="1.8" />
+          <circle cx="11" cy="18" r="1.8" />
+        </svg>
+      );
+    case "mcts":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="5" r="2" />
+          <path d="M12 7l-6 6M12 7l6 6M6 15l-2 4M6 15l2 4M18 15l-2 4M18 15l2 4" />
+          <circle cx="6" cy="13" r="1.6" />
+          <circle cx="18" cy="13" r="1.6" />
+        </svg>
+      );
+    case "regret-matching-cfr":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="14" r="3.6" />
+          <circle cx="14" cy="14" r="2.4" />
+          <circle cx="20" cy="14" r="1.2" />
+          <path d="M4 6h16" />
+        </svg>
+      );
+    case "fictitious-play":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20h18M3 20V4" />
+          <path d="M4 6l3 10 3-8 3 7 3-5 3 3" />
+          <path d="M4 12h16" strokeDasharray="2 2" />
+        </svg>
+      );
+    case "lemke-howson":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21h18M3 21V4" />
+          <path d="M4 19Q12 18 20 4" />
+          <path d="M4 17h16" strokeDasharray="2 2" />
+          <circle className="solid" cx="20" cy="4.5" r="1.6" />
+        </svg>
+      );
+    case "linear-programming-zero-sum":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 21h18M3 21V4" />
+          <path d="M4 18L20 8M4 8l16 10" />
+          <circle className="solid" cx="12" cy="13" r="2" />
+        </svg>
+      );
+    case "multiplicative-weights":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="6" cy="12" r="4" />
+          <circle cx="14" cy="12" r="2.6" />
+          <circle cx="20" cy="12" r="1.4" />
+        </svg>
+      );
+    case "marl-self-play":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="8" cy="12" r="4" />
+          <circle cx="16" cy="12" r="4" />
+          <path d="M12 6a8 8 0 0 1 0 0M10 20h4" />
+        </svg>
+      );
+    case "contextual-bandits":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="6" r="2.6" />
+          <path d="M12 9v3M6 18l6-6 6 6" />
+          <circle cx="6" cy="19" r="2" />
+          <circle cx="18" cy="19" r="2" />
+        </svg>
+      );
+    case "personalized-pricing":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 8l8-4h9v9l-8 8z" />
+          <circle className="solid" cx="15.5" cy="8.5" r="1.8" />
+        </svg>
+      );
+    case "context-aware-recsys":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="8" y="3" width="8" height="18" rx="2" />
+          <circle className="solid" cx="12" cy="12" r="2.2" />
+          <path d="M5 8c-1 2-1 6 0 8M19 8c1 2 1 6 0 8" />
+        </svg>
+      );
+    case "desirability-rsrr":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="16" r="3" />
+          <circle cx="17" cy="8" r="3" />
+          <path d="M9.5 14l5-4" strokeDasharray="2 2" />
+        </svg>
+      );
+    case "hypergame-theory":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="12" height="12" />
+          <rect x="9" y="9" width="12" height="12" strokeDasharray="2 2" />
+          <circle className="solid" cx="15" cy="15" r="2" />
+        </svg>
+      );
+    case "hypergame-levels":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20h16M6 20v-4h4v-4h4V8h4" />
+          <circle className="solid" cx="18" cy="5" r="1.8" />
+        </svg>
+      );
+    case "metagame-howard":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" />
+          <rect x="7" y="7" width="10" height="10" />
+          <circle className="solid" cx="12" cy="12" r="2" />
+        </svg>
+      );
+    case "synthesis-frames":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" />
+          <rect x="7" y="7" width="10" height="10" strokeDasharray="2 2" />
+          <circle className="solid" cx="12" cy="12" r="2" />
+          <path d="M3 3l4 4M21 3l-4 4" />
+        </svg>
+      );
+    case "synthesis-board":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" />
+          <path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
+          <circle className="solid" cx="12" cy="12" r="2.2" />
+        </svg>
+      );
+    case "reciprocity-fairness":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="7" cy="12" r="3.5" />
+          <circle cx="17" cy="12" r="3.5" />
+          <path d="M11.5 9.5h1M11.5 14.5h1M10.5 12h3" />
+        </svg>
+      );
+    case "hyperbolic-discounting":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 20.5h18M3 20.5V3.5" />
+          <path d="M4 6C7 14 12 17 20.5 18" />
+          <circle className="solid" cx="6" cy="9.5" r="1.8" />
+        </svg>
+      );
+    case "near-miss-effect":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="5" cy="12" r="3" />
+          <circle className="solid" cx="12" cy="12" r="3" />
+          <circle cx="19" cy="12" r="3" />
+        </svg>
+      );
+    case "sunk-cost-endowment":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="8" cy="12" r="6" strokeDasharray="2 2.4" />
+          <circle className="solid" cx="17" cy="12" r="3" />
+        </svg>
+      );
+    case "breaking-frames":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 3.5h8M3 3.5v8M21 20.5h-8M21 20.5v-8" />
+          <circle className="solid" cx="15" cy="9" r="2.4" />
+          <circle cx="9" cy="15" r="2.4" />
+        </svg>
+      );
+    case "finite-infinite-games":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 12h8.5M11.5 8v8" />
+          <path d="M14 12c0-3 2-4.5 3.5-4.5S21 9 21 12s-1.5 4.5-3.5 4.5S14 15 14 12z" />
+        </svg>
+      );
+    case "game-selection":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="5.5" cy="12" r="2.5" />
+          <circle className="solid" cx="12" cy="12" r="4" />
+          <circle cx="19" cy="12" r="2" />
+        </svg>
+      );
+    case "commitment-credibility":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 4v6M12 10L6 20M12 10l6 10" />
+          <circle className="solid" cx="12" cy="4.5" r="2" />
+          <path d="M15.5 14.5l4 4M19.5 14.5l-4 4" />
+        </svg>
+      );
+    case "multipolar-traps":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="8" />
+          <circle className="solid" cx="12" cy="6" r="1.5" />
+          <circle className="solid" cx="17.5" cy="15" r="1.5" />
+          <circle className="solid" cx="6.5" cy="15" r="1.5" />
+        </svg>
+      );
+    case "minimax-alpha-beta":
+      return (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle className="solid" cx="12" cy="4.5" r="1.8" />
+          <path d="M12 6.5L6.5 12M12 6.5L17.5 12M6.5 12L4 19M6.5 12L9 19M17.5 12L15 19" />
+          <path d="M19.5 14.5l-4 5" strokeDasharray="1.5 1.5" />
+        </svg>
+      );
     default:
       return (
         <svg viewBox="0 0 24 24" aria-hidden="true">
