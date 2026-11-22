@@ -44,7 +44,7 @@ One game is about 60 to 90 seconds. Prompts are one or two short sentences. Ther
 The app has one slot for each of the 116 topics in The Gambit, plus two synthesis capstones that mix several theories. Slots are ordered easy to hard: Foundations, Core, Advanced, the hypergame finale, then the capstones.
 
 <div align="center">
-  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with sixty-five games live (001 to 075 except 056 to 065) and the rest empty slots" width="100%" />
+  <img src="docs/diagrams/curriculum.svg" alt="The curriculum as 118 dots in four rows: Foundations, Core, Advanced and Synthesis, with seventy-five games live (001 to 095 except 056 to 065 and 076 to 085) and the rest empty slots" width="100%" />
 </div>
 
 | Slot | Game | State |
@@ -106,7 +106,18 @@ The app has one slot for each of the 116 topics in The Gambit, plus two synthesi
 | 073 | Trembling Hand Perfect Equilibrium | Live |
 | 074 | Sequential Equilibrium | Live |
 | 075 | Perfect Bayesian Equilibrium | Live |
-| 076 onward | The remaining 43 slots | Empty slots, same as above |
+| 076 to 085 | The next 10 slots | Empty slots, same as above |
+| 086 | Cheap Talk | Live |
+| 087 | Bayesian Persuasion | Live |
+| 088 | Mechanism Design | Live |
+| 089 | The Revelation Principle | Live |
+| 090 | VCG Mechanism | Live |
+| 091 | The Core | Live |
+| 092 | Shapley Value | Live |
+| 093 | Banzhaf and Shapley-Shubik Power Indices | Live |
+| 094 | The Nucleolus | Live |
+| 095 | Nash Bargaining | Live |
+| 096 onward | The remaining 33 slots | Empty slots, same as above |
 | 117 and 118 | Frames Within Frames, The Whole Board | Synthesis capstones, last |
 
 Link straight to one topic with `https://theorygambit.github.io/g/<slug>`, for example `/g/stag-hunt`. There is no hash in the address. Older `/#/g/<slug>` links still work and are upgraded in place. A topic with no game yet opens its empty slot, so links are safe to add before every game exists.
@@ -255,4 +266,4 @@ Read `docs/FOUNDATION.md` before changing anything. If a new game breaks one of 
 | `IPHONE_CONTRACT` | The size, blur and touch rules, and how they are checked |
 | `DEPLOY` | One time setup, releases, and adding the app to a phone |
 | `GAMBIT_HIGHLIGHT` | How the game is shown on The Gambit page |
-| `NEXT` | What is live, and where to go next (056 to 065, then 076 on) |
+| `NEXT` | What is live, and where to go next (056 to 065, 076 to 085, then 096 on) |
