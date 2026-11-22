@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500" role="img" aria-labelledby="t d">
   <title id="t">The curriculum</title>
-  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Sixty-five games are live: slots 1 to 55 and 66 to 75. The rest are empty slots.</desc>
+  <desc id="d">The order of the whole app, easy to hard: 24 Foundations, 46 Core, 46 Advanced and 2 synthesis capstones. Seventy-five games are live: slots 1 to 55, 66 to 75 and 86 to 95. The rest are empty slots.</desc>
   <defs>
     <style>
 
@@ -124,16 +124,16 @@
   <circle class="em d" style="--i:82" cx="445.6" cy="298" r="4.6"/>
   <circle class="em d" style="--i:83" cx="466.4" cy="298" r="4.6"/>
   <circle class="em d" style="--i:84" cx="487.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:85" cx="508" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:86" cx="528.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:87" cx="549.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:88" cx="570.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:89" cx="591.2" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:90" cx="612" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:91" cx="632.8" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:92" cx="653.6" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:93" cx="674.4" cy="298" r="4.6"/>
-  <circle class="em d" style="--i:94" cx="695.2" cy="298" r="4.6"/>
+  <circle class="lv d" style="--i:85" cx="508" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:86" cx="528.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:87" cx="549.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:88" cx="570.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:89" cx="591.2" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:90" cx="612" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:91" cx="632.8" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:92" cx="653.6" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:93" cx="674.4" cy="298" r="5.4"/>
+  <circle class="lv d" style="--i:94" cx="695.2" cy="298" r="5.4"/>
   <circle class="em d" style="--i:95" cx="716" cy="298" r="4.6"/>
   <circle class="em d" style="--i:96" cx="736.8" cy="298" r="4.6"/>
   <circle class="em d" style="--i:97" cx="757.6" cy="298" r="4.6"/>
